@@ -55,7 +55,11 @@ export function useTempsReel(): void {
 
     const connexion = new ConnexionTempsReel({
       demanderTicket,
-      baseApi: () => apiClient.defaults.baseURL ?? window.location.origin,
+      // `||` et non `??` : en déploiement même-origine la base est la chaîne
+      // VIDE, et `new URL("/ws/temps-reel", "")` lève « Invalid URL ». Il faut
+      // donc retomber sur l'origine de la page, pas seulement si la base est
+      // absente.
+      baseApi: () => apiClient.defaults.baseURL || window.location.origin,
       canaux: canauxAAbonner,
       surEtat: definirEtatTempsReel,
       surOuverture: (reconnexion) => {

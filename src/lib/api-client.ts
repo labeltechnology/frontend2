@@ -23,8 +23,23 @@ export class ApiError extends Error {
   }
 }
 
+/**
+ * Racine de l'API.
+ *
+ *  - Valeur fournie (ex. « https://api.exemple.mg ») : utilisée telle quelle.
+ *  - Vide ou absente EN PRODUCTION : chaîne vide = **même origine que la
+ *    page**. C'est le montage recommandé sur un VPS — le serveur web sert le
+ *    frontend et relaie /api et /ws vers le backend : ni CORS à configurer,
+ *    ni contenu mixte, et le même build fonctionne sur n'importe quel domaine.
+ *  - Absente EN DÉVELOPPEMENT : le backend tourne à part, sur le port 8080.
+ *
+ * L'URL du temps réel en découle (voir protocole.ts, urlTempsReel), avec
+ * bascule http→ws et https→wss automatique.
+ */
+const RACINE_API = import.meta.env.VITE_API_BASE_URL ?? (import.meta.env.DEV ? "http://localhost:8080" : "");
+
 export const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8080",
+  baseURL: RACINE_API,
   headers: {
     "Content-Type": "application/json",
   },

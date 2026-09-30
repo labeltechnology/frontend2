@@ -1,0 +1,125 @@
+# Déploiement de test sur un VPS
+
+Marche à suivre pour mettre l'application en ligne sur un serveur de test.
+Concerne le frontend ; les points qui dépendent du backend sont signalés.
+
+## Principe retenu : une seule origine
+
+nginx sert le frontend **et** relaie `/api` et `/ws` vers le backend. Tout passe
+par la même adresse, ce qui supprime d'un coup trois sources d'ennuis :
+
+- aucun CORS à configurer ;
+- aucun blocage de contenu mixte (page en HTTPS appelant une API en HTTP) ;
+- le build ne dépend plus du domaine : la même image fonctionne sur
+  `http://203.0.113.10` comme sur `https://parcauto.exemple.mg`.
+
+C'est pourquoi `VITE_API_BASE_URL` reste **vide**. Une valeur n'est nécessaire
+que si le backend vit sur un autre domaine — il faut alors HTTPS des deux côtés
+et déclarer l'origine du frontend dans `APP_CORS_ALLOWED_ORIGINS`.
+
+## Prérequis sur le VPS
+
+- Docker et Docker Compose, ou bien Node 22 + nginx si l'on compile à la main ;
+- 2 Go de RAM au minimum (le backend Java en consomme l'essentiel) ;
+- les ports 80 (et 443 si certificat) ouverts.
+
+## Option A — Docker Compose (recommandée pour un test)
+
+Le `Dockerfile` du frontend est fourni. À la racine du projet, un
+`docker-compose.yml` assemble les trois services :
+
+```yaml
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_DB: parcauto
+      POSTGRES_USER: parcauto
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?mot de passe requis}
+    volumes: [db-data:/var/lib/postgresql/data]
+
+  backend:
+    build: ./backend            # à confirmer avec le responsable du backend
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      APP_DB_URL: jdbc:postgresql://db:5432/parcauto
+      APP_DB_USERNAME: parcauto
+      APP_DB_PASSWORD: ${DB_PASSWORD}
+      APP_JWT_SECRET: ${JWT_SECRET:?secret requis}
+      APP_STORAGE_UPLOAD_DIR: /data/uploads
+    volumes: [uploads:/data/uploads]
+    depends_on: [db]
+
+  frontend:
+    build:
+      context: ./frontend2
+      args:
+        VITE_API_BASE_URL: ""   # même origine, voir plus haut
+    ports: ["80:80"]
+    depends_on: [backend]
+
+volumes:
+  db-data:
+  uploads:
+```
+
+Les deux volumes nommés sont essentiels : sans `db-data` la base repart de zéro
+à chaque redéploiement, sans `uploads` les photos de véhicules et les proformas
+disparaissent.
+
+```bash
+export DB_PASSWORD='…'   # à générer, pas celui de développement
+export JWT_SECRET="$(openssl rand -base64 48)"
+docker compose up -d --build
+```
+
+## Option B — Compilation manuelle
+
+```bash
+cd frontend2
+npm ci
+VITE_API_BASE_URL= npm run build     # variable vide = même origine
+sudo cp -r dist/* /var/www/parcauto/
+sudo cp nginx.conf /etc/nginx/sites-available/parcauto
+# remplacer http://backend:8080 par http://127.0.0.1:8080 dans le fichier
+sudo ln -s /etc/nginx/sites-available/parcauto /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+## À faire côté backend
+
+À traiter avec la personne qui en a la charge :
+
+| Point | Pourquoi |
+|---|---|
+| `APP_JWT_SECRET` long et aléatoire | le secret de développement invaliderait toute la sécurité |
+| Mot de passe PostgreSQL dédié | `parcauto/parcauto` ne vaut que pour la machine locale |
+| `APP_STORAGE_UPLOAD_DIR` sur un volume persistant | sinon les fichiers envoyés disparaissent à chaque redéploiement |
+| Sauvegarde de la base | `pg_dump` régulier ; aucune reprise possible sans cela |
+| Jetons Mapbox et Traccar | stockés en base, à ressaisir dans l'écran Paramètres après la mise en ligne |
+
+## Vérifier que tout fonctionne
+
+```bash
+curl -I  http://VOTRE_VPS/                    # 200, type text/html
+curl -s  http://VOTRE_VPS/actuator/health     # {"status":"UP"}
+curl -I  http://VOTRE_VPS/engins              # 200 (et non 404 : repli SPA)
+curl -sI http://VOTRE_VPS/api/engins | head -1  # 401 ou 403 = le relais marche
+```
+
+Puis dans le navigateur : se connecter, ouvrir une carte (tuiles), et vérifier
+le témoin **« En direct »** de la barre de navigation — s'il reste gris, le
+relais WebSocket (`location /ws/`) ne fonctionne pas.
+
+## Limites connues
+
+- **Pas de HTTPS dans cette configuration.** Pour un test interne c'est
+  acceptable, mais les jetons de session circulent en clair. Sur une adresse
+  publique, ajouter un certificat (Certbot) avant toute donnée réelle.
+- **Bundle de 2,4 Mo** (674 Ko compressés), en un seul fichier. La compression
+  gzip est active dans `nginx.conf` ; un découpage par route reste à faire si le
+  premier chargement est jugé trop lent.
+- **La police Google Sans est chargée depuis Google Fonts.** Sur un serveur sans
+  accès sortant, ou derrière un filtrage, l'interface bascule sur une police
+  système. L'auto-hébergement est possible (le thème « nuit » le fait déjà pour
+  Source Sans 3).
