@@ -1,0 +1,335 @@
+/*
+ * Police du thème « Nuit vitrée » (Source Sans 3, version variable : un seul
+ * fichier pour toutes les graisses). Hébergée par l'application via
+ * @fontsource — aucun appel à un CDN, fonctionne hors ligne. Les @font-face
+ * ne sont téléchargées que si la police est réellement utilisée, donc jamais
+ * en thème clair/sombre. Doit précéder les directives @tailwind.
+ */
+@import "@fontsource-variable/source-sans-3";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /*
+   * Palette « Sable & Ambre » (frontend2, direction choisie le 2026-09-23 sur
+   * capture d'écran) — c'est le preset n° 4 du template de référence
+   * (sa.avidtemplates.com), dont les valeurs sont relevées dans sa feuille de
+   * style : fond brun chaud #2d271d, texte crème #f7ecdf, texte secondaire
+   * #dbc5aa, accent ambre #cd9438, bordures sable translucides (#d1b69c33,
+   * rendues ici en couleur pleine — les tokens Tailwind attendent une couleur
+   * opaque). Converties en hsl() pour les tokens existants.
+   *
+   *  - `.dark` = le thème par DÉFAUT, celui de la capture.
+   *  - `:root` = déclinaison claire de la même direction (crème + ambre
+   *    assombri à #9a6b16, seul moyen de garder un texte blanc lisible sur un
+   *    bouton ambre).
+   *
+   * La bascule est pilotée par la classe `dark` sur <html> (voir lib/theme.ts
+   * et le script inline d'index.html, qui l'applique avant le premier rendu).
+   * Les noms de variables sont identiques dans les deux blocs : aucun
+   * composant n'a à connaître le thème courant.
+   */
+  :root {
+    --background: 36 50% 96%;
+    --foreground: 37 26% 13%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 37 26% 13%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 37 26% 13%;
+
+    --primary: 39 75% 35%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 37 43% 90%;
+    --secondary-foreground: 37 26% 13%;
+
+    --muted: 37 43% 90%;
+    --muted-foreground: 33 17% 41%;
+
+    --accent: 37 43% 90%;
+    --accent-foreground: 37 26% 13%;
+
+    --destructive: 0 53% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 159 53% 35%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 37 82% 39%;
+    --warning-foreground: 38 22% 15%;
+
+    --border: 36 38% 85%;
+    --input: 36 38% 85%;
+    --ring: 39 75% 35%;
+
+    /* Rayon du template : --bs-border-radius: .375rem. */
+    --radius: 0.375rem;
+
+    /* Bornes du dégradé de fond (voir la règle `body` plus bas). */
+    --gradient-from: 38 55% 91%;
+    --gradient-to: 38 50% 97%;
+
+    /* Pastilles de statut : fond pastel chaud, texte foncé de la même teinte. */
+    --badge-success-bg: 150 37% 93%;
+    --badge-success-fg: 158 56% 27%;
+    --badge-info-bg: 191 44% 92%;
+    --badge-info-fg: 188 67% 28%;
+    --badge-warning-bg: 38 82% 91%;
+    --badge-warning-fg: 37 84% 29%;
+    --badge-danger-bg: 0 66% 94%;
+    --badge-danger-fg: 0 54% 40%;
+    --badge-neutral-bg: 37 43% 90%;
+    --badge-neutral-fg: 34 19% 35%;
+
+    /* Barre latérale blanche, état actif sable avec texte ambre. */
+    --sidebar-bg: 0 0% 100%;
+    --sidebar-active: 39 67% 91%;
+    --sidebar-chip: 37 43% 90%;
+    --sidebar-text: 34 19% 35%;
+    --sidebar-text-muted: 35 16% 53%;
+    --brand-from: 39 75% 35%;
+    --brand-to: 39 75% 35%;
+
+    /* Typographie et verre (2026-09-24), hérités par `.dark`. Valeurs par
+       défaut = rendu d'avant l'ajout de « Nuit vitrée » : Google Sans,
+       graisses Tailwind standard, voiles à 80 % floutés à 12 px. */
+    --police: "Google Sans";
+    --graisse-moyenne: 500;
+    --graisse-demi: 600;
+    --graisse-grasse: 700;
+    --verre-opacite: 0.8;
+    --verre-opacite-laterale: 0.8;
+    --verre-flou: 12px;
+  }
+
+  .dark {
+    --background: 38 22% 15%;
+    --foreground: 33 60% 92%;
+
+    --card: 42 28% 17%;
+    --card-foreground: 33 60% 92%;
+
+    --popover: 42 28% 17%;
+    --popover-foreground: 33 60% 92%;
+
+    --primary: 37 60% 51%;
+    --primary-foreground: 40 26% 11%;
+
+    --secondary: 36 21% 19%;
+    --secondary-foreground: 33 60% 92%;
+
+    --muted: 36 21% 19%;
+    --muted-foreground: 33 31% 71%;
+
+    --accent: 36 21% 19%;
+    --accent-foreground: 33 60% 92%;
+
+    --destructive: 0 66% 65%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 157 43% 52%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 37 76% 57%;
+    --warning-foreground: 38 22% 15%;
+
+    --border: 35 19% 25%;
+    --input: 35 19% 25%;
+    --ring: 37 60% 51%;
+
+    /* Le dégradé porte la profondeur du template : brun clair en haut à
+       gauche, quasi noir en bas. */
+    --gradient-from: 36 27% 18%;
+    --gradient-to: 37 24% 11%;
+
+    /* Pastilles de statut : fond brun teinté, texte vif. */
+    --badge-success-bg: 152 23% 16%;
+    --badge-success-fg: 156 49% 57%;
+    --badge-info-bg: 192 31% 15%;
+    --badge-info-fg: 187 51% 53%;
+    --badge-warning-bg: 39 43% 16%;
+    --badge-warning-fg: 37 76% 57%;
+    --badge-danger-bg: 7 29% 18%;
+    --badge-danger-fg: 0 74% 71%;
+    --badge-neutral-bg: 36 21% 19%;
+    --badge-neutral-fg: 33 31% 71%;
+
+    /* Barre latérale plus sombre que la page (comme la capture), état actif
+       brun doré avec texte/icône ambre. */
+    --sidebar-bg: 37 22% 12%;
+    --sidebar-active: 40 37% 19%;
+    --sidebar-chip: 36 21% 19%;
+    --sidebar-text: 33 31% 71%;
+    --sidebar-text-muted: 35 16% 53%;
+    --brand-from: 37 60% 51%;
+    --brand-to: 37 60% 51%;
+  }
+
+  /*
+   * « Nuit vitrée » (ajouté le 2026-09-24, d'après une maquette de tableau de
+   * bord fournie par l'utilisateur ; seules les couleurs, le fond et la
+   * typographie sont repris). Variante de `.dark` : lib/theme.ts pose la
+   * classe `dark` ET `data-theme="nuit"` sur <html> ; ce bloc (spécificité
+   * 0,2,0) surcharge donc `.dark` sans dépendre de l'ordre des règles.
+   *
+   * Fond : dégradé bleu nuit → indigo → prune (règle `body` plus bas).
+   * Panneaux : verre dépoli plus transparent (50 %) que les autres thèmes.
+   * Couleurs d'accent : bleu vif, vert, rouge — éclaircies pour rester
+   * lisibles en texte sur les panneaux (contraste ≥ 4,5:1 vérifié, WCAG AA),
+   * d'où un texte foncé sur les boutons pleins, comme le thème sombre.
+   * Bordure des champs (--input) à 3:1 sur les panneaux (WCAG 1.4.11).
+   * Police : Source Sans 3, graisses allégées (titres et libellés en 400).
+   */
+  .dark[data-theme="nuit"] {
+    --background: 228 42% 20%;
+    --foreground: 220 33% 96%;
+
+    --card: 226 45% 12%;
+    --card-foreground: 220 33% 96%;
+
+    --popover: 228 42% 16%;
+    --popover-foreground: 220 33% 96%;
+
+    --primary: 212 95% 68%;
+    --primary-foreground: 226 50% 12%;
+
+    --secondary: 225 35% 24%;
+    --secondary-foreground: 220 33% 96%;
+
+    --muted: 225 35% 24%;
+    --muted-foreground: 220 28% 78%;
+
+    --accent: 222 40% 28%;
+    --accent-foreground: 220 33% 96%;
+
+    --destructive: 356 90% 74%;
+    --destructive-foreground: 356 60% 12%;
+
+    --success: 142 60% 58%;
+    --success-foreground: 145 50% 10%;
+
+    --warning: 40 92% 62%;
+    --warning-foreground: 38 60% 12%;
+
+    --border: 224 32% 30%;
+    --input: 222 25% 55%;
+    --ring: 212 95% 68%;
+
+    /* Angles presque vifs, comme la maquette. */
+    --radius: 0.25rem;
+
+    --gradient-from: 222 40% 26%;
+    --gradient-to: 262 36% 20%;
+
+    --badge-success-bg: 145 40% 17%;
+    --badge-success-fg: 142 60% 62%;
+    --badge-info-bg: 214 50% 20%;
+    --badge-info-fg: 210 90% 74%;
+    --badge-warning-bg: 38 45% 17%;
+    --badge-warning-fg: 40 90% 64%;
+    --badge-danger-bg: 355 40% 19%;
+    --badge-danger-fg: 356 85% 74%;
+    --badge-neutral-bg: 225 30% 22%;
+    --badge-neutral-fg: 220 25% 80%;
+
+    /* Barre latérale plus foncée que les panneaux, comme la maquette. */
+    --sidebar-bg: 222 42% 11%;
+    --sidebar-active: 216 45% 24%;
+    --sidebar-chip: 222 34% 20%;
+    --sidebar-text: 220 28% 82%;
+    --sidebar-text-muted: 220 22% 70%;
+    --brand-from: 212 95% 68%;
+    --brand-to: 212 95% 68%;
+
+    --police: "Source Sans 3 Variable", "Source Sans 3";
+    --graisse-moyenne: 400;
+    --graisse-demi: 400;
+    --graisse-grasse: 600;
+    --verre-opacite: 0.5;
+    --verre-opacite-laterale: 0.6;
+    --verre-flou: 16px;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  /*
+   * Fond dégradé, comme le template de référence (sa.avidtemplates.com) : il
+   * pose une photo en `cover` derrière toute l'application et fait flotter
+   * au-dessus des panneaux translucides (--elevated: #08162b33) floutés par
+   * `backdrop-filter`. Reproduit ici en CSS pur plutôt qu'avec leur image,
+   * qui est un actif propriétaire du template : deux halos radiaux bleus sur
+   * un dégradé linéaire, en `fixed` pour que le fond ne défile pas avec le
+   * contenu (seul <main> défile, voir AppLayout.tsx).
+   *
+   * Le dégradé n'est visible qu'entre les panneaux : c'est exactement ce qui
+   * donne au template sa profondeur. Les surfaces (cartes, barre latérale,
+   * barre du haut) sont rendues semi-transparentes dans leurs composants
+   * respectifs — voir card.tsx, Sidebar.tsx, Topbar.tsx.
+   */
+  body {
+    @apply bg-background text-foreground font-sans;
+    background-image:
+      radial-gradient(80rem 40rem at 12% -10%, hsl(var(--primary) / 0.16), transparent 60%),
+      radial-gradient(60rem 36rem at 105% 5%, hsl(var(--primary) / 0.1), transparent 55%),
+      linear-gradient(170deg, hsl(var(--gradient-from)) 0%, hsl(var(--gradient-to)) 55%);
+    background-attachment: fixed;
+    background-size: cover;
+  }
+  /*
+   * Fond « Nuit vitrée » : ardoise en haut à gauche, indigo profond en haut à
+   * droite, prune en bas à droite, sur un dégradé bleu nuit → violet. Halos
+   * volontairement retenus (ardoise à 42 % de luminosité) : du texte est posé
+   * directement sur ce fond (en-têtes de page), il doit rester lisible.
+   */
+  .dark[data-theme="nuit"] body {
+    background-image:
+      radial-gradient(70rem 45rem at 0% 0%, hsl(208 30% 42% / 0.45), transparent 60%),
+      radial-gradient(60rem 40rem at 100% 0%, hsl(234 70% 30% / 0.7), transparent 60%),
+      radial-gradient(60rem 45rem at 100% 100%, hsl(326 50% 42% / 0.7), transparent 60%),
+      linear-gradient(160deg, hsl(var(--gradient-from)) 0%, hsl(228 42% 20%) 55%, hsl(var(--gradient-to)) 100%);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+  }
+}
+
+/*
+ * Surfaces en verre dépoli (2026-09-24) — remplacent les classes
+ * `bg-card backdrop-blur-md supports-[backdrop-filter]:bg-card/80` répétées
+ * dans card.tsx, Topbar.tsx et Sidebar.tsx : l'opacité et le flou deviennent
+ * des variables de thème. Sans support de backdrop-filter, la surface reste
+ * opaque (lisibilité d'abord). En couche `components` : une classe `bg-*`
+ * passée à un composant l'emporte toujours.
+ */
+@layer components {
+  .surface-verre,
+  .surface-verre-laterale {
+    -webkit-backdrop-filter: blur(var(--verre-flou));
+    backdrop-filter: blur(var(--verre-flou));
+  }
+  .surface-verre {
+    background-color: hsl(var(--card));
+  }
+  .surface-verre-laterale {
+    background-color: hsl(var(--sidebar-bg));
+  }
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    .surface-verre {
+      background-color: hsl(var(--card) / var(--verre-opacite));
+    }
+    .surface-verre-laterale {
+      background-color: hsl(var(--sidebar-bg) / var(--verre-opacite-laterale));
+    }
+  }
+}

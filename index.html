@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ParcAuto — Gestion de parc</title>
+    <!--
+      Applique le thème mémorisé (clé "parcauto.theme", voir src/lib/theme.ts)
+      avant le premier rendu React, pour éviter un flash de thème clair au
+      chargement. Sombre par défaut : c'est le preset « Sable & Ambre »
+      retenu (voir la palette dans index.css). « nuit » (Nuit vitrée) est une
+      variante sombre : classe `dark` + data-theme="nuit". Doit rester
+      identique à appliquerTheme() dans theme.ts.
+    -->
+    <script>
+      (function () {
+        var theme = "sombre";
+        try {
+          theme = localStorage.getItem("parcauto.theme") || "sombre";
+        } catch (e) {}
+        var racine = document.documentElement;
+        var fonce = theme !== "clair";
+        racine.classList.toggle("dark", fonce);
+        if (theme === "nuit") racine.setAttribute("data-theme", "nuit");
+        racine.style.colorScheme = fonce ? "dark" : "light";
+      })();
+    </script>
+    <!-- Police de l'app (voir tailwind.config.js, fontFamily) : Google Sans, celle du template
+         de référence. Chargée ici en <link> plutôt qu'en @import CSS : le navigateur la découvre
+         dès le parsing du HTML au lieu d'attendre la feuille de style. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
