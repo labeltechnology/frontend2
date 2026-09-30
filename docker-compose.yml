@@ -3,7 +3,7 @@
 #
 # Les valeurs sont lues dans le fichier .env à côté de ce fichier :
 #   VITE_API_BASE_URL=http://IP_DU_VPS:8080   (obligatoire, inscrite au build)
-#   FRONT_PORT=80                             (facultatif)
+#   FRONT_PORT=8081                           (facultatif)
 #
 # Lancement : docker compose up -d --build
 # Après un changement de VITE_API_BASE_URL, relancer avec --build : la valeur
@@ -19,4 +19,4 @@ services:
     container_name: parcauto-frontend
     restart: unless-stopped
     ports:
-      - "0.0.0.0:${FRONT_PORT:-80}:3000"
+      - "0.0.0.0:${FRONT_PORT:-8081}:3000"

@@ -11,7 +11,7 @@
 # Variables (même écran, onglet Variables) :
 #   VITE_API_BASE_URL (obligatoire) URL publique du backend, sans slash final,
 #                     ex. http://IP_DU_VPS:8080 — inscrite dans le bundle
-#   FRONT_PORT        (facultatif) port publié sur le VPS, 80 par défaut
+#   FRONT_PORT        (facultatif) port publié sur le VPS, 8081 par défaut
 
 name: Déploiement
 
@@ -103,7 +103,7 @@ jobs:
           VPS_USER: ${{ secrets.VPS_USER }}
           VPS_PORT: ${{ secrets.VPS_PORT || '22' }}
           IMAGE: ${{ needs.build.outputs.image }}:${{ github.sha }}
-          FRONT_PORT: ${{ vars.FRONT_PORT || '80' }}
+          FRONT_PORT: ${{ vars.FRONT_PORT || '8081' }}
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Les valeurs sont transmises en tête du script distant, échappées
