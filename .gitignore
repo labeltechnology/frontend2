@@ -4,6 +4,9 @@ node_modules
 # Build
 dist
 dist-ssr
+# Cache de compilation incrémentale de TypeScript : régénéré à chaque build,
+# propre à la machine — n'a pas à être versionné.
+*.tsbuildinfo
 
 # Environnement local (contient potentiellement des URLs spécifiques à la machine)
 .env
