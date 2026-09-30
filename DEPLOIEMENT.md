@@ -23,6 +23,19 @@ et déclarer l'origine du frontend dans `APP_CORS_ALLOWED_ORIGINS`.
 - 2 Go de RAM au minimum (le backend Java en consomme l'essentiel) ;
 - les ports 80 (et 443 si certificat) ouverts.
 
+## Le backend est déjà en place sur le VPS
+
+Dans ce cas, seul le frontend reste à installer : nginx sert les fichiers et
+relaie `/api` et `/ws` vers le backend local. Rien à modifier côté backend —
+en particulier `APP_CORS_ALLOWED_ORIGINS` devient sans objet, puisque le
+navigateur ne voit qu'une seule origine.
+
+Avant de configurer, identifier l'existant (voir « Reconnaître l'installation
+en place » plus bas) : le backend écoute-t-il sur 8080, tourne-t-il en
+conteneur, et un serveur web est-il déjà installé ? La réponse change
+seulement deux choses : l'adresse dans le bloc `upstream` de `nginx.conf`, et
+le fait d'ajouter un fichier de configuration plutôt que d'installer nginx.
+
 ## Option A — Docker Compose (recommandée pour un test)
 
 Le `Dockerfile` du frontend est fourni. À la racine du projet, un
@@ -73,22 +86,38 @@ export JWT_SECRET="$(openssl rand -base64 48)"
 docker compose up -d --build
 ```
 
-## Option B — Compilation manuelle
+## Option B — Compilation manuelle (backend déjà en place)
+
+La compilation peut se faire sur le poste de développement puis être copiée :
+le VPS n'a alors besoin ni de Node ni des sources.
 
 ```bash
+# --- sur le poste de développement ---
 cd frontend2
 npm ci
 VITE_API_BASE_URL= npm run build     # variable vide = même origine
-sudo cp -r dist/* /var/www/parcauto/
-sudo cp nginx.conf /etc/nginx/sites-available/parcauto
-# remplacer http://backend:8080 par http://127.0.0.1:8080 dans le fichier
-sudo ln -s /etc/nginx/sites-available/parcauto /etc/nginx/sites-enabled/
+tar czf parcauto-frontend.tgz -C dist .
+scp parcauto-frontend.tgz nginx.conf UTILISATEUR@VPS:/tmp/
+
+# --- sur le VPS ---
+sudo mkdir -p /var/www/parcauto
+sudo tar xzf /tmp/parcauto-frontend.tgz -C /var/www/parcauto
+sudo cp /tmp/nginx.conf /etc/nginx/sites-available/parcauto
+# adapter deux lignes du fichier :
+#   root  → /var/www/parcauto   (au lieu de /usr/share/nginx/html, valeur Docker)
+#   upstream → l'adresse relevée à l'étape « Reconnaître l'installation »
+sudo ln -sf /etc/nginx/sites-available/parcauto /etc/nginx/sites-enabled/
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
+`nginx -t` avant le rechargement n'est pas une précaution de style : une erreur
+de syntaxe non détectée laisse nginx sur son ancienne configuration sans
+prévenir, et l'on cherche ensuite pourquoi rien n'a changé.
+
 ## À faire côté backend
 
-À traiter avec la personne qui en a la charge :
+Sans objet si le backend tourne déjà et que ces points ont été traités à son
+installation. À vérifier néanmoins avec la personne qui en a la charge :
 
 | Point | Pourquoi |
 |---|---|
@@ -110,6 +139,33 @@ curl -sI http://VOTRE_VPS/api/engins | head -1  # 401 ou 403 = le relais marche
 Puis dans le navigateur : se connecter, ouvrir une carte (tuiles), et vérifier
 le témoin **« En direct »** de la barre de navigation — s'il reste gris, le
 relais WebSocket (`location /ws/`) ne fonctionne pas.
+
+## Reconnaître l'installation en place
+
+À lancer sur le VPS :
+
+```bash
+# Qui écoute, et sur quoi
+sudo ss -lntp | grep -E ':(80|443|8080|5432)\s'
+
+# Un serveur web est-il déjà installé et actif ?
+systemctl is-active nginx apache2 2>/dev/null
+
+# Le backend tourne-t-il en conteneur ?
+docker ps --format '{{.Names}}	{{.Image}}	{{.Ports}}' 2>/dev/null
+
+# Le backend répond-il ?
+curl -s localhost:8080/actuator/health
+```
+
+Lecture des résultats :
+
+| Constat | Conséquence |
+|---|---|
+| `8080` écouté par `java` | `upstream` reste sur `127.0.0.1:8080` |
+| `docker ps` montre le backend | mettre le nom du service dans `upstream`, et rattacher le frontend au même réseau Docker |
+| `nginx` déjà actif | ne pas en installer un second : ajouter les blocs `location` de `nginx.conf` au fichier existant |
+| `443` écouté | HTTPS déjà en place : le relais en profite automatiquement, et le temps réel bascule en `wss` |
 
 ## Limites connues
 
