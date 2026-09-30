@@ -26,15 +26,8 @@
         racine.style.colorScheme = fonce ? "dark" : "light";
       })();
     </script>
-    <!-- Police de l'app (voir tailwind.config.js, fontFamily) : Google Sans, celle du template
-         de référence. Chargée ici en <link> plutôt qu'en @import CSS : le navigateur la découvre
-         dès le parsing du HTML au lieu d'attendre la feuille de style. -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Les polices sont auto-hébergées via @fontsource (voir src/index.css) : aucun appel à
+         un CDN externe, l'application fonctionne sur un serveur sans accès sortant. -->
   </head>
   <body>
     <div id="root"></div>

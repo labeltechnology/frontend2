@@ -6,6 +6,15 @@
  * en thème clair/sombre. Doit précéder les directives @tailwind.
  */
 @import "@fontsource-variable/source-sans-3";
+/*
+ * Google Sans, auto-hébergée (licence OFL-1.1) : jusqu'au 2026-09-30 elle
+ * était chargée depuis fonts.googleapis.com, ce qui faisait dépendre chaque
+ * ouverture de l'application d'un tiers — et la dégradait en police système
+ * sur un serveur sans accès sortant ou derrière un filtrage. Le fichier
+ * couvre tous les alphabets, mais `unicode-range` fait que le navigateur ne
+ * télécharge que le sous-ensemble dont la page a besoin (latin ici).
+ */
+@import "@fontsource-variable/google-sans";
 
 @tailwind base;
 @tailwind components;
@@ -97,7 +106,7 @@
     /* Typographie et verre (2026-09-24), hérités par `.dark`. Valeurs par
        défaut = rendu d'avant l'ajout de « Nuit vitrée » : Google Sans,
        graisses Tailwind standard, voiles à 80 % floutés à 12 px. */
-    --police: "Google Sans";
+    --police: "Google Sans Variable", "Google Sans";
     --graisse-moyenne: 500;
     --graisse-demi: 600;
     --graisse-grasse: 700;
