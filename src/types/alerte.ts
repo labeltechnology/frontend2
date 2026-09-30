@@ -61,4 +61,11 @@ export interface Alerte {
   /** Chantier concerné (2026-09-29) ; absent ou null sinon. */
   idChantier?: number | null;
   nomChantier?: string | null;
+  /**
+   * Clôture automatique (2026-09-30) : vrai si le système a clos l'alerte
+   * parce que sa cause a disparu (document renouvelé, stock réapprovisionné…).
+   */
+  traitementAutomatique?: boolean;
+  /** Motif de la clôture automatique ; null pour un traitement manuel. */
+  motifTraitement?: string | null;
 }

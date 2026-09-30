@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Accueil } from "@/routes/Accueil";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { AuthProvider } from "@/features/auth/AuthContext";
@@ -78,7 +79,8 @@ export function App() {
             </RequireAuth>
           }
         >
-          <Route index element={garder("/", <DashboardPage />)} />
+          {/* Pages par métier (2026-09-30) : le conducteur arrive sur la messagerie. */}
+          <Route index element={<Accueil tableauDeBord={<DashboardPage />} />} />
           <Route path="analytique" element={garder("/analytique", <AnalyticsPage />)} />
           <Route path="engins" element={garder("/engins", <EnginsPage />)} />
           {/* Page « Fiche véhicule » (2026-09-24) : création et correction, même page. */}

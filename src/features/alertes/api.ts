@@ -43,3 +43,26 @@ export function useTraiterAlerte() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["alertes"] }),
   });
 }
+
+/** Résultat de « Vérifier les causes » (2026-09-30). */
+export interface ResultatResolution {
+  alertesCloses: number;
+}
+
+/**
+ * Lance tout de suite la clôture automatique (sinon faite toutes les 15 min
+ * par le serveur) : utile juste après avoir renouvelé un document ou
+ * planifié une maintenance.
+ */
+async function verifierCauses(): Promise<ResultatResolution> {
+  const { data } = await apiClient.post<ResultatResolution>("/api/alertes/resolution-automatique");
+  return data;
+}
+
+export function useVerifierCauses() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: verifierCauses,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["alertes"] }),
+  });
+}

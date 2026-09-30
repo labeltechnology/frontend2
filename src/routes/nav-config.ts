@@ -1,4 +1,4 @@
-import { ROLES_PAR_CAPACITE } from "@/lib/droits";
+import { ACCES_PAGES } from "@/routes/acces-pages";
 import type { RoleLibelle } from "@/types/auth";
 import {
   LayoutDashboard,
@@ -64,15 +64,12 @@ export interface NavItem {
   icon: LucideIcon;
   /** Groupe de la barre latérale — obligatoire : toute nouvelle entrée doit choisir sa place. */
   groupe: IdGroupeNav;
-  /** Omis = accessible à tout utilisateur authentifié. Toujours tiré de ROLES_PAR_CAPACITE (lib/droits.ts). */
+  /** Omis = accessible à tout utilisateur authentifié. Toujours tiré de ACCES_PAGES (routes/acces-pages.ts). */
   rolesAutorises?: readonly RoleLibelle[];
 }
 
-/**
- * Niveaux d'autorisation (2026-09-28) : chaque restriction reprend une
- * capacité de lib/droits.ts, miroir des @PreAuthorize du serveur.
- */
-const { GERER_PARC, CONSULTER_GESTION, ADMINISTRER } = ROLES_PAR_CAPACITE;
+/** Pages par métier (2026-09-30) : les rôles de chaque page viennent de routes/acces-pages.ts. */
+const acces = (to: string) => ({ to, rolesAutorises: ACCES_PAGES[to] });
 
 /**
  * Un seul point de vérité pour la navigation : chaque entrée pilote à la
@@ -83,56 +80,56 @@ const { GERER_PARC, CONSULTER_GESTION, ADMINISTRER } = ROLES_PAR_CAPACITE;
  */
 export const NAV_ITEMS: NavItem[] = [
   // Pilotage : analyser et décider.
-  { to: "/", label: "Tableau de bord", icon: LayoutDashboard, groupe: "pilotage" },
-  { to: "/analytique", label: "Analytique", icon: TrendingUp, groupe: "pilotage" },
+  { ...acces("/"), label: "Tableau de bord", icon: LayoutDashboard, groupe: "pilotage" },
+  { ...acces("/analytique"), label: "Analytique", icon: TrendingUp, groupe: "pilotage" },
   // Performance et utilisation (2026-09-28) : taux d'utilisation réel, coût par km / h, KPI du parc.
-  { to: "/performance", label: "Performance", icon: Gauge, groupe: "pilotage", rolesAutorises: CONSULTER_GESTION },
+  { ...acces("/performance"), label: "Performance", icon: Gauge, groupe: "pilotage" },
   // Coûts et rentabilité (2026-09-29) : TCO, véhicules à problèmes, budget carburant, conduite.
-  { to: "/couts", label: "Coûts", icon: Wallet, groupe: "pilotage", rolesAutorises: CONSULTER_GESTION },
+  { ...acces("/couts"), label: "Coûts", icon: Wallet, groupe: "pilotage" },
   // Maintenance et fiabilité, conformité, sinistres ; renouvellement (2026-09-29)
-  { to: "/fiabilite", label: "Fiabilité et conformité", icon: ShieldCheck, groupe: "pilotage", rolesAutorises: CONSULTER_GESTION },
-  { to: "/renouvellement", label: "Renouvellement", icon: RefreshCw, groupe: "pilotage", rolesAutorises: CONSULTER_GESTION },
+  { ...acces("/fiabilite"), label: "Fiabilité et conformité", icon: ShieldCheck, groupe: "pilotage" },
+  { ...acces("/renouvellement"), label: "Renouvellement", icon: RefreshCw, groupe: "pilotage" },
   // Recommandations par règles (2026-09-29) : actions chiffrées tirées des indicateurs.
-  { to: "/recommandations", label: "Recommandations", icon: Lightbulb, groupe: "pilotage", rolesAutorises: CONSULTER_GESTION },
-  { to: "/rapports", label: "Rapports", icon: BarChart3, groupe: "pilotage", rolesAutorises: CONSULTER_GESTION },
+  { ...acces("/recommandations"), label: "Recommandations", icon: Lightbulb, groupe: "pilotage" },
+  { ...acces("/rapports"), label: "Rapports", icon: BarChart3, groupe: "pilotage" },
   // Messagerie interne (2026-09-28) : tous les rôles ; affichée à part dans la barre (pastille des non-lus).
-  { to: "/messagerie", label: "Messagerie", icon: MessagesSquare, groupe: "pilotage" },
+  { ...acces("/messagerie"), label: "Messagerie", icon: MessagesSquare, groupe: "pilotage" },
   // Parc : le matériel, ses papiers et les conducteurs.
-  { to: "/engins", label: "Véhicules", icon: Car, groupe: "parc" },
-  { to: "/types-engin", label: "Types de véhicule", icon: Tags, groupe: "parc", rolesAutorises: GERER_PARC },
-  { to: "/listes-fiche", label: "Listes de la fiche", icon: ListChecks, groupe: "parc", rolesAutorises: GERER_PARC },
-  { to: "/documents", label: "Documents", icon: FileText, groupe: "parc" },
-  { to: "/conducteurs", label: "Conducteurs", icon: Users, groupe: "parc", rolesAutorises: CONSULTER_GESTION },
-  { to: "/zones", label: "Zones géographiques", icon: MapPinned, groupe: "parc" },
+  { ...acces("/engins"), label: "Véhicules", icon: Car, groupe: "parc" },
+  { ...acces("/types-engin"), label: "Types de véhicule", icon: Tags, groupe: "parc" },
+  { ...acces("/listes-fiche"), label: "Listes de la fiche", icon: ListChecks, groupe: "parc" },
+  { ...acces("/documents"), label: "Documents", icon: FileText, groupe: "parc" },
+  { ...acces("/conducteurs"), label: "Conducteurs", icon: Users, groupe: "parc" },
+  { ...acces("/zones"), label: "Zones géographiques", icon: MapPinned, groupe: "parc" },
   // Exploitation : le travail de tous les jours.
-  { to: "/missions", label: "Missions", icon: RouteIcon, groupe: "exploitation" },
-  { to: "/affectations", label: "Affectations", icon: ClipboardList, groupe: "exploitation" },
-  { to: "/chantiers", label: "Chantiers", icon: HardHat, groupe: "exploitation" },
-  { to: "/gps", label: "GPS & trajets", icon: Satellite, groupe: "exploitation" },
-  { to: "/carburant", label: "Carburant", icon: Fuel, groupe: "exploitation" },
-  { to: "/incidents", label: "Incidents", icon: TriangleAlert, groupe: "exploitation" },
-  { to: "/alertes", label: "Alertes", icon: BellRing, groupe: "exploitation" },
+  { ...acces("/missions"), label: "Missions", icon: RouteIcon, groupe: "exploitation" },
+  { ...acces("/affectations"), label: "Affectations", icon: ClipboardList, groupe: "exploitation" },
+  { ...acces("/chantiers"), label: "Chantiers", icon: HardHat, groupe: "exploitation" },
+  { ...acces("/gps"), label: "GPS & trajets", icon: Satellite, groupe: "exploitation" },
+  { ...acces("/carburant"), label: "Carburant", icon: Fuel, groupe: "exploitation" },
+  { ...acces("/incidents"), label: "Incidents", icon: TriangleAlert, groupe: "exploitation" },
+  { ...acces("/alertes"), label: "Alertes", icon: BellRing, groupe: "exploitation" },
   // Atelier
-  { to: "/maintenance", label: "Maintenance", icon: Wrench, groupe: "atelier" },
-  { to: "/garages-externes", label: "Garages externes", icon: Building2, groupe: "atelier" },
-  { to: "/fournisseurs", label: "Fournisseurs", icon: Truck, groupe: "atelier" },
+  { ...acces("/maintenance"), label: "Maintenance", icon: Wrench, groupe: "atelier" },
+  { ...acces("/garages-externes"), label: "Garages externes", icon: Building2, groupe: "atelier" },
+  { ...acces("/fournisseurs"), label: "Fournisseurs", icon: Truck, groupe: "atelier" },
   // Finances
-  { to: "/locations-externes", label: "Locations externes", icon: Handshake, groupe: "finances", rolesAutorises: CONSULTER_GESTION },
-  { to: "/locations-entrantes", label: "Locations entrantes", icon: ArrowDownToLine, groupe: "finances", rolesAutorises: CONSULTER_GESTION },
-  { to: "/prestataires-location", label: "Prestataires de location", icon: Store, groupe: "finances", rolesAutorises: CONSULTER_GESTION },
-  { to: "/factures-proforma", label: "Factures proforma", icon: Receipt, groupe: "finances", rolesAutorises: CONSULTER_GESTION },
+  { ...acces("/locations-externes"), label: "Locations externes", icon: Handshake, groupe: "finances" },
+  { ...acces("/locations-entrantes"), label: "Locations entrantes", icon: ArrowDownToLine, groupe: "finances" },
+  { ...acces("/prestataires-location"), label: "Prestataires de location", icon: Store, groupe: "finances" },
+  { ...acces("/factures-proforma"), label: "Factures proforma", icon: Receipt, groupe: "finances" },
   // Export comptable (2026-09-29) : écritures CSV des factures, du carburant et de la maintenance.
-  { to: "/export-comptable", label: "Export comptable", icon: FileSpreadsheet, groupe: "finances", rolesAutorises: CONSULTER_GESTION },
+  { ...acces("/export-comptable"), label: "Export comptable", icon: FileSpreadsheet, groupe: "finances" },
   // Administration (Paramètres est présenté à part par la barre de navigation)
   // Mise en service (2026-09-30) : les 5 étapes de réglage, avec leur avancement.
-  { to: "/mise-en-service", label: "Mise en service", icon: Rocket, groupe: "administration", rolesAutorises: ADMINISTRER },
-  { to: "/utilisateurs", label: "Utilisateurs", icon: UserCog, groupe: "administration", rolesAutorises: ADMINISTRER },
-  { to: "/journal-audit", label: "Journal d'audit", icon: History, groupe: "administration", rolesAutorises: ADMINISTRER },
+  { ...acces("/mise-en-service"), label: "Mise en service", icon: Rocket, groupe: "administration" },
+  { ...acces("/utilisateurs"), label: "Utilisateurs", icon: UserCog, groupe: "administration" },
+  { ...acces("/journal-audit"), label: "Journal d'audit", icon: History, groupe: "administration" },
   // Suivi du logiciel (adoption, qualité des données, connexions) et import Excel / CSV (2026-09-29).
-  { to: "/suivi-logiciel", label: "Suivi du logiciel", icon: Activity, groupe: "administration", rolesAutorises: ADMINISTRER },
-  { to: "/imports", label: "Import Excel / CSV", icon: FileUp, groupe: "administration", rolesAutorises: GERER_PARC },
-  { to: "/aide", label: "Aide", icon: HelpCircle, groupe: "administration" },
-  { to: "/parametres", label: "Paramètres", icon: Settings, groupe: "administration", rolesAutorises: ADMINISTRER },
+  { ...acces("/suivi-logiciel"), label: "Suivi du logiciel", icon: Activity, groupe: "administration" },
+  { ...acces("/imports"), label: "Import Excel / CSV", icon: FileUp, groupe: "administration" },
+  { ...acces("/aide"), label: "Aide", icon: HelpCircle, groupe: "administration" },
+  { ...acces("/parametres"), label: "Paramètres", icon: Settings, groupe: "administration" },
 ];
 
 /**

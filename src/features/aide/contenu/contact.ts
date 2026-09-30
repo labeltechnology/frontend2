@@ -53,6 +53,39 @@ export const pageNouveautes: PageNouveautes = {
   versions: [
     {
       date: "2026-09-30",
+      titre: "Chacun voit les pages de son métier",
+      points: [
+        "Le **DG**, le **responsable du parc** et l'**administrateur** voient toutes les pages et ont tous les droits.",
+        "Le **chef de maintenance** voit l'atelier : maintenances, pièces, garages, fournisseurs, véhicules, incidents, fiabilité et les alertes de l'atelier. L'**assistant maintenance** voit la même chose, sans la fiabilité, en lecture.",
+        "Le **comptable** voit les finances : coûts, renouvellement, rapports, carburant, maintenance, garages et fournisseurs, locations, prestataires, proformas et export comptable.",
+        "Le **chef de chantier** voit ses chantiers, leurs affectations, leurs véhicules sur la carte GPS, leurs incidents et leurs alertes.",
+        "L'**assistant du parc** voit le parc et l'exploitation : véhicules, documents, conducteurs, zones, missions, affectations, chantiers, GPS, carburant, incidents, alertes et rapports.",
+        "Le **conducteur** n'a sur le site que la **Messagerie** et l'**Aide** ; tout le reste se fait dans l'application mobile.",
+        "Nouveaux **tableaux de bord par métier** : atelier (planning, retards, pièces à réapprovisionner), finances (factures à régler et à encaisser, contrats à échéance, dépenses du mois) et chef de chantier (véhicules sur place, demandes de matériel).",
+        "Le serveur applique les mêmes règles : une page ou une donnée hors de votre métier est refusée, même par un lien direct.",
+      ],
+    },
+    {
+      date: "2026-09-30",
+      titre: "Chantiers sur la carte GPS et trajets par période",
+      points: [
+        "Carte **GPS & trajets** : les chantiers en cours et planifiés apparaissent (casque de chantier), avec leur périmètre de présence et, au choix, leur plan.",
+        "La bulle d'un véhicule indique son chantier du jour et s'il est sur place ou hors du chantier ; la bulle d'un chantier liste ses véhicules.",
+        "Trajet d'un véhicule sur une période (aujourd'hui, hier, 7 jours ou dates au choix) avec distance, vitesse maximale et passages sur chantier (entrée, sortie, durée).",
+      ],
+    },
+    {
+      date: "2026-09-30",
+      titre: "Alertes closes automatiquement",
+      points: [
+        "Une alerte se ferme seule quand sa cause disparaît : document renouvelé, entretien fait ou planifié, stock réapprovisionné, sortie ou retour de chantier saisi, chantier démarré ou terminé, demande de matériel traitée.",
+        "Son statut indique « Close auto » avec le motif ; le journal d'audit garde la trace.",
+        "Bouton **Vérifier les causes** sur la page **Alertes** : le contrôle se fait tout de suite, sans attendre les 15 minutes.",
+        "Un document expiré ne crée plus une nouvelle alerte toutes les 6 heures : une seule, tant qu'elle est ouverte.",
+      ],
+    },
+    {
+      date: "2026-09-30",
       titre: "Ergonomie : trouver et saisir plus vite",
       points: [
         "Menu rangé par métier : **Pilotage**, **Parc**, **Exploitation**, **Atelier**, **Finances**, **Administration**.",

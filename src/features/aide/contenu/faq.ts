@@ -85,6 +85,12 @@ export const themesFaq: SectionAide[] = [
         { motsCles: ["escalade", "priorité", "critique", "monte"], voirAussi: ["guide-traiter-alerte", "guide-regler-controles"] },
       ),
       q(
+        "faq-alerte-close-seule",
+        "Pourquoi une alerte s'est-elle fermée toute seule ?",
+        "Sa cause a disparu : document renouvelé, maintenance planifiée ou faite, stock réapprovisionné, sortie ou retour de chantier saisi… Dans le filtre **Toutes**, son statut indique « Close auto » et le motif. Le journal d'audit garde la trace.",
+        { motsCles: ["close auto", "fermée", "disparue", "automatique", "motif"], voirAussi: ["guide-traiter-alerte"] },
+      ),
+      q(
         "faq-alertes-gps-repetees",
         "Je reçois la même alerte GPS toutes les 15 minutes : est-ce normal ?",
         "Oui, tant que le problème dure, le contrôle se répète. Les alertes du même type sont regroupées sur une seule ligne avec leur nombre. Un clic sur **Tout traiter** les ferme ensemble.",

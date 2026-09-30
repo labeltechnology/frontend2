@@ -57,7 +57,10 @@ export const pagesDemarrer: PageTexte[] = [
       },
       {
         titre: "Résultat",
-        paragraphes: ["Le **Tableau de bord** s'ouvre. Les menus affichés dépendent de votre rôle."],
+        paragraphes: [
+          "Le **Tableau de bord** de votre métier s'ouvre (direction, atelier, finances, chantier). Les menus affichés dépendent de votre rôle : chacun ne voit que les pages de son métier.",
+          "Conducteur : la **Messagerie** s'ouvre ; le reste de votre travail se fait dans l'application mobile.",
+        ],
       },
       {
         titre: "Bon à savoir",
@@ -87,7 +90,7 @@ export const pagesDemarrer: PageTexte[] = [
         tableau: {
           colonnes: ["Élément", "À quoi il sert"],
           lignes: [
-            ["**Tableau de bord**", "Page d'accueil : chiffres du parc, missions en cours, alertes."],
+            ["**Tableau de bord**", "Page d'accueil de votre métier : chiffres clés, liste « À traiter », planning ou factures selon le rôle."],
             ["**Pilotage**", "Analytique, Performance, Coûts, Fiabilité, Renouvellement, Recommandations, Rapports."],
             ["**Parc**", "Véhicules, types, documents, conducteurs, zones."],
             ["**Exploitation**", "Missions, affectations, chantiers, GPS, carburant, incidents, alertes."],

@@ -1,4 +1,5 @@
 import { peut } from "@/lib/droits";
+import { pageVisible } from "@/routes/acces-pages";
 import type { RoleLibelle } from "@/types/auth";
 import type { IdRubriqueAide, PageAide, PageGuide, RubriqueAide, SectionAide } from "@/types/aide";
 
@@ -25,9 +26,15 @@ export function indexerPages(centre: readonly RubriqueAide[]): Map<string, PageP
   return new Map(toutesLesPages(centre).map((p) => [p.page.id, p]));
 }
 
-/** La page est-elle faisable par ce rôle ? (page sans capacité : oui) */
+/**
+ * La page d'aide concerne-t-elle ce rôle ? Il faut la capacité demandée
+ * (s'il y en a une) et, depuis les pages par métier (2026-09-30), pouvoir
+ * ouvrir au moins un des écrans décrits (« /engins/:id/rapport » → « /engins »).
+ */
 export function accessible(page: PageAide, role: RoleLibelle | undefined): boolean {
-  return !page.capacite || peut(role, page.capacite);
+  const ecrans = page.ecrans ?? [];
+  const ecranVisible = ecrans.length === 0 || ecrans.some((e) => pageVisible(role, e.replace(/\/:[^/]+/g, "/0")));
+  return (!page.capacite || peut(role, page.capacite)) && ecranVisible;
 }
 
 /** « /engins/:id/rapport » → expression qui reconnaît « /engins/12/rapport ». */

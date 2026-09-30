@@ -84,7 +84,19 @@ export type Urgence = "critique" | "elevee" | "moyenne";
 export interface ElementATraiter {
   cle: string;
   urgence: Urgence;
-  categorie: "Alerte" | "Incident" | "Document" | "Mission" | "Véhicule";
+  /** Tableaux de bord par métier (2026-09-30) : atelier, finances, chantier ajoutent leurs catégories. */
+  categorie:
+    | "Alerte"
+    | "Incident"
+    | "Document"
+    | "Mission"
+    | "Véhicule"
+    | "Maintenance"
+    | "Pièce"
+    | "Facture"
+    | "Contrat"
+    | "Chantier"
+    | "Demande";
   titre: string;
   detail: string;
   lien: string;
@@ -94,6 +106,35 @@ export interface ElementATraiter {
 
 const RANG_URGENCE: Record<Urgence, number> = { critique: 0, elevee: 1, moyenne: 2 };
 export const SEUIL_DOCUMENT_JOURS = 30;
+
+/**
+ * Alertes critiques et élevées non traitées, une ligne par groupe : alertes
+ * répétées regroupées (même cible, même type — 2026-09-28), un GPS qui alerte
+ * toutes les 15 min donne UNE ligne « ×96 depuis le … ». Partagé par tous les
+ * tableaux de bord (le serveur ne renvoie que les alertes du métier).
+ */
+export function elementsAlertes(alertes: Alerte[]): ElementATraiter[] {
+  const elements: ElementATraiter[] = [];
+  for (const g of grouperAlertes(alertes.filter((a) => !a.traitee))) {
+    if (rangPriorite(g.prioriteMax) < rangPriorite("ELEVEE")) continue;
+    const repetition = g.nombre > 1 ? `depuis le ${formatDateTime(g.premiere)}, dernière : ` : "";
+    elements.push({
+      cle: `alerte-${g.cle}`,
+      urgence: g.prioriteMax === "CRITIQUE" ? "critique" : "elevee",
+      categorie: "Alerte",
+      titre: libelleGroupe(g),
+      detail: [g.libelleCible, `${repetition}${g.description}`].filter(Boolean).join(" — "),
+      lien: "/alertes",
+      date: g.premiere,
+    });
+  }
+  return elements;
+}
+
+/** Tri commun des listes « À traiter » : urgence, puis date (plus ancien d'abord). */
+export function trierATraiter(elements: ElementATraiter[]): ElementATraiter[] {
+  return elements.sort((a, b) => RANG_URGENCE[a.urgence] - RANG_URGENCE[b.urgence] || a.date.localeCompare(b.date));
+}
 
 /**
  * Tout ce qui demande une action, du plus urgent au moins urgent :
@@ -110,23 +151,7 @@ export function elementsATraiter(sources: {
   maintenant: Date;
 }): ElementATraiter[] {
   const { engins, missions, alertes, incidents, documents, maintenant } = sources;
-  const elements: ElementATraiter[] = [];
-
-  // Alertes répétées regroupées (même cible, même type — 2026-09-28) : un GPS
-  // qui alerte toutes les 15 min donne UNE ligne « ×96 depuis le … ».
-  for (const g of grouperAlertes(alertes.filter((a) => !a.traitee))) {
-    if (rangPriorite(g.prioriteMax) < rangPriorite("ELEVEE")) continue;
-    const repetition = g.nombre > 1 ? `depuis le ${formatDateTime(g.premiere)}, dernière : ` : "";
-    elements.push({
-      cle: `alerte-${g.cle}`,
-      urgence: g.prioriteMax === "CRITIQUE" ? "critique" : "elevee",
-      categorie: "Alerte",
-      titre: libelleGroupe(g),
-      detail: [g.libelleCible, `${repetition}${g.description}`].filter(Boolean).join(" — "),
-      lien: "/alertes",
-      date: g.premiere,
-    });
-  }
+  const elements: ElementATraiter[] = elementsAlertes(alertes);
 
   for (const i of incidents) {
     if (!estIncidentOuvert(i)) continue;
@@ -184,7 +209,7 @@ export function elementsATraiter(sources: {
     });
   }
 
-  return elements.sort((a, b) => RANG_URGENCE[a.urgence] - RANG_URGENCE[b.urgence] || a.date.localeCompare(b.date));
+  return trierATraiter(elements);
 }
 
 // ---------------------------------------------------------------- Missions en cours

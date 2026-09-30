@@ -7,11 +7,17 @@ import { PageHeader } from "@/components/data-table/PageHeader";
 import { GarageFormDialog } from "@/features/garages/GarageFormDialog";
 import { useChangerActivationGarage, useGaragesExternes } from "@/features/garages/api";
 import { FacturesGarageDialog } from "@/features/factures-garage/FacturesGarageDialog";
+import { useAuth } from "@/features/auth/useAuth";
 import { ApiError } from "@/lib/api-client";
+import { peut } from "@/lib/droits";
 import type { GarageExterne } from "@/types/garage";
 import { toast } from "sonner";
 
 export function GaragesPage() {
+  const { session } = useAuth();
+  // Pages par métier (2026-09-30) : la comptable voit les factures, l'atelier modifie les garages.
+  const peutModifier = peut(session?.role, "GERER_MAINTENANCE");
+  const voitFactures = peut(session?.role, "VOIR_FINANCES");
   const { data: garages, isLoading, isError } = useGaragesExternes();
   const changerActivation = useChangerActivationGarage();
   const [dialogOuvert, setDialogOuvert] = useState(false);
@@ -55,10 +61,12 @@ export function GaragesPage() {
         title="Garages externes"
         description="Garages pouvant réaliser une maintenance hors de l'atelier interne."
         actions={
-          <Button onClick={onOuvrirCreation}>
-            <Plus className="h-4 w-4" />
-            Nouveau garage
-          </Button>
+          peutModifier ? (
+            <Button onClick={onOuvrirCreation}>
+              <Plus className="h-4 w-4" />
+              Nouveau garage
+            </Button>
+          ) : undefined
         }
       />
 
@@ -70,15 +78,21 @@ export function GaragesPage() {
         getRowKey={(g) => g.idGarageExterne}
         rowActions={(garage) => (
           <div className="flex justify-end gap-2">
-            <Button variant="outline" size="sm" onClick={() => onOuvrirEdition(garage)}>
-              Modifier
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => onToggleActivation(garage)}>
-              {garage.actif ? "Désactiver" : "Activer"}
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => setAFacturer(garage)}>
-              Factures
-            </Button>
+            {peutModifier && (
+              <>
+                <Button variant="outline" size="sm" onClick={() => onOuvrirEdition(garage)}>
+                  Modifier
+                </Button>
+                <Button variant="outline" size="sm" onClick={() => onToggleActivation(garage)}>
+                  {garage.actif ? "Désactiver" : "Activer"}
+                </Button>
+              </>
+            )}
+            {voitFactures && (
+              <Button variant="outline" size="sm" onClick={() => setAFacturer(garage)}>
+                Factures
+              </Button>
+            )}
           </div>
         )}
       />

@@ -1,14 +1,16 @@
 import { useMemo, useState } from "react";
-import { Check } from "lucide-react";
+import { Check, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DataTable, type DataTableColumn } from "@/components/data-table/DataTable";
 import { PageHeader } from "@/components/data-table/PageHeader";
 import { StatutBadge } from "@/components/data-table/StatutBadge";
 import { useAuth } from "@/features/auth/useAuth";
-import { useAlertes, useTraiterAlertesGroupe } from "@/features/alertes/api";
+import { useAlertes, useTraiterAlertesGroupe, useVerifierCauses } from "@/features/alertes/api";
 import { LIBELLES_PRIORITE_ALERTE, libelleTypeAlerte } from "@/features/alertes/libelles";
 import { grouperAlertes, periodeGroupe, type GroupeAlertes } from "@/features/alertes/regroupement";
+import { StatutTraitementAlerte } from "@/features/alertes/StatutTraitementAlerte";
+import { etatTraitement, LIBELLES_ETAT_TRAITEMENT, messageVerification } from "@/features/alertes/traitement";
 import { ApiError } from "@/lib/api-client";
 import { peut } from "@/lib/droits";
 import { toast } from "sonner";
@@ -19,12 +21,18 @@ import { toast } from "sonner";
  * « depuis le … — dernière le … », priorité la plus haute, description la
  * plus récente (features/alertes/regroupement.ts). « Traiter » traite tout
  * le groupe en un appel (POST /api/alertes/traitement-groupe).
+ *
+ * Depuis le 2026-09-30, le serveur clôt seul une alerte dont la cause a
+ * disparu (document renouvelé, maintenance planifiée, stock réapprovisionné,
+ * sortie enregistrée…) : Statut « Close auto » avec le motif. « Vérifier les
+ * causes » lance ce contrôle tout de suite (sinon toutes les 15 minutes).
  */
 export function AlertesPage() {
   const { session } = useAuth();
   const [filtre, setFiltre] = useState<"toutes" | "nonTraitees">("nonTraitees");
   const { data: alertes, isLoading, isError } = useAlertes(filtre === "nonTraitees");
   const traiter = useTraiterAlertesGroupe();
+  const verifier = useVerifierCauses();
   const groupes = useMemo(() => (alertes ? grouperAlertes(alertes) : undefined), [alertes]);
 
   const peutTraiter = peut(session?.role, "GERER_PARC");
@@ -36,6 +44,15 @@ export function AlertesPage() {
       toast.success(traitees.length > 1 ? `${traitees.length} alertes traitées` : "Alerte traitée");
     } catch (e) {
       toast.error(e instanceof ApiError ? e.message : "Action impossible");
+    }
+  };
+
+  const onVerifier = async () => {
+    try {
+      const resultat = await verifier.mutateAsync();
+      toast.success(messageVerification(resultat.alertesCloses));
+    } catch (e) {
+      toast.error(e instanceof ApiError ? e.message : "Vérification impossible");
     }
   };
 
@@ -75,7 +92,8 @@ export function AlertesPage() {
     {
       key: "traitee",
       header: "Statut",
-      render: (g) => (g.traitee ? <StatutBadge statut="TERMINEE" /> : <StatutBadge statut="EN_COURS" />),
+      render: (g) => <StatutTraitementAlerte alertes={g.alertes} />,
+      sortValue: (g) => LIBELLES_ETAT_TRAITEMENT[etatTraitement(g.alertes)],
     },
   ];
 
@@ -83,14 +101,28 @@ export function AlertesPage() {
     <div className="space-y-6">
       <PageHeader
         title="Alertes"
-        description="Alertes générées automatiquement par le système ; les alertes répétées sont regroupées."
+        description="Alertes générées automatiquement par le système ; les alertes répétées sont regroupées, et celles dont la cause a disparu sont closes seules."
         actions={
-          <Tabs value={filtre} onValueChange={(v) => setFiltre(v as typeof filtre)}>
-            <TabsList>
-              <TabsTrigger value="nonTraitees">Non traitées</TabsTrigger>
-              <TabsTrigger value="toutes">Toutes</TabsTrigger>
-            </TabsList>
-          </Tabs>
+          <div className="flex flex-wrap items-center gap-2">
+            {peutTraiter && (
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={verifier.isPending}
+                onClick={onVerifier}
+                title="Clôt tout de suite les alertes dont la cause a disparu (fait aussi seul toutes les 15 minutes)"
+              >
+                <RefreshCw className={verifier.isPending ? "h-4 w-4 animate-spin" : "h-4 w-4"} />
+                Vérifier les causes
+              </Button>
+            )}
+            <Tabs value={filtre} onValueChange={(v) => setFiltre(v as typeof filtre)}>
+              <TabsList>
+                <TabsTrigger value="nonTraitees">Non traitées</TabsTrigger>
+                <TabsTrigger value="toutes">Toutes</TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
         }
       />
 

@@ -9,6 +9,7 @@ import { PastilleNiveau } from "@/features/historique-engin/PastilleNiveau";
 import { NIVEAU_PRIORITE } from "@/features/rapport-engin/construire-rapport";
 import { formatDate, formatDateTime, formatMontant, libelleEnum } from "@/lib/utils";
 import type { StatutMaintenance } from "@/types/maintenance";
+import { texteSuivi } from "@/features/alertes/traitement";
 
 const VARIANTE_STATUT_MAINTENANCE: Record<StatutMaintenance, BadgeProps["variant"]> = {
   PLANIFIEE: "default",
@@ -52,8 +53,8 @@ export function OngletAlertesMaintenance({ idEngin }: { idEngin: number }) {
                     <PastilleNiveau niveau={NIVEAU_PRIORITE[a.priorite]} libelle={libelleEnum(a.priorite)} />
                   </TableCell>
                   <TableCell className="max-w-md">{a.description}</TableCell>
-                  <TableCell className="whitespace-nowrap text-muted-foreground">
-                    {a.traitee ? `Traitée${a.dateTraitement ? ` le ${formatDateTime(a.dateTraitement)}` : ""}` : "À traiter"}
+                  <TableCell className="max-w-xs text-muted-foreground">
+                    {texteSuivi(a)}
                   </TableCell>
                 </TableRow>
               ))}

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { Circle, GeoJSON, MapContainer, Marker, Polyline, Popup, TileLayer, useMap } from "react-leaflet";
+import { Circle, GeoJSON, MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,8 +10,25 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { StatutBadge } from "@/components/data-table/StatutBadge";
 import { AuthenticatedImage } from "@/features/engins/AuthenticatedImage";
 import { useEnginPhotos } from "@/features/engins/photos-api";
-import { useDernieresPositions, useDispositifsGps, usePositionsFlotte } from "@/features/gps/api";
+import { useDispositifsGps, usePositionsFlotte } from "@/features/gps/api";
+import { useChantiersCarte } from "@/features/gps/chantiers/api";
+import {
+  COULEUR_STATUT_CHANTIER,
+  COULEUR_TON,
+  LIBELLE_STATUT_CHANTIER,
+  centreChantier,
+  pointsChantier,
+  situationsDuVehicule,
+  type SituationVehicule,
+} from "@/features/gps/chantiers/carte-chantiers";
+import { CoucheChantiers } from "@/features/gps/chantiers/CoucheChantiers";
+import { COUCHES_PAR_DEFAUT, ControlesCarte, type CouchesCarte } from "@/features/gps/chantiers/ControlesCarte";
 import { COULEUR_PAR_STATUT, iconePourStatut } from "@/features/gps/icone-statut";
+import { useTrajetPeriode } from "@/features/gps/trajet/api";
+import { CoucheTrajet } from "@/features/gps/trajet/CoucheTrajet";
+import { bornesPeriode, estErreur, jourLocal, type ChoixPeriode } from "@/features/gps/trajet/periode";
+import { ResumeTrajet } from "@/features/gps/trajet/ResumeTrajet";
+import { SelecteurPeriode } from "@/features/gps/trajet/SelecteurPeriode";
 import { useZones } from "@/features/zones/api";
 import { formatDateTime, formatNombre } from "@/lib/utils";
 import type { PositionFlotte } from "@/types/gps";
@@ -114,7 +131,7 @@ function PhotoPrincipalePopup({ idEngin }: { idEngin: number }) {
   );
 }
 
-function MarqueurFlotte({ position }: { position: PositionFlotte }) {
+function MarqueurFlotte({ position, situations }: { position: PositionFlotte; situations: SituationVehicule[] }) {
   return (
     <Marker position={[position.latitude, position.longitude]} icon={iconePourStatut(position.statutEngin)}>
       <Popup>
@@ -124,6 +141,12 @@ function MarqueurFlotte({ position }: { position: PositionFlotte }) {
           <p className="text-xs text-muted-foreground">Dispositif : {position.numeroSerie}</p>
           <p className="text-xs text-muted-foreground">{formatDateTime(position.horodatage)}</p>
           <p className="text-xs text-muted-foreground">Vitesse : {formatNombre(position.vitesse, 1)} km/h</p>
+          {situations.map((s) => (
+            <p key={s.idChantier} className="flex items-start gap-1.5 text-xs">
+              <span className="mt-1 inline-block h-2 w-2 shrink-0 rounded-full" style={{ background: COULEUR_TON[s.ton] }} />
+              {s.texte}
+            </p>
+          ))}
           <PhotoPrincipalePopup idEngin={position.idEngin} />
         </div>
       </Popup>
@@ -131,7 +154,7 @@ function MarqueurFlotte({ position }: { position: PositionFlotte }) {
   );
 }
 
-function LegendeCarte() {
+function LegendeCarte({ chantiers }: { chantiers: boolean }) {
   const entrees: [string, string][] = [
     ["Disponible", COULEUR_PAR_STATUT.DISPONIBLE],
     ["Affecté", COULEUR_PAR_STATUT.AFFECTE],
@@ -155,51 +178,81 @@ function LegendeCarte() {
         <span className="inline-block h-2.5 w-2.5 rounded-full border" style={{ borderColor: "#dc2626" }} />
         Zone interdite
       </span>
+      {chantiers &&
+        (["EN_COURS", "PLANIFIE"] as const).map((statut) => (
+          <span key={statut} className="flex items-center gap-1.5">
+            <span className="inline-block h-2.5 w-2.5 rounded-sm" style={{ background: COULEUR_STATUT_CHANTIER[statut] }} />
+            Chantier {LIBELLE_STATUT_CHANTIER[statut].toLowerCase()}
+          </span>
+        ))}
     </div>
   );
 }
 
+/**
+ * Carte GPS : vue flotte (dernière position de chaque véhicule) ou trajet
+ * d'un véhicule sur une période. Depuis le 2026-09-30, les chantiers
+ * planifiés et en cours y figurent (repère, périmètre de présence, plan), la
+ * bulle d'un véhicule dit s'il est sur son chantier, et le trajet liste ses
+ * passages sur chantier (entrée, sortie, durée).
+ */
 export function FlotteMap() {
   const { data: flotte, isLoading: chargementFlotte } = usePositionsFlotte();
   const { data: dispositifs } = useDispositifsGps();
+  const [couches, setCouches] = useState<CouchesCarte>(COUCHES_PAR_DEFAUT);
+  const { data: chantiers } = useChantiersCarte(couches.chantiers);
+  const [idChantierCentre, setIdChantierCentre] = useState("tous");
   const [idDispositifDetail, setIdDispositifDetail] = useState<string>("");
+  const [choixPeriode, setChoixPeriode] = useState<ChoixPeriode>("AUJOURDHUI");
+  const [perso, setPerso] = useState(() => ({ debut: jourLocal(new Date()), fin: jourLocal(new Date()) }));
   const idSelectionne = idDispositifDetail ? Number(idDispositifDetail) : null;
-  const { data: positionsDetail, isLoading: chargementDetail } = useDernieresPositions(idSelectionne);
+
+  const bornes = useMemo(() => bornesPeriode(choixPeriode, new Date(), perso), [choixPeriode, perso]);
+  const erreurPeriode = estErreur(bornes) ? bornes.erreur : null;
+  const enDirect = choixPeriode === "AUJOURDHUI" || choixPeriode === "SEPT_JOURS" || (choixPeriode === "PERSO" && perso.fin >= jourLocal(new Date()));
+  const { data: trajet, isLoading: chargementDetail, isError: erreurTrajet } = useTrajetPeriode(
+    idSelectionne,
+    estErreur(bornes) ? null : bornes,
+    enDirect,
+  );
 
   const modeDetail = idSelectionne !== null;
+  const chantiersAffiches = useMemo(() => (couches.chantiers ? (chantiers ?? []) : []), [couches.chantiers, chantiers]);
+  const chantierCentre = chantiersAffiches.find((c) => String(c.idChantier) === idChantierCentre);
 
-  // Le backend renvoie les positions du plus récent au plus ancien ; on
-  // inverse pour tracer le trajet dans l'ordre chronologique.
-  const trajetChronologique = useMemo(
-    () => (positionsDetail ? [...positionsDetail].reverse() : []),
-    [positionsDetail],
-  );
   const pointsTrajet = useMemo<[number, number][]>(
-    () => trajetChronologique.map((p) => [p.latitude, p.longitude]),
-    [trajetChronologique],
+    () => (trajet?.positions ?? []).map((p) => [p.latitude, p.longitude]),
+    [trajet],
   );
-  const pointsFlotte = useMemo<[number, number][]>(
-    () => (flotte ?? []).map((p) => [p.latitude, p.longitude]),
-    [flotte],
-  );
+  const pointsFlotte = useMemo<[number, number][]>(() => {
+    const vehicules = (flotte ?? []).map((p) => [p.latitude, p.longitude] as [number, number]);
+    const reperes = chantiersAffiches.map(centreChantier).filter((p): p is [number, number] => p !== null);
+    return [...vehicules, ...reperes];
+  }, [flotte, chantiersAffiches]);
+  const pointsCentre = useMemo(() => (chantierCentre ? pointsChantier(chantierCentre) : null), [chantierCentre]);
 
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-end justify-between gap-4">
-        <div className="max-w-xs flex-1 space-y-2">
-          <Label>Voir le trajet détaillé d'un véhicule (optionnel)</Label>
-          <Select value={idDispositifDetail} onValueChange={setIdDispositifDetail}>
-            <SelectTrigger>
-              <SelectValue placeholder="Vue flotte (tous les véhicules)" />
-            </SelectTrigger>
-            <SelectContent>
-              {dispositifs?.map((d) => (
-                <SelectItem key={d.idDispositifGps} value={String(d.idDispositifGps)}>
-                  {d.numeroSerie} — {d.libelleVehicule ?? "non posé"}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <div className="flex flex-wrap items-end gap-4">
+          <div className="w-72 space-y-2">
+            <Label>Voir le trajet d'un véhicule (optionnel)</Label>
+            <Select value={idDispositifDetail} onValueChange={setIdDispositifDetail}>
+              <SelectTrigger>
+                <SelectValue placeholder="Vue flotte (tous les véhicules)" />
+              </SelectTrigger>
+              <SelectContent>
+                {dispositifs?.map((d) => (
+                  <SelectItem key={d.idDispositifGps} value={String(d.idDispositifGps)}>
+                    {d.numeroSerie} — {d.libelleVehicule ?? "non posé"}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          {modeDetail && (
+            <SelecteurPeriode choix={choixPeriode} onChoix={setChoixPeriode} perso={perso} onPerso={setPerso} erreur={erreurPeriode} />
+          )}
         </div>
         {modeDetail && (
           <Button variant="outline" onClick={() => setIdDispositifDetail("")}>
@@ -208,7 +261,7 @@ export function FlotteMap() {
         )}
       </div>
 
-      {(chargementFlotte || chargementDetail) && (
+      {(chargementFlotte || (modeDetail && chargementDetail)) && (
         <p className="flex items-center gap-2 text-sm text-muted-foreground">
           <Loader2 className="h-4 w-4 animate-spin" /> Chargement de la carte…
         </p>
@@ -216,7 +269,14 @@ export function FlotteMap() {
 
       <Card>
         <CardContent className="space-y-3 pt-6">
-          <LegendeCarte />
+          <ControlesCarte
+            couches={couches}
+            onCouches={setCouches}
+            chantiers={chantiers}
+            idChantierCentre={idChantierCentre}
+            onCentrer={setIdChantierCentre}
+          />
+          <LegendeCarte chantiers={couches.chantiers} />
           <div className="h-[520px] overflow-hidden rounded-md border">
             <MapContainer center={CENTRE_PAR_DEFAUT} zoom={ZOOM_PAR_DEFAUT} className="h-full w-full">
               <TileLayer
@@ -224,30 +284,20 @@ export function FlotteMap() {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
               <CoucheZones />
+              <CoucheChantiers chantiers={chantiersAffiches} afficherPerimetre={couches.perimetres} afficherPlan={couches.plans} />
 
-              {!modeDetail && flotte?.map((position) => <MarqueurFlotte key={position.idDispositifGps} position={position} />)}
+              {!modeDetail &&
+                flotte?.map((position) => (
+                  <MarqueurFlotte
+                    key={position.idDispositifGps}
+                    position={position}
+                    situations={situationsDuVehicule(position.idEngin, chantiersAffiches)}
+                  />
+                ))}
 
-              {modeDetail && trajetChronologique.length > 0 && (
-                <>
-                  <Polyline positions={pointsTrajet} pathOptions={{ color: "#2563eb", weight: 3 }} />
-                  {trajetChronologique.map((p, index) => (
-                    <Marker
-                      key={p.idPositionGps}
-                      position={[p.latitude, p.longitude]}
-                      icon={iconePourStatut(index === trajetChronologique.length - 1 ? "EN_MISSION" : "AFFECTE")}
-                    >
-                      <Popup>
-                        <div className="space-y-1 text-sm">
-                          <p className="text-xs text-muted-foreground">{formatDateTime(p.horodatage)}</p>
-                          <p className="text-xs text-muted-foreground">Vitesse : {formatNombre(p.vitesse, 1)} km/h</p>
-                        </div>
-                      </Popup>
-                    </Marker>
-                  ))}
-                </>
-              )}
+              {modeDetail && trajet && <CoucheTrajet trajet={trajet} />}
 
-              <AjusterVue points={modeDetail ? pointsTrajet : pointsFlotte} />
+              <AjusterVue points={pointsCentre ?? (modeDetail ? pointsTrajet : pointsFlotte)} />
             </MapContainer>
           </div>
           {!modeDetail && !chargementFlotte && (flotte?.length ?? 0) === 0 && (
@@ -256,9 +306,11 @@ export function FlotteMap() {
               dès réception d'une première position.
             </p>
           )}
-          {modeDetail && !chargementDetail && trajetChronologique.length === 0 && (
-            <p className="text-sm text-muted-foreground">Aucune position enregistrée pour ce dispositif.</p>
+          {modeDetail && erreurTrajet && <p className="text-sm text-destructive">Trajet illisible pour cette période.</p>}
+          {modeDetail && trajet && trajet.positions.length === 0 && (
+            <p className="text-sm text-muted-foreground">Aucune position enregistrée pour ce véhicule sur cette période.</p>
           )}
+          {modeDetail && trajet && trajet.positions.length > 0 && <ResumeTrajet trajet={trajet} />}
         </CardContent>
       </Card>
     </div>

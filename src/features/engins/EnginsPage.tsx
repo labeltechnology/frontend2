@@ -23,8 +23,7 @@ import { filtrerVehicules } from "@/features/engins/recherche-vehicules";
 import { StatutLocationVehicule } from "@/features/engins/StatutLocationVehicule";
 import { ZoneRechercheVehicules } from "@/features/engins/ZoneRechercheVehicules";
 import { useChangerStatutEngin, useEngins, useEquiperGps } from "@/features/engins/api";
-import { useContratsLocationExterne } from "@/features/location-externe/api";
-import { useContratsLocationEntrante } from "@/features/location-entrante/api";
+import { useLocationsActives } from "@/features/engins/locations-actives-api";
 import { useMissions } from "@/features/missions/api";
 import { useAffectationsChantierTousChantiers, useChantiers } from "@/features/chantiers/api";
 import { PlanningRessources, type RessourcePlanning } from "@/features/planning/PlanningRessources";
@@ -85,27 +84,21 @@ export function EnginsPage() {
   const { data: engins, isLoading, isError } = useEngins();
   const changerStatut = useChangerStatutEngin();
   const equiperGps = useEquiperGps();
-  // Statut de location des engins (demande explicite de l'utilisateur : afficher, dans la
-  // liste des engins, à la fois les engins loués À un client — Locations externes — et ceux
-  // loués CHEZ un prestataire — Locations entrantes). Aucune modification backend nécessaire :
-  // les deux endpoints de liste sont déjà ouverts et renvoient déjà l'engin imbriqué, donc le
-  // croisement se fait entièrement ici, côté client.
-  const { data: contratsExternes } = useContratsLocationExterne();
-  const { data: contratsEntrantes } = useContratsLocationEntrante();
+  // Statut de location des engins : loués À un client (Locations externes) ou CHEZ un
+  // prestataire (Locations entrantes).
+  // Depuis le 2026-09-30 (pages par métier), les contrats complets sont réservés aux
+  // finances : la liste lit seulement « loué à / loué chez » (GET /api/engins/locations-actives).
+  const { data: locationsActives } = useLocationsActives();
   const locationsExternesParEngin = useMemo(() => {
     const map = new Map<number, string>();
-    contratsExternes
-      ?.filter((c) => c.statut === "ACTIF")
-      .forEach((c) => map.set(c.engin.idEngin, c.nomSociete));
+    locationsActives?.forEach((l) => l.loueA && map.set(l.idEngin, l.loueA));
     return map;
-  }, [contratsExternes]);
+  }, [locationsActives]);
   const locationsEntrantesParEngin = useMemo(() => {
     const map = new Map<number, string>();
-    contratsEntrantes
-      ?.filter((c) => c.statut === "ACTIF")
-      .forEach((c) => map.set(c.engin.idEngin, c.nomPrestataire));
+    locationsActives?.forEach((l) => l.loueChez && map.set(l.idEngin, l.loueChez));
     return map;
-  }, [contratsEntrantes]);
+  }, [locationsActives]);
   // Création et correction passent par la page « Fiche véhicule » (FicheEnginPage,
   // 2026-09-24) — plus par un dialogue : trop de champs pour une fenêtre.
   const navigate = useNavigate();

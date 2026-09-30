@@ -27,12 +27,21 @@ export type Capacite =
   /** Écrire le journal de chantier (V64 ; chef de chantier : ses chantiers). */
   | "ECRIRE_JOURNAL_CHANTIER"
   /** Tableau de bord de direction : KPI, alertes chiffrées, flotte, coûts face au budget (2026-09-30). */
-  | "PILOTAGE_DIRECTION";
+  | "PILOTAGE_DIRECTION"
+  /** Lecture des données du parc : tous les profils du site sauf le conducteur (2026-09-30). */
+  | "LIRE_DONNEES_PARC"
+  /** Analytique, performance, recommandations : direction (2026-09-30). */
+  | "VOIR_PILOTAGE"
+  /** Coûts, budgets, prévisions, renouvellement : direction et comptable (2026-09-30). */
+  | "VOIR_COUTS"
+  /** Locations, prestataires, factures, export comptable : direction et comptable (2026-09-30). */
+  | "VOIR_FINANCES";
 
 export const ROLES_PAR_CAPACITE: Record<Capacite, readonly RoleLibelle[]> = {
-  GERER_PARC: ["DG", "RESPONSABLE_PARC"],
-  GERER_MAINTENANCE: ["DG", "RESPONSABLE_PARC", "CHEF_MAINTENANCE"],
-  SAISIE_TERRAIN: ["DG", "RESPONSABLE_PARC", "CONDUCTEUR"],
+  // L'administrateur a les droits de la direction (2026-09-30, choix validé).
+  GERER_PARC: ["DG", "RESPONSABLE_PARC", "ADMINISTRATEUR"],
+  GERER_MAINTENANCE: ["DG", "RESPONSABLE_PARC", "ADMINISTRATEUR", "CHEF_MAINTENANCE"],
+  SAISIE_TERRAIN: ["DG", "RESPONSABLE_PARC", "ADMINISTRATEUR", "CONDUCTEUR"],
   CONSULTER_GESTION: [
     "DG",
     "RESPONSABLE_PARC",
@@ -43,19 +52,23 @@ export const ROLES_PAR_CAPACITE: Record<Capacite, readonly RoleLibelle[]> = {
     "COMPTABLE",
   ],
   ADMINISTRER: ["ADMINISTRATEUR", "DG", "RESPONSABLE_PARC"],
-  DEMANDER_MATERIEL: ["DG", "RESPONSABLE_PARC", "ASSISTANT_PARC", "CHEF_CHANTIER"],
-  SUIVI_CHANTIER: [
+  DEMANDER_MATERIEL: ["DG", "RESPONSABLE_PARC", "ADMINISTRATEUR", "ASSISTANT_PARC", "CHEF_CHANTIER"],
+  SUIVI_CHANTIER: ["DG", "RESPONSABLE_PARC", "ADMINISTRATEUR", "ASSISTANT_PARC", "CHEF_CHANTIER"],
+  ECRIRE_JOURNAL_CHANTIER: ["DG", "RESPONSABLE_PARC", "ADMINISTRATEUR", "CHEF_CHANTIER"],
+  PILOTAGE_DIRECTION: ["DG", "RESPONSABLE_PARC", "ADMINISTRATEUR"],
+  LIRE_DONNEES_PARC: [
     "DG",
     "RESPONSABLE_PARC",
+    "ADMINISTRATEUR",
     "ASSISTANT_PARC",
     "CHEF_MAINTENANCE",
     "ASSISTANT_MAINTENANCE",
-    "ADMINISTRATEUR",
     "COMPTABLE",
     "CHEF_CHANTIER",
   ],
-  ECRIRE_JOURNAL_CHANTIER: ["DG", "RESPONSABLE_PARC", "CHEF_CHANTIER"],
-  PILOTAGE_DIRECTION: ["DG", "RESPONSABLE_PARC"],
+  VOIR_PILOTAGE: ["DG", "RESPONSABLE_PARC", "ADMINISTRATEUR"],
+  VOIR_COUTS: ["DG", "RESPONSABLE_PARC", "ADMINISTRATEUR", "COMPTABLE"],
+  VOIR_FINANCES: ["DG", "RESPONSABLE_PARC", "ADMINISTRATEUR", "COMPTABLE"],
 };
 
 /** Le rôle connecté a-t-il cette capacité ? (sans session : non) */

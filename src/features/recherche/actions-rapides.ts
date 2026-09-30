@@ -1,4 +1,5 @@
 import { peut, type Capacite } from "@/lib/droits";
+import { pageVisible } from "@/routes/acces-pages";
 import { normaliserRecherche } from "@/components/data-table/liste";
 import type { RoleLibelle } from "@/types/auth";
 
@@ -28,7 +29,7 @@ export const ACTIONS_RAPIDES: ActionRapide[] = [
 /** Sans terme : toutes les actions permises ; avec : celles dont le libellé ou les mots-clés contiennent chaque mot. */
 export function actionsPour(role: RoleLibelle | undefined, terme: string): ActionRapide[] {
   const mots = normaliserRecherche(terme).split(" ").filter(Boolean);
-  return ACTIONS_RAPIDES.filter((a) => peut(role, a.capacite)).filter((a) => {
+  return ACTIONS_RAPIDES.filter((a) => peut(role, a.capacite) && pageVisible(role, a.chemin)).filter((a) => {
     const texte = normaliserRecherche(`${a.libelle} ${a.motsCles}`);
     return mots.every((m) => texte.includes(m));
   });
