@@ -1,0 +1,22 @@
+# Frontend seul : le backend tourne déjà sur le VPS, le navigateur l'appelle
+# directement à l'adresse VITE_API_BASE_URL.
+#
+# Les valeurs sont lues dans le fichier .env à côté de ce fichier :
+#   VITE_API_BASE_URL=http://IP_DU_VPS:8080   (obligatoire, inscrite au build)
+#   FRONT_PORT=80                             (facultatif)
+#
+# Lancement : docker compose up -d --build
+# Après un changement de VITE_API_BASE_URL, relancer avec --build : la valeur
+# est figée dans le bundle à la compilation.
+
+services:
+  frontend:
+    build:
+      context: .
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:?définir VITE_API_BASE_URL dans .env}
+    image: parcauto-frontend
+    container_name: parcauto-frontend
+    restart: unless-stopped
+    ports:
+      - "0.0.0.0:${FRONT_PORT:-80}:3000"
