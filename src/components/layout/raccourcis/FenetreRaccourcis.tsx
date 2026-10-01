@@ -29,7 +29,7 @@ const GROUPES: { titre: string; lignes: { touches: string[]; texte: string }[] }
     titre: "Dans un formulaire",
     lignes: [
       { touches: ["Ctrl", "S"], texte: "Enregistrer" },
-      { touches: ["Échap"], texte: "Fermer sans enregistrer (une fenêtre)" },
+      { touches: ["Échap"], texte: "Fermer la fenêtre sans enregistrer" },
     ],
   },
 ];
@@ -44,7 +44,7 @@ export function FenetreRaccourcis({ ouverte, surChangement }: { ouverte: boolean
             <Keyboard className="h-5 w-5 text-primary" aria-hidden="true" />
             Raccourcis clavier
           </DialogTitle>
-          <DialogDescription>Les touches seules ne réagissent pas pendant une saisie dans un champ.</DialogDescription>
+          <DialogDescription>Les raccourcis à une seule touche sont inactifs pendant la saisie dans un champ.</DialogDescription>
         </DialogHeader>
         <div className="grid gap-6 md:grid-cols-3">
           {GROUPES.map((g) => (

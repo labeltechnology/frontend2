@@ -116,7 +116,7 @@ export function IncidentFormDialog({ open, onOpenChange, idEnginInitial = null }
               {errors.idEngin && <p className="text-sm text-destructive">{errors.idEngin.message}</p>}
             </div>
             <div className="space-y-2">
-              <Label>Conducteur (optionnel)</Label>
+              <Label>Conducteur (facultatif)</Label>
               <Select value={watch("idConducteur")} onValueChange={(v) => setValue("idConducteur", v)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Sélectionner" />

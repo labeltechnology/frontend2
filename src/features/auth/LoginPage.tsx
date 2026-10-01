@@ -12,7 +12,7 @@ import { useAuth } from "@/features/auth/useAuth";
 import { ApiError } from "@/lib/api-client";
 
 const schema = z.object({
-  email: z.string().min(1, "L'email est requis").email("Email invalide"),
+  email: z.string().min(1, "L'adresse électronique est requise").email("Adresse électronique invalide"),
   motDePasse: z.string().min(1, "Le mot de passe est requis"),
 });
 
@@ -40,7 +40,7 @@ export function LoginPage() {
       if (e instanceof ApiError) {
         setErreur(e.message);
       } else {
-        setErreur("Connexion impossible — vérifie ton email et ton mot de passe.");
+        setErreur("Connexion impossible : vérifiez votre adresse électronique et votre mot de passe.");
       }
     }
   };
@@ -53,12 +53,12 @@ export function LoginPage() {
             <Car className="h-5 w-5" />
           </div>
           <CardTitle>ParcAuto</CardTitle>
-          <CardDescription>Connecte-toi pour accéder à la gestion du parc</CardDescription>
+          <CardDescription>Connectez-vous pour accéder à la gestion du parc</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">Adresse électronique</Label>
               <Input id="email" type="email" autoComplete="username" {...register("email")} />
               {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
             </div>

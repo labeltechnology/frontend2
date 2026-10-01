@@ -101,7 +101,7 @@ export function BudgetCarburantDialog({ open, onOpenChange, annee, types, ligne 
           </div>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <div className="space-y-1.5">
-              <Label htmlFor="usagePrevu">{unite === "h" ? "Heures prévues sur l'année" : "Km prévus sur l'année"}</Label>
+              <Label htmlFor="usagePrevu">{unite === "h" ? "Heures prévues sur l'année" : "Kilomètres prévus sur l'année"}</Label>
               <Input id="usagePrevu" type="number" min={0} value={usage} onChange={(e) => setUsage(e.target.value)} />
             </div>
             <div className="space-y-1.5">

@@ -233,7 +233,7 @@ export function ParametresPage() {
           <Card>
             <CardHeader>
               <CardTitle>Entreprise</CardTitle>
-              <CardDescription>Affiché en en-tête des factures de location et des factures proforma.</CardDescription>
+              <CardDescription>Affiché en en-tête des factures de location et des factures pro forma.</CardDescription>
             </CardHeader>
             <CardContent className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2 sm:col-span-2">
@@ -249,7 +249,7 @@ export function ParametresPage() {
                 <Input id="telephone" {...register("telephone")} />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">Adresse électronique</Label>
                 <Input id="email" type="email" {...register("email")} />
               </div>
               <div className="space-y-2">
@@ -267,7 +267,7 @@ export function ParametresPage() {
             <CardHeader>
               <CardTitle>Logo</CardTitle>
               <CardDescription>
-                Affiché en haut à droite des factures de location et des factures proforma, à côté du nom de
+                Affiché en haut à droite des factures de location et des factures pro forma, à côté du nom de
                 l'entreprise. Formats acceptés : JPEG, PNG, WEBP (5 Mo maximum).
               </CardDescription>
             </CardHeader>
@@ -330,7 +330,7 @@ export function ParametresPage() {
             <CardHeader>
               <CardTitle>TVA</CardTitle>
               <CardDescription>
-                Appliqué à chaque facture de location et facture proforma émise ensuite — figé sur les factures déjà
+                Appliqué à chaque facture de location et facture pro forma émise ensuite — figé sur les factures déjà
                 émises, jamais recalculé après coup.
               </CardDescription>
             </CardHeader>
@@ -425,7 +425,7 @@ export function ParametresPage() {
                   autoComplete="off"
                   placeholder={
                     parametresTraccar?.jetonConfigure
-                      ? `Configuré (${parametresTraccar.jetonApercu}) — laisser vide pour ne pas changer`
+                      ? `Configuré (${parametresTraccar.jetonApercu}) — laisser vide pour conserver le jeton actuel`
                       : "Compte → Jetons API dans l'interface Traccar"
                   }
                   {...registerTraccar("jetonApi")}

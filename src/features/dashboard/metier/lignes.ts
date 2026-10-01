@@ -4,6 +4,7 @@ import { cheminChantier } from "@/features/dashboard/metier/chantier";
 import type { EtatPlanning, LignePlanning } from "@/features/dashboard/metier/atelier";
 import type { LigneLien } from "@/features/dashboard/metier/sections/ListeLiens";
 import { formatDate, formatDateTime, formatMontant } from "@/lib/utils";
+import { pluriel } from "@/lib/pluriel";
 import type { ChantierCarte } from "@/types/carte-gps";
 import type { ChantierResume, DemandeMateriel, EtatSuiviChantier } from "@/types/chantier";
 import type { Piece } from "@/types/maintenance";
@@ -87,7 +88,7 @@ export function lignesChantiers(chantiers: ChantierResume[]): LigneLien[] {
     return {
       cle: `chantier-${r.chantier.idChantier}`,
       titre: r.chantier.nom + (r.chantier.lieu ? ` — ${r.chantier.lieu}` : ""),
-      detail: `${r.vehicules} véhicule(s), ${r.conducteurs} conducteur(s) — ${fin}${avancement}`,
+      detail: `${pluriel(r.vehicules, "véhicule")}, ${pluriel(r.conducteurs, "conducteur")} — ${fin}${avancement}`,
       etiquette: etat.libelle,
       ton: etat.ton,
       lien: cheminChantier(r.chantier.idChantier),
@@ -104,7 +105,7 @@ export function lignesDemandesEnAttente(demandes: DemandeMateriel[]): LigneLien[
     .map((d) => ({
       cle: `demande-${d.idDemande}`,
       titre: `${d.quantite} × ${d.typeEngin} — ${d.nomChantier}`,
-      detail: `du ${formatDate(d.dateDebut.slice(0, 10))} au ${formatDate(d.dateFin.slice(0, 10))}${d.disponiblesEstimes !== null ? ` — ${d.disponiblesEstimes} disponible(s) estimé(s)` : ""}`,
+      detail: `du ${formatDate(d.dateDebut.slice(0, 10))} au ${formatDate(d.dateFin.slice(0, 10))}${d.disponiblesEstimes !== null ? ` — ${pluriel(d.disponiblesEstimes, "disponible estimé")}` : ""}`,
       etiquette: d.priorite === "CRITIQUE" ? "Critique" : d.priorite === "HAUTE" ? "Haute" : "En attente",
       ton: d.priorite === "CRITIQUE" ? "danger" : d.priorite === "HAUTE" ? "alerte" : "info",
       lien: cheminChantier(d.idChantier),

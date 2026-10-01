@@ -282,7 +282,7 @@ export function MouvementDialog({
             )}
           </section>
         )}
-        {!existant && modifiable && <p className="text-xs text-muted-foreground">Les photos s'ajoutent après l'enregistrement.</p>}
+        {!existant && modifiable && <p className="text-xs text-muted-foreground">Les photos peuvent être ajoutées après l'enregistrement.</p>}
 
         <DialogFooter className="gap-2">
           {existant && modifiable && (

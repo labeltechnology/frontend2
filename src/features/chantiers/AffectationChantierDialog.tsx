@@ -68,7 +68,7 @@ export function AffectationChantierDialog({ chantier, onOpenChange }: Affectatio
   };
 
   const onDetacher = async (idAffectationChantier: number) => {
-    const motif = window.prompt("Motif de détachement de le véhicule :");
+    const motif = window.prompt("Motif de détachement du véhicule :");
     if (!motif) return;
     try {
       await annuler.mutateAsync({ id: idAffectationChantier, motifAnnulation: motif });
@@ -83,7 +83,7 @@ export function AffectationChantierDialog({ chantier, onOpenChange }: Affectatio
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Engins rattachés {chantier ? `— ${chantier.nom}` : ""}</DialogTitle>
-          <DialogDescription>Ajoute ou retire des véhicules et véhicules de ce chantier.</DialogDescription>
+          <DialogDescription>Ajoutez ou retirez des véhicules de ce chantier.</DialogDescription>
         </DialogHeader>
 
         <div className="flex items-center gap-2">

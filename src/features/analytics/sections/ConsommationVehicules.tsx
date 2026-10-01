@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Gauge } from "lucide-react";
 import { CadreSection, EtatBloc } from "@/features/dashboard/sections/CadreSection";
 import type { ConsommationVehicule } from "@/features/analytics/agregats";
+import { pluriel } from "@/lib/pluriel";
 import { formatNombre } from "@/lib/utils";
 import { identifiantVehicule } from "@/lib/vehicule";
 
@@ -18,7 +19,7 @@ export function ConsommationVehicules({ lignes, moyenne }: { lignes: Consommatio
   return (
     <CadreSection titre="Consommation par véhicule" icone={Gauge} lien="/carburant">
       {lignes.length === 0 ? (
-        <EtatBloc>Pas assez de pleins sur la période (2 par véhicule au minimum).</EtatBloc>
+        <EtatBloc>Nombre de pleins insuffisant sur la période (2 par véhicule au minimum).</EtatBloc>
       ) : (
         <div className="space-y-3">
           {moyenne !== null && (
@@ -50,7 +51,7 @@ export function ConsommationVehicules({ lignes, moyenne }: { lignes: Consommatio
               );
             })}
           </ul>
-          {lignes.length > NOMBRE_VISIBLE && <p className="text-xs text-muted-foreground">+ {lignes.length - NOMBRE_VISIBLE} autre(s) véhicule(s).</p>}
+          {lignes.length > NOMBRE_VISIBLE && <p className="text-xs text-muted-foreground">+ {pluriel(lignes.length - NOMBRE_VISIBLE, "autre véhicule")}.</p>}
         </div>
       )}
     </CadreSection>

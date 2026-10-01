@@ -48,7 +48,7 @@ export function BoutonAideContextuelle() {
           </SheetHeader>
           <div className="mt-4 space-y-4">
             {pages.length === 0 ? (
-              <p className="text-sm text-muted-foreground">Pas encore de guide pour cet écran. Cherchez dans le centre d'aide.</p>
+              <p className="text-sm text-muted-foreground">Aucun guide n'est encore disponible pour cet écran. Consultez le centre d'aide.</p>
             ) : (
               <ul className="space-y-2">
                 {pages.map(({ page }) => {

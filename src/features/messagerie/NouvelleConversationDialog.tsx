@@ -58,7 +58,7 @@ export function NouvelleConversationDialog({
         </div>
         <ul className="max-h-80 space-y-0.5 overflow-y-auto">
           {isLoading && <li className="py-4 text-center text-sm text-muted-foreground">Chargement…</li>}
-          {!isLoading && visibles.length === 0 && <li className="py-4 text-center text-sm text-muted-foreground">Personne ne correspond.</li>}
+          {!isLoading && visibles.length === 0 && <li className="py-4 text-center text-sm text-muted-foreground">Aucune personne ne correspond à la recherche.</li>}
           {visibles.map((c) => (
             <li key={c.idUtilisateur}>
               <button

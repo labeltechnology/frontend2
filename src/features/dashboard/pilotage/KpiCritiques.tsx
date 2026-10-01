@@ -35,7 +35,7 @@ export function KpiCritiques({
 
   return (
     <CadreSection
-      titre="KPI critiques"
+      titre="Indicateurs clés critiques"
       icone={Gauge}
       lien="/performance"
       libelleLien="Performance détaillée"
@@ -56,7 +56,7 @@ export function KpiCritiques({
           ))}
         </div>
       ) : enErreur || !kpis ? (
-        <EtatBloc erreur>Impossible de calculer les KPI.</EtatBloc>
+        <EtatBloc erreur>Impossible de calculer les indicateurs clés.</EtatBloc>
       ) : (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6">
           {kpis.map((k) => (

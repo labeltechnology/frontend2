@@ -3,6 +3,7 @@ import { CadreSection, EtatBloc } from "@/features/dashboard/sections/CadreSecti
 import type { MissionSuivie } from "@/features/dashboard/indicateurs";
 import { cn, formatDateTime } from "@/lib/utils";
 import { identifiantVehicule } from "@/lib/vehicule";
+import { pluriel } from "@/lib/pluriel";
 
 const NOMBRE_VISIBLE = 6;
 
@@ -52,7 +53,7 @@ export function MissionsEnCours({ missions, enChargement, enErreur }: { missions
         </ul>
       )}
       {missions.length > NOMBRE_VISIBLE && (
-        <p className="mt-3 text-xs text-muted-foreground">+ {missions.length - NOMBRE_VISIBLE} autre(s) mission(s) en cours.</p>
+        <p className="mt-3 text-xs text-muted-foreground">+ {pluriel(missions.length - NOMBRE_VISIBLE, "autre mission")} en cours.</p>
       )}
     </CadreSection>
   );

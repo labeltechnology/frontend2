@@ -105,7 +105,7 @@ export const NAV_ITEMS: NavItem[] = [
   { ...acces("/missions"), label: "Missions", icon: RouteIcon, groupe: "exploitation" },
   { ...acces("/affectations"), label: "Affectations", icon: ClipboardList, groupe: "exploitation" },
   { ...acces("/chantiers"), label: "Chantiers", icon: HardHat, groupe: "exploitation" },
-  { ...acces("/gps"), label: "GPS & trajets", icon: Satellite, groupe: "exploitation" },
+  { ...acces("/gps"), label: "GPS et trajets", icon: Satellite, groupe: "exploitation" },
   { ...acces("/carburant"), label: "Carburant", icon: Fuel, groupe: "exploitation" },
   { ...acces("/incidents"), label: "Incidents", icon: TriangleAlert, groupe: "exploitation" },
   { ...acces("/alertes"), label: "Alertes", icon: BellRing, groupe: "exploitation" },
@@ -117,7 +117,7 @@ export const NAV_ITEMS: NavItem[] = [
   { ...acces("/locations-externes"), label: "Locations externes", icon: Handshake, groupe: "finances" },
   { ...acces("/locations-entrantes"), label: "Locations entrantes", icon: ArrowDownToLine, groupe: "finances" },
   { ...acces("/prestataires-location"), label: "Prestataires de location", icon: Store, groupe: "finances" },
-  { ...acces("/factures-proforma"), label: "Factures proforma", icon: Receipt, groupe: "finances" },
+  { ...acces("/factures-proforma"), label: "Factures pro forma", icon: Receipt, groupe: "finances" },
   // Export comptable (2026-09-29) : écritures CSV des factures, du carburant et de la maintenance.
   { ...acces("/export-comptable"), label: "Export comptable", icon: FileSpreadsheet, groupe: "finances" },
   // Administration (Paramètres est présenté à part par la barre de navigation)
@@ -127,7 +127,7 @@ export const NAV_ITEMS: NavItem[] = [
   { ...acces("/journal-audit"), label: "Journal d'audit", icon: History, groupe: "administration" },
   // Suivi du logiciel (adoption, qualité des données, connexions) et import Excel / CSV (2026-09-29).
   { ...acces("/suivi-logiciel"), label: "Suivi du logiciel", icon: Activity, groupe: "administration" },
-  { ...acces("/imports"), label: "Import Excel / CSV", icon: FileUp, groupe: "administration" },
+  { ...acces("/imports"), label: "Import Excel ou CSV", icon: FileUp, groupe: "administration" },
   { ...acces("/aide"), label: "Aide", icon: HelpCircle, groupe: "administration" },
   { ...acces("/parametres"), label: "Paramètres", icon: Settings, groupe: "administration" },
 ];

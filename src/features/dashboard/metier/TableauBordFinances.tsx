@@ -27,6 +27,7 @@ import { useContratsLocationExterne } from "@/features/location-externe/api";
 import { useMaintenances } from "@/features/maintenance/api";
 import { libelleRole, peut } from "@/lib/droits";
 import { formatMontant, formatNombre } from "@/lib/utils";
+import { pluriel } from "@/lib/pluriel";
 
 /**
  * Tableau de bord des finances (pages par métier, 2026-09-30) — comptable.
@@ -118,7 +119,7 @@ export function TableauBordFinances() {
         <CarteIndicateur
           titre="Carburant du mois"
           valeur={formatMontant(carburant.montant)}
-          precision={`${formatNombre(carburant.litres)} L — ${carburant.pleins} plein(s)`}
+          precision={`${formatNombre(carburant.litres)} L — ${pluriel(carburant.pleins, "plein")}`}
           icone={Fuel}
           ton="info"
           lien="/carburant"
@@ -127,7 +128,7 @@ export function TableauBordFinances() {
         <CarteIndicateur
           titre="Maintenance du mois"
           valeur={formatMontant(atelier.montant)}
-          precision={`${atelier.interventions} intervention(s) terminée(s)${atelier.montantExterne > 0 ? `, dont ${formatMontant(atelier.montantExterne)} en garage` : ""}`}
+          precision={`${pluriel(atelier.interventions, "intervention terminée")}${atelier.montantExterne > 0 ? `, dont ${formatMontant(atelier.montantExterne)} en garage` : ""}`}
           icone={Wrench}
           ton="info"
           lien="/maintenance"
@@ -136,7 +137,7 @@ export function TableauBordFinances() {
         <CarteIndicateur
           titre="À régler"
           valeur={formatMontant(aRegler.montant)}
-          precision={`${aRegler.nombre} facture(s) garage et location`}
+          precision={pluriel(aRegler.nombre, "facture de garage ou de location", "factures de garage et de location")}
           icone={ArrowUpFromLine}
           ton={aRegler.nombre > 0 ? "alerte" : "succes"}
           lien="/garages-externes"
@@ -145,7 +146,7 @@ export function TableauBordFinances() {
         <CarteIndicateur
           titre="À encaisser"
           valeur={formatMontant(aEncaisser.montant)}
-          precision={`${aEncaisser.nombre} facture(s) de location émise(s)`}
+          precision={pluriel(aEncaisser.nombre, "facture de location émise", "factures de location émises")}
           icone={ArrowDownToLine}
           ton={aEncaisser.nombre > 0 ? "info" : "neutre"}
           lien="/locations-externes"
@@ -154,7 +155,7 @@ export function TableauBordFinances() {
         <CarteIndicateur
           titre="Contrats de location"
           valeur={actifs.sortants + actifs.entrants}
-          precision={`${actifs.sortants} loué(s) à des clients, ${actifs.entrants} pris en location`}
+          precision={`${pluriel(actifs.sortants, "loué")} à des clients, ${actifs.entrants} pris en location`}
           icone={Handshake}
           ton="neutre"
           lien="/locations-externes"
@@ -165,7 +166,7 @@ export function TableauBordFinances() {
           valeur={echeances.length}
           precision={
             echeances.some((e) => e.jours < 0)
-              ? `dont ${echeances.filter((e) => e.jours < 0).length} dépassée(s)`
+              ? `dont ${pluriel(echeances.filter((e) => e.jours < 0).length, "dépassée")}`
               : "fins de contrat à préparer"
           }
           icone={CalendarClock}

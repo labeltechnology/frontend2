@@ -15,7 +15,7 @@ import type { BlocRapport } from "@/features/rapport-engin/niveaux";
  * Clé « documents » : le bouton « Voir détail » ouvre l'onglet Documents de
  * l'historique ; l'onglet « Sécurité et outils » reste dans la même page.
  */
-export const TITRE_DOCUMENTS_INVENTAIRE = "Documents et Inventaire";
+export const TITRE_DOCUMENTS_INVENTAIRE = "Documents et inventaire";
 
 export function blocDocumentsInventaire(sources: SourcesRapport): BlocRapport {
   return fusionnerBlocs("documents", "documents", TITRE_DOCUMENTS_INVENTAIRE, [

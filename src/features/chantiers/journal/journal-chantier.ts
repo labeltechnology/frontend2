@@ -33,7 +33,7 @@ export function refusEcriture(chantier: Pick<Chantier, "statut" | "dateFinPrevue
         ? null
         : `Chantier terminé depuis plus de ${JOURS_APRES_FIN} jours : le journal est clos.`;
     case "PLANIFIE":
-      return "Le journal se remplit une fois le chantier démarré.";
+      return "Le journal peut être renseigné une fois le chantier démarré.";
     default:
       return "Chantier annulé : pas de journal.";
   }
@@ -63,9 +63,9 @@ export function refusJournee(
   idJournalEdite?: number,
 ): string | null {
   if (!jour) return "Indiquez la date de la journée.";
-  if (jour > aujourdhui) return "Le journal ne se remplit pas à l'avance.";
+  if (jour > aujourdhui) return "Le journal ne peut pas être renseigné à l'avance.";
   if (jour < chantier.dateDebutPrevue || jour > chantier.dateFinPrevue) return "Journée en dehors des dates du chantier.";
-  if (journaux.some((j) => j.dateJour === jour && j.idJournal !== idJournalEdite)) return "Cette journée est déjà rédigée : modifiez-la.";
+  if (journaux.some((j) => j.dateJour === jour && j.idJournal !== idJournalEdite)) return "Cette journée a déjà été saisie : veuillez la modifier.";
   return null;
 }
 

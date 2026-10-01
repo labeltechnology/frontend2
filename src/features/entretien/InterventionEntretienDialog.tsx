@@ -75,7 +75,7 @@ export function InterventionEntretienDialog({ idEngin, compteurActuel, echeance,
           <DialogTitle>Intervention effectuée</DialogTitle>
           <DialogDescription>
             {echeance?.libelle}
-            {compteurActuel != null && ` — compteur actuel de le véhicule : ${formatNombre(compteurActuel)} ${unite}`}
+            {compteurActuel != null && ` — compteur actuel du véhicule : ${formatNombre(compteurActuel)} ${unite}`}
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 sm:grid-cols-2">

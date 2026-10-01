@@ -70,7 +70,7 @@ export function DispositifFormDialog({ open, onOpenChange }: DispositifFormDialo
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Installer un dispositif GPS</DialogTitle>
-          <DialogDescription>Associe un boîtier GPS à un véhicule.</DialogDescription>
+          <DialogDescription>Associez un boîtier GPS à un véhicule.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">

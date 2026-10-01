@@ -5,6 +5,7 @@ import { ICONES_DIMENSION, TuileVehicule } from "@/features/dashboard/sections/T
 import { DIMENSIONS_SANTE, estAProbleme, type SanteParc } from "@/features/dashboard/sante-parc";
 import type { StatutEngin } from "@/types/engin";
 import { cn } from "@/lib/utils";
+import { pluriel } from "@/lib/pluriel";
 
 const COULEUR_STATUT: Partial<Record<StatutEngin, string>> = {
   DISPONIBLE: "bg-badge-successFg",
@@ -55,7 +56,7 @@ export function StatutParc({ sante, enChargement }: { sante: SanteParc; enCharge
         sante.actifs > 0 && (
           <div className="flex rounded-md bg-muted p-0.5" role="group" aria-label="Filtrer les véhicules">
             {boutonFiltre("tous", `Tous (${sante.actifs})`)}
-            {boutonFiltre("problemes", `À problème (${nombreProblemes})`)}
+            {boutonFiltre("problemes", `Avec anomalie (${nombreProblemes})`)}
           </div>
         )
       }
@@ -74,11 +75,11 @@ export function StatutParc({ sante, enChargement }: { sante: SanteParc; enCharge
           </dl>
 
           {groupes.length === 0 ? (
-            <EtatBloc>Aucun véhicule à problème : tout le parc est en règle.</EtatBloc>
+            <EtatBloc>Aucun véhicule présentant une anomalie : tout le parc est en règle.</EtatBloc>
           ) : (
             <div className="max-h-[26rem] space-y-3 overflow-y-auto pr-1">
               {groupes.map((groupe) => (
-                <section key={groupe.statut} aria-label={`${groupe.libelle} : ${groupe.vehicules.length} véhicule(s)`}>
+                <section key={groupe.statut} aria-label={`${groupe.libelle} : ${pluriel(groupe.vehicules.length, "véhicule")}`}>
                   <h3 className="mb-1.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                     <span className={cn("h-2 w-2 rounded-full", COULEUR_STATUT[groupe.statut])} aria-hidden />
                     {groupe.libelle}
@@ -99,7 +100,7 @@ export function StatutParc({ sante, enChargement }: { sante: SanteParc; enCharge
           <Legende />
           {(sante.horsParc > 0 || sante.dimensionsIndisponibles.length > 0) && (
             <p className="text-[11px] text-muted-foreground">
-              {sante.horsParc > 0 && `${sante.horsParc} véhicule(s) réformé(s) ou vendu(s) non affiché(s). `}
+              {sante.horsParc > 0 && `${pluriel(sante.horsParc, "véhicule réformé ou vendu non affiché")}. `}
               {sante.dimensionsIndisponibles.length > 0 &&
                 `Non disponible pour votre profil : ${sante.dimensionsIndisponibles
                   .map((d) => DIMENSIONS_SANTE.find((x) => x.cle === d)!.libelle.toLowerCase())

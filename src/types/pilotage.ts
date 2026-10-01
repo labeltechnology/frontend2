@@ -67,6 +67,8 @@ export interface TypeFlotte {
   tauxUtilisation: number | null;
   usageParJour: number | null;
   uniteUsage: string | null;
+  /** Famille du type (2026-10-01) ; null si non renseignée. Absente sur un serveur plus ancien. */
+  famille?: string | null;
 }
 
 export interface Immobilisation {

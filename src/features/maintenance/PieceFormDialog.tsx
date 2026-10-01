@@ -73,7 +73,7 @@ export function PieceFormDialog({ open, onOpenChange }: PieceFormDialogProps) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Nouvelle pièce</DialogTitle>
-          <DialogDescription>Ajoute une pièce de rechange au stock.</DialogDescription>
+          <DialogDescription>Ajoutez une pièce de rechange au stock.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
@@ -108,7 +108,7 @@ export function PieceFormDialog({ open, onOpenChange }: PieceFormDialogProps) {
             </div>
           </div>
           <div className="space-y-2">
-            <Label>Fournisseur (optionnel)</Label>
+            <Label>Fournisseur (facultatif)</Label>
             <Select
               value={watch("idFournisseur") ?? AUCUN_FOURNISSEUR}
               onValueChange={(v) => setValue("idFournisseur", v)}

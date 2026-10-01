@@ -6,6 +6,7 @@ import { PageHeader } from "@/components/data-table/PageHeader";
 import { ProformaApercuDialog } from "@/features/proforma/ProformaApercuDialog";
 import { ProformaFormDialog } from "@/features/proforma/ProformaFormDialog";
 import { useFacturesProforma } from "@/features/proforma/api";
+import { pluriel } from "@/lib/pluriel";
 import { formatDate, formatMontant } from "@/lib/utils";
 import type { FactureProforma } from "@/types/proforma";
 
@@ -27,7 +28,7 @@ export function ProformaPage() {
     {
       key: "validite",
       header: "Validité",
-      render: (p) => (p.validiteJours != null ? `${p.validiteJours} jour(s)` : "—"),
+      render: (p) => (p.validiteJours != null ? pluriel(p.validiteJours, "jour") : "—"),
     },
     { key: "montantTtc", header: "Total TTC", render: (p) => formatMontant(p.montantTtc) },
   ];
@@ -35,12 +36,12 @@ export function ProformaPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Factures proforma"
+        title="Factures pro forma"
         description="Devis non engageants, indépendants des contrats de location — destinataire et lignes saisis librement."
         actions={
           <Button onClick={() => setDialogOuvert(true)}>
             <Plus className="h-4 w-4" />
-            Nouvelle proforma
+            Nouvelle facture pro forma
           </Button>
         }
       />

@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { LayoutGrid } from "lucide-react";
 import { CadreSection, EtatBloc } from "@/features/dashboard/sections/CadreSection";
@@ -6,6 +7,7 @@ import {
   segmentsStatut,
   statutParCategorie,
   type CompteursStatut,
+  type LigneCategorie,
 } from "@/features/dashboard/pilotage/statut-par-categorie";
 import { cn } from "@/lib/utils";
 import type { StatutEngin } from "@/types/engin";
@@ -25,6 +27,10 @@ const COULEUR_STATUT: Record<StatutEngin, string> = {
  * direction) : véhicules routiers et engins de chantier, puis leurs types de
  * matériel, avec utilisables, immobilisés, en alerte et à surveiller. Plus de
  * tuile par véhicule : un clic ouvre la liste des véhicules filtrée.
+ *
+ * 2026-10-01 (demande de la direction) : chaque catégorie dans son propre
+ * cadre ; familles puis types en plus petit (« Véhicule de service » → 4x4,
+ * léger, bus), voir statut-par-categorie.ts.
  */
 export function StatutParcParCategorie({ sante, enChargement }: { sante: SanteParc; enChargement: boolean }) {
   const categories = statutParCategorie(sante);
@@ -44,34 +50,15 @@ export function StatutParcParCategorie({ sante, enChargement }: { sante: SantePa
             <Chiffre libelle="À surveiller" valeur={sante.aSurveiller} ton={sante.aSurveiller > 0 ? "text-badge-warningFg" : "text-foreground"} />
           </dl>
 
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[440px] text-sm">
-              <caption className="sr-only">Statut du parc par catégorie et par type de matériel</caption>
-              <thead>
-                <tr className="border-b text-left text-xs text-muted-foreground">
-                  <th className="py-2 pr-2 font-medium">Catégorie / type</th>
-                  <th className="px-1.5 py-2 text-right font-medium">Total</th>
-                  <th className="px-1.5 py-2 text-right font-medium" title="Disponibles, en mission ou affectés">Utilisables</th>
-                  <th className="px-1.5 py-2 text-right font-medium" title="En maintenance ou en panne">Immobilisés</th>
-                  <th className="px-1.5 py-2 text-right font-medium">En alerte</th>
-                  <th className="py-2 pl-1.5 text-right font-medium">À surveiller</th>
-                </tr>
-              </thead>
-              {categories.map((c) => (
-                <tbody key={c.categorie} className="border-b last:border-b-0">
-                  <Ligne libelle={c.libelle} lien={c.lien} compteurs={c.compteurs} categorie />
-                  {c.types.map((t) => (
-                    <Ligne key={t.idTypeEngin ?? "sans-type"} libelle={t.libelle} lien={t.lien} compteurs={t.compteurs} />
-                  ))}
-                </tbody>
-              ))}
-            </table>
-          </div>
+          {categories.map((c) => (
+            <CadreCategorie key={c.categorie} categorie={c} />
+          ))}
 
           <Legende />
           {(sante.horsParc > 0 || sante.dimensionsIndisponibles.length > 0) && (
             <p className="text-[11px] text-muted-foreground">
-              {sante.horsParc > 0 && `${sante.horsParc} véhicule(s) réformé(s) ou vendu(s) non compté(s). `}
+              {sante.horsParc > 0 &&
+                `${sante.horsParc} ${sante.horsParc > 1 ? "véhicules réformés ou vendus non comptés" : "véhicule réformé ou vendu non compté"}. `}
               {sante.dimensionsIndisponibles.length > 0 &&
                 `Non disponible pour votre profil : ${sante.dimensionsIndisponibles
                   .map((d) => DIMENSIONS_SANTE.find((x) => x.cle === d)!.libelle.toLowerCase())
@@ -84,44 +71,119 @@ export function StatutParcParCategorie({ sante, enChargement }: { sante: SantePa
   );
 }
 
+/** Une catégorie encadrée : en-tête (nom, barre, chiffres), puis familles et types en plus petit. */
+function CadreCategorie({ categorie: c }: { categorie: LigneCategorie }) {
+  return (
+    <section className="rounded-lg border border-border bg-muted/20 p-3" aria-label={`${c.libelle} : ${c.compteurs.total} véhicules`}>
+      <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+        <div className="min-w-[160px] flex-1">
+          <Link to={c.lien} className="text-sm font-semibold text-foreground hover:underline focus-visible:underline">
+            {c.libelle}
+          </Link>
+          <Barre compteurs={c.compteurs} haute />
+        </div>
+        <dl className="flex flex-wrap gap-x-3 gap-y-1 text-xs">
+          <Compteur libelle="Total" valeur={c.compteurs.total} classe="font-semibold text-foreground" />
+          <Compteur libelle="Utilisables" valeur={c.compteurs.utilisables} classe="text-badge-successFg" />
+          <Compteur libelle="Immobilisés" valeur={c.compteurs.immobilises} classe={c.compteurs.immobilises > 0 ? "text-badge-warningFg" : "text-muted-foreground"} />
+          <Compteur libelle="En alerte" valeur={c.compteurs.enAlerte} classe={c.compteurs.enAlerte > 0 ? "font-semibold text-badge-dangerFg" : "text-muted-foreground"} />
+          <Compteur libelle="À surveiller" valeur={c.compteurs.aSurveiller} classe={c.compteurs.aSurveiller > 0 ? "text-badge-warningFg" : "text-muted-foreground"} />
+        </dl>
+      </div>
+
+      <div className="mt-2 overflow-x-auto">
+        <table className="w-full min-w-[400px] text-xs">
+          <caption className="sr-only">{`${c.libelle} : détail par ${c.avecFamilles ? "famille et " : ""}type de matériel`}</caption>
+          <thead>
+            <tr className="border-b text-left text-[10px] uppercase tracking-wide text-muted-foreground">
+              <th className="py-1 pr-2 font-medium">{c.avecFamilles ? "Famille / type" : "Type"}</th>
+              <th className="px-1.5 py-1 text-right font-medium">Total</th>
+              <th className="px-1.5 py-1 text-right font-medium" title="Disponibles, en mission ou affectés">Utilisables</th>
+              <th className="px-1.5 py-1 text-right font-medium" title="En maintenance ou en panne">Immobilisés</th>
+              <th className="px-1.5 py-1 text-right font-medium">En alerte</th>
+              <th className="py-1 pl-1.5 text-right font-medium">À surveiller</th>
+            </tr>
+          </thead>
+          <tbody>
+            {c.avecFamilles
+              ? c.familles.map((f) => (
+                  <Fragment key={f.famille ?? "sans-famille"}>
+                    <Ligne libelle={f.libelle} lien={null} compteurs={f.compteurs} niveau="famille" />
+                    {f.types.map((t) => (
+                      <Ligne key={t.idTypeEngin ?? "sans-type"} libelle={t.libelle} lien={t.lien} compteurs={t.compteurs} niveau="type" />
+                    ))}
+                  </Fragment>
+                ))
+              : c.types.map((t) => (
+                  <Ligne key={t.idTypeEngin ?? "sans-type"} libelle={t.libelle} lien={t.lien} compteurs={t.compteurs} niveau="famille" />
+                ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
+
+function Compteur({ libelle, valeur, classe }: { libelle: string; valeur: number; classe: string }) {
+  return (
+    <div className="flex items-baseline gap-1">
+      <dt className="text-muted-foreground">{libelle}</dt>
+      <dd className={cn("tabular-nums", classe)}>{valeur}</dd>
+    </div>
+  );
+}
+
+function Barre({ compteurs, haute }: { compteurs: CompteursStatut; haute?: boolean }) {
+  const segments = segmentsStatut(compteurs);
+  const texteBarre = segments.map((s) => `${s.libelle} ${s.nombre}`).join(", ");
+  return (
+    <div
+      className={cn("mt-1 flex w-full min-w-[80px] overflow-hidden rounded-full bg-muted", haute ? "h-2" : "h-1")}
+      role="img"
+      aria-label={texteBarre}
+      title={texteBarre}
+    >
+      {segments.map((s) => (
+        <span key={s.statut} className={COULEUR_STATUT[s.statut]} style={{ width: `${s.largeur}%` }} />
+      ))}
+    </div>
+  );
+}
+
+/** Ligne du tableau d'une catégorie : famille (texte normal) ou type (plus petit, en retrait). */
 function Ligne({
   libelle,
   lien,
   compteurs: c,
-  categorie,
+  niveau,
 }: {
   libelle: string;
   lien: string | null;
   compteurs: CompteursStatut;
-  categorie?: boolean;
+  niveau: "famille" | "type";
 }) {
-  const segments = segmentsStatut(c);
-  const texteBarre = segments.map((s) => `${s.libelle} ${s.nombre}`).join(", ");
+  const type = niveau === "type";
   return (
-    <tr className={cn(categorie && "bg-muted/40")}>
-      <td className={cn("py-1.5 pr-2", categorie ? "pl-2 font-semibold" : "pl-5")}>
+    <tr className={cn(!type && "border-t border-border/60")}>
+      <td className={cn("py-1 pr-2", type ? "pl-4 text-[11px]" : "font-medium")}>
         {lien ? (
-          <Link to={lien} className="text-foreground hover:underline focus-visible:underline">
+          <Link to={lien} className={cn("hover:underline focus-visible:underline", type ? "text-muted-foreground hover:text-foreground" : "text-foreground")}>
             {libelle}
           </Link>
         ) : (
-          <span className="text-muted-foreground">{libelle}</span>
+          <span className={type ? "text-muted-foreground" : "text-foreground"}>{libelle}</span>
         )}
-        <div className="mt-1 flex h-1.5 w-full min-w-[80px] overflow-hidden rounded-full bg-muted" role="img" aria-label={texteBarre} title={texteBarre}>
-          {segments.map((s) => (
-            <span key={s.statut} className={COULEUR_STATUT[s.statut]} style={{ width: `${s.largeur}%` }} />
-          ))}
-        </div>
+        {!type && <Barre compteurs={c} />}
       </td>
-      <td className={cn("px-1.5 py-1.5 text-right tabular-nums", categorie && "font-semibold")}>{c.total}</td>
-      <td className="px-1.5 py-1.5 text-right tabular-nums text-badge-successFg">{c.utilisables}</td>
-      <td className={cn("px-1.5 py-1.5 text-right tabular-nums", c.immobilises > 0 ? "text-badge-warningFg" : "text-muted-foreground")}>
+      <td className={cn("px-1.5 py-1 text-right tabular-nums", type ? "text-[11px]" : "font-medium")}>{c.total}</td>
+      <td className={cn("px-1.5 py-1 text-right tabular-nums text-badge-successFg", type && "text-[11px]")}>{c.utilisables}</td>
+      <td className={cn("px-1.5 py-1 text-right tabular-nums", type && "text-[11px]", c.immobilises > 0 ? "text-badge-warningFg" : "text-muted-foreground")}>
         {c.immobilises || "—"}
       </td>
-      <td className={cn("px-1.5 py-1.5 text-right tabular-nums", c.enAlerte > 0 ? "font-semibold text-badge-dangerFg" : "text-muted-foreground")}>
+      <td className={cn("px-1.5 py-1 text-right tabular-nums", type && "text-[11px]", c.enAlerte > 0 ? "font-semibold text-badge-dangerFg" : "text-muted-foreground")}>
         {c.enAlerte || "—"}
       </td>
-      <td className={cn("py-1.5 pl-1.5 text-right tabular-nums", c.aSurveiller > 0 ? "text-badge-warningFg" : "text-muted-foreground")}>
+      <td className={cn("py-1 pl-1.5 text-right tabular-nums", type && "text-[11px]", c.aSurveiller > 0 ? "text-badge-warningFg" : "text-muted-foreground")}>
         {c.aSurveiller || "—"}
       </td>
     </tr>

@@ -33,7 +33,7 @@ export function FilAriane() {
         <Link
           to={retour.chemin}
           className="inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          title="Retour à la liste (Alt+←), filtres gardés"
+          title="Retour à la liste (Alt+←), filtres conservés"
         >
           <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
           {retour.libelle}

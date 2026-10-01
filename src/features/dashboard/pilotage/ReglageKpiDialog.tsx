@@ -68,7 +68,7 @@ export function ReglageKpiDialog({ kpi, onFermer }: { kpi: KpiPilotage | null; o
         <p className="text-xs text-muted-foreground">
           Vert : objectif atteint. Orange : objectif manqué sans franchir le seuil. Rouge : seuil franchi. Laisser vide
           retire la valeur (sans seuil, le rouge commence à 10 % de l'objectif).
-          {kpi?.objectifPartageAvecPerformance && " L'objectif est aussi celui de la page Performance."}
+          {kpi?.objectifPartageAvecPerformance && " Cet objectif s'applique également à la page « Performance »."}
         </p>
         <DialogFooter>
           <Button variant="outline" onClick={onFermer}>

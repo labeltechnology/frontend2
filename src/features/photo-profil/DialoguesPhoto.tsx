@@ -48,7 +48,7 @@ export function PhotoConducteurDialog({ conducteur, onOpenChange }: { conducteur
       open={conducteur !== null}
       onOpenChange={onOpenChange}
       titre={`Photo — ${nom}`}
-      description="Sert à reconnaître le conducteur ; son compte de l'appli mobile, s'il en a un, affiche la même photo."
+      description="Sert à reconnaître le conducteur ; son compte de l'application mobile, s'il en a un, affiche la même photo."
       nom={nom}
       initiales={initialesPersonne(conducteur?.nom, conducteur?.prenom)}
       urlPhotoActuelle={conducteur?.urlPhoto}

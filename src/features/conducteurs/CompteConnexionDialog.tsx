@@ -55,7 +55,7 @@ export function CompteConnexionDialog({ conducteur, onOpenChange }: CompteConnex
         idConducteur: conducteur.idConducteur,
         idUtilisateur: choix === AUCUN ? null : Number(choix),
       });
-      toast.success(choix === AUCUN ? "Compte retiré : l'appli mobile est coupée pour ce conducteur" : "Compte relié");
+      toast.success(choix === AUCUN ? "Compte retiré : ce conducteur n'a plus accès à l'application mobile" : "Compte relié");
       onOpenChange(false);
     } catch (e) {
       toast.error(e instanceof ApiError ? e.message : "Enregistrement impossible");
@@ -71,7 +71,7 @@ export function CompteConnexionDialog({ conducteur, onOpenChange }: CompteConnex
             Compte de connexion
           </DialogTitle>
           <DialogDescription>
-            {conducteur.matricule} — {conducteur.nom} {conducteur.prenom}. Le compte choisi ouvre l'appli mobile : missions,
+            {conducteur.matricule} — {conducteur.nom} {conducteur.prenom}. Le compte choisi ouvre l'application mobile : missions,
             véhicule, pleins, incidents et messagerie de ce conducteur uniquement.
           </DialogDescription>
         </DialogHeader>
@@ -83,7 +83,7 @@ export function CompteConnexionDialog({ conducteur, onOpenChange }: CompteConnex
               <SelectValue placeholder={isLoading ? "Chargement…" : "Choisir un compte"} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={AUCUN}>Aucun compte (pas d'accès à l'appli)</SelectItem>
+              <SelectItem value={AUCUN}>Aucun compte (pas d'accès à l'application)</SelectItem>
               {(comptes ?? []).map((c) => (
                 <SelectItem key={c.idUtilisateur} value={String(c.idUtilisateur)}>
                   {c.nomComplet} — {c.email}

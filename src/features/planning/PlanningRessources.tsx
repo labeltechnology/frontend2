@@ -310,7 +310,7 @@ export function PlanningRessources({
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
-          <div className="ml-2 inline-flex rounded-md border p-0.5" role="group" aria-label="Affichage du planning">
+          <div className="ml-2 inline-flex rounded-md border p-0.5" role="group" aria-label="Affichage du calendrier">
             {(Object.keys(LIBELLES_VUE) as VuePlanning[]).map((v) => (
               <button
                 key={v}

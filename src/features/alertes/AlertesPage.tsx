@@ -101,7 +101,7 @@ export function AlertesPage() {
     <div className="space-y-6">
       <PageHeader
         title="Alertes"
-        description="Alertes générées automatiquement par le système ; les alertes répétées sont regroupées, et celles dont la cause a disparu sont closes seules."
+        description="Alertes générées automatiquement par le système ; les alertes répétées sont regroupées, et celles dont la cause a disparu sont closes automatiquement."
         actions={
           <div className="flex flex-wrap items-center gap-2">
             {peutTraiter && (
@@ -110,7 +110,7 @@ export function AlertesPage() {
                 size="sm"
                 disabled={verifier.isPending}
                 onClick={onVerifier}
-                title="Clôt tout de suite les alertes dont la cause a disparu (fait aussi seul toutes les 15 minutes)"
+                title="Clore immédiatement les alertes dont la cause a disparu (opération également effectuée automatiquement toutes les 15 minutes)"
               >
                 <RefreshCw className={verifier.isPending ? "h-4 w-4 animate-spin" : "h-4 w-4"} />
                 Vérifier les causes

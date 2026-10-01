@@ -8,7 +8,8 @@ import { cn, formatMontant } from "@/lib/utils";
 const NOMBRE_VISIBLE = 6;
 
 /**
- * « Alertes urgentes » (2026-09-30) : critiques d'abord (action immédiate),
+ * « Notifications » (2026-09-30, renommé le 2026-10-01 à la demande de la
+ * direction ; anciennement « Alertes urgentes ») : critiques d'abord (action immédiate),
  * puis avertissements. Chaque alerte donne son contexte, l'impact par jour,
  * le montant en jeu et l'action prévue ou conseillée, et mène à la page où
  * agir. Le niveau est donné par la couleur ET un libellé.
@@ -29,7 +30,7 @@ export function AlertesUrgentes({
 
   return (
     <CadreSection
-      titre="Alertes urgentes"
+      titre="Notifications"
       icone={Siren}
       lien="/alertes"
       libelleLien="Toutes les alertes"
@@ -48,7 +49,7 @@ export function AlertesUrgentes({
       {enChargement ? (
         <EtatBloc>Chargement…</EtatBloc>
       ) : alertes.length === 0 ? (
-        <EtatBloc>{enErreur ? "Alertes chiffrées indisponibles." : "Aucune alerte urgente : tout est sous contrôle."}</EtatBloc>
+        <EtatBloc>{enErreur ? "Notifications indisponibles." : "Aucune notification urgente : la situation est sous contrôle."}</EtatBloc>
       ) : (
         <ul className="space-y-2">
           {visibles.map((a) => (

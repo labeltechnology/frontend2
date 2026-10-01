@@ -61,7 +61,7 @@ function ligneConsommation(consommation: ConsommationMoyenne | null, anomalies: 
     };
   }
   if (consommation === null) return { ...base, niveau: "inconnu", detail: "Non disponible" };
-  if (!valeur) return { ...base, niveau: "inconnu", detail: "Pas assez de pleins pour la calculer (2 minimum)" };
+  if (!valeur) return { ...base, niveau: "inconnu", detail: "Nombre de pleins insuffisant pour le calcul (2 au minimum)" };
   return { ...base, niveau: "ok", detail: valeur };
 }
 

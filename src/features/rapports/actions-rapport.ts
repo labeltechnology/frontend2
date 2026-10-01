@@ -51,7 +51,7 @@ export function useActionsRapport() {
     regenerer: async (r: Rapport): Promise<Rapport | null> => {
       try {
         const nouveau = await generer.mutateAsync(requeteRegeneration(r));
-        toast.success("Rapport régénéré avec les chiffres d'aujourd'hui");
+        toast.success("Rapport régénéré avec les données à jour");
         return nouveau;
       } catch (e) {
         toast.error(messageErreur(e, "Régénération impossible"));

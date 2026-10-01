@@ -61,6 +61,11 @@ export function TypesEnginPage() {
           <Badge variant="default">Véhicule routier</Badge>
         ),
     },
+    {
+      key: "famille",
+      header: "Famille",
+      render: (t) => t.famille ?? <span className="text-muted-foreground">—</span>,
+    },
     { key: "vitesseMaximale", header: "Vitesse maximale", render: (t) => `${t.vitesseMaximale ?? "—"} km/h` },
     {
       key: "performance",

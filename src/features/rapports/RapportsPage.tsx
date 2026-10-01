@@ -96,7 +96,7 @@ export function RapportsPage() {
           <div className="flex flex-wrap gap-2">
             <Button variant="outline" onClick={() => setAbonnementsOuvert(true)}>
               <Mail className="h-4 w-4" />
-              Recevoir par e-mail
+              Recevoir par courriel
             </Button>
             <Button onClick={() => setFormulaireOuvert(true)}>
               <Plus className="h-4 w-4" />

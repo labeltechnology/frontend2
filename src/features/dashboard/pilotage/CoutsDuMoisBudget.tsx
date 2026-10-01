@@ -59,7 +59,7 @@ export function CoutsDuMoisBudget({ actif }: { actif: boolean }) {
           <p className="text-xs text-muted-foreground">
             {c.joursEcoules < c.joursMois
               ? `${c.joursEcoules} jour${c.joursEcoules > 1 ? "s" : ""} écoulé${c.joursEcoules > 1 ? "s" : ""} sur ${c.joursMois} : la projection prolonge le rythme actuel.`
-              : "Mois terminé : la projection est le réel."}
+              : "Mois terminé : la projection correspond aux montants réels."}
           </p>
           <div className="overflow-x-auto">
             <table className="w-full min-w-[620px] text-sm">

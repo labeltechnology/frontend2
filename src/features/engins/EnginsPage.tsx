@@ -169,7 +169,7 @@ export function EnginsPage() {
   const onToggleGps = async (engin: Engin) => {
     try {
       await equiperGps.mutateAsync({ id: engin.idEngin, equipe: !engin.equipeGps });
-      toast.success(engin.equipeGps ? "GPS retiré" : "GPS équipé");
+      toast.success(engin.equipeGps ? "GPS retiré" : "GPS installé");
     } catch (e) {
       toast.error(e instanceof ApiError ? e.message : "Action impossible");
     }
@@ -184,7 +184,7 @@ export function EnginsPage() {
       sortValue: (e) => e.equipeGps,
       render: (e) =>
         e.equipeGps ? (
-          <SatelliteDish className="h-4 w-4 text-success" aria-label="Équipé GPS" />
+          <SatelliteDish className="h-4 w-4 text-success" aria-label="Équipé d'un GPS" />
         ) : (
           <Satellite className="h-4 w-4 text-muted-foreground" aria-label="Sans GPS" />
         ),
@@ -193,7 +193,7 @@ export function EnginsPage() {
       // Immatriculation (véhicules/camions) ou numéro de série (engins de chantier sans
       // plaque routière) selon la catégorie du type — voir CategorieEngin, ajouté le 2026-09-22.
       key: "identifiant",
-      header: "Immatriculation / N° série",
+      header: "Immatriculation / N° de série",
       render: (e) => <span className="font-medium">{identifiantVehicule(e)}</span>,
       sortValue: (e) => identifiantVehicule(e),
       mobile: "titre",
@@ -253,7 +253,7 @@ export function EnginsPage() {
       <Tabs defaultValue="liste">
         <TabsList>
           <TabsTrigger value="liste">Liste</TabsTrigger>
-          <TabsTrigger value="planning">Planning</TabsTrigger>
+          <TabsTrigger value="planning">Calendrier</TabsTrigger>
         </TabsList>
 
         <TabsContent value="liste" className="space-y-6">
@@ -291,7 +291,7 @@ export function EnginsPage() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onSelect={() => setEnginKm(engin)}>Mettre à jour le kilométrage</DropdownMenuItem>
                   <DropdownMenuItem onSelect={() => onToggleGps(engin)}>
-                    {engin.equipeGps ? "Retirer le GPS" : "Équiper le GPS"}
+                    {engin.equipeGps ? "Retirer le GPS" : "Installer le GPS"}
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onSelect={() => setEnginPhotos(engin)}>Photos</DropdownMenuItem>

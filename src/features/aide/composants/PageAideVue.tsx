@@ -122,7 +122,7 @@ export function PageAideVue({ placee, index, role, responsable }: PageAideVuePro
             </span>
             <Link to={cheminPage("contact-support")} className="inline-flex items-center gap-1 hover:text-foreground">
               <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" />
-              Une question ? Contacter le support
+              Une question ? Contacter l'assistance
             </Link>
           </p>
         </footer>
@@ -286,11 +286,11 @@ function CorpsDepannage({ page, index }: { page: PageDepannage; index: Map<strin
           ))}
         </ol>
       </Bloc>
-      <Bloc titre="Si le problème continue">
+      <Bloc titre="Si le problème persiste">
         <p className="text-sm">
           Notez le message exact et l'écran concerné, puis{" "}
           <Link to={cheminPage("contact-support")} className="font-medium text-primary hover:underline">
-            {index.get("contact-support")?.page.titre.toLowerCase() ?? "contactez le support"}
+            {index.get("contact-support")?.page.titre.toLowerCase() ?? "contactez l'assistance"}
           </Link>
           .
         </p>
@@ -312,7 +312,7 @@ function CorpsReference({ page }: { page: Extract<PageAide, { type: "REFERENCE" 
           <div className="mt-3 space-y-3 pl-4 text-sm">
             {article.fonctionnalites.length > 0 && (
               <div>
-                <p className="font-semibold">Ce qu'on peut faire</p>
+                <p className="font-semibold">Actions possibles</p>
                 <ul className="list-disc space-y-1 pl-5">
                   {article.fonctionnalites.map((f, i) => <li key={i}>{f}</li>)}
                 </ul>

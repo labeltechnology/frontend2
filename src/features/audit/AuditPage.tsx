@@ -32,7 +32,7 @@ export function AuditPage() {
 
   const columns: DataTableColumn<JournalAudit>[] = [
     { key: "entite", header: "Entité", render: (j) => <span className="font-medium">{j.entite}</span> },
-    { key: "idEntite", header: "ID", render: (j) => j.idEntite },
+    { key: "idEntite", header: "Identifiant", render: (j) => j.idEntite },
     { key: "action", header: "Action", render: (j) => <StatutBadge statut={j.action} /> },
     { key: "utilisateur", header: "Utilisateur", render: (j) => j.idUtilisateur ?? "—" },
     { key: "date", header: "Date", render: (j) => formatInstant(j.dateAction) },
@@ -47,10 +47,10 @@ export function AuditPage() {
         <CardContent className="grid grid-cols-1 gap-4 pt-6 sm:grid-cols-5">
           <div className="space-y-2">
             <Label htmlFor="entite">Entité</Label>
-            <Input id="entite" placeholder="Véhicule, Mission..." value={entite} onChange={(e) => setEntite(e.target.value)} />
+            <Input id="entite" placeholder="Véhicule, mission…" value={entite} onChange={(e) => setEntite(e.target.value)} />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="idUtilisateur">ID utilisateur</Label>
+            <Label htmlFor="idUtilisateur">Identifiant de l'utilisateur</Label>
             <Input
               id="idUtilisateur"
               type="number"

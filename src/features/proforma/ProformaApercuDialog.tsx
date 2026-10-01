@@ -36,7 +36,7 @@ export function ProformaApercuDialog({ proforma, onOpenChange }: ProformaApercuD
         setPdfPreview({ blob, url: URL.createObjectURL(blob) });
       })
       .catch((e) => {
-        if (!annule) toast.error(e instanceof ApiError ? e.message : "Aperçu de la facture proforma indisponible");
+        if (!annule) toast.error(e instanceof ApiError ? e.message : "Aperçu de la facture pro forma indisponible");
       });
 
     return () => {
@@ -65,7 +65,7 @@ export function ProformaApercuDialog({ proforma, onOpenChange }: ProformaApercuD
     <Dialog open={!!proforma} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
-          <DialogTitle>Proforma {proforma?.reference}</DialogTitle>
+          <DialogTitle>Facture pro forma {proforma?.reference}</DialogTitle>
           <DialogDescription>{proforma?.clientNom}</DialogDescription>
         </DialogHeader>
 
@@ -78,7 +78,7 @@ export function ProformaApercuDialog({ proforma, onOpenChange }: ProformaApercuD
         {pdfPreview && (
           <iframe
             src={pdfPreview.url}
-            title="Aperçu PDF de la facture proforma"
+            title="Aperçu PDF de la facture pro forma"
             className="h-[60vh] w-full rounded-md border"
           />
         )}

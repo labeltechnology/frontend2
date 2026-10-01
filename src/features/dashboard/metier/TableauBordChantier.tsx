@@ -16,6 +16,7 @@ import { EnTeteTableauBord } from "@/features/dashboard/sections/EnTeteTableauBo
 import { PanneauATraiter } from "@/features/dashboard/sections/PanneauATraiter";
 import { useChantiersCarte } from "@/features/gps/chantiers/api";
 import { libelleRole } from "@/lib/droits";
+import { pluriel } from "@/lib/pluriel";
 
 /**
  * Tableau de bord du chef de chantier (pages par métier, 2026-09-30). Le
@@ -143,7 +144,7 @@ export function TableauBordChantier() {
         <CarteIndicateur
           titre="Alertes"
           valeur={indicateurs.alertes}
-          precision={indicateurs.alertesCritiques > 0 ? `${indicateurs.alertesCritiques} critique(s)` : "aucune critique"}
+          precision={indicateurs.alertesCritiques > 0 ? pluriel(indicateurs.alertesCritiques, "critique") : "aucune alerte critique"}
           icone={TriangleAlert}
           ton={indicateurs.alertesCritiques > 0 ? "danger" : "neutre"}
           lien="/alertes"

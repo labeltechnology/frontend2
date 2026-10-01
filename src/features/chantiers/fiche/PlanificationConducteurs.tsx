@@ -35,6 +35,7 @@ import {
   type ConducteurFiche,
 } from "@/features/chantiers/fiche/conducteurs-chantier";
 import { AvatarPersonne } from "@/features/photo-profil/AvatarPersonne";
+import { accord, pluriel } from "@/lib/pluriel";
 
 const ZONE_EQUIPE = "zone-equipe";
 const ZONE_CHANTIER = "zone-conducteurs-chantier";
@@ -65,8 +66,8 @@ const ANNONCES: Announcements = {
 };
 
 const INSTRUCTIONS =
-  "Appuyez sur Espace ou Entrée pour saisir le conducteur, déplacez-le avec les flèches, puis Espace ou Entrée pour le déposer. " +
-  "Échap annule. Les boutons Ajouter et Retirer font la même chose sans glisser.";
+  "Appuyez sur Espace ou Entrée pour saisir le conducteur, déplacez-le avec les flèches, puis appuyez de nouveau sur Espace ou Entrée pour le déposer. " +
+  "La touche Échap annule le déplacement. Les boutons « Ajouter » et « Retirer » permettent la même opération sans glisser-déposer.";
 
 /** Empêche qu'un clic ou une frappe dans un bouton ou un champ de la carte ne démarre un glisser-déposer. */
 const isoler = {
@@ -347,14 +348,14 @@ export function PlanificationConducteurs({
                 onAjouter={() => ajouter(c.conducteur.idConducteur)}
               />
             ))}
-            {equipe.length === 0 && <li className="py-6 text-center text-sm text-muted-foreground">Aucun conducteur ne correspond.</li>}
+            {equipe.length === 0 && <li className="py-6 text-center text-sm text-muted-foreground">Aucun conducteur ne correspond à votre recherche.</li>}
           </ul>
         </ZoneDepot>
 
         <ZoneDepot
           id={ZONE_CHANTIER}
           titre="Conducteurs du chantier"
-          sousTitre={`${selection.length} conducteur${selection.length > 1 ? "s" : ""} — enregistrés avec la fiche`}
+          sousTitre={`${pluriel(selection.length, "conducteur")} — ${accord(selection.length, "enregistré")} avec la fiche`}
         >
           {enConflit.length > 0 && (
             <p className="mb-2 rounded-md bg-badge-dangerBg px-2 py-1.5 text-xs text-badge-dangerFg" role="alert">

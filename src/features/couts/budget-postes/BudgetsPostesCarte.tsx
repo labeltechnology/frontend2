@@ -26,7 +26,7 @@ export function BudgetsPostesCarte({ annee, actif, peutModifier }: { annee: numb
     if (l.idBudgetPoste === null) return;
     const ok = await confirmer({
       titre: `Supprimer le budget « ${l.libelle} » ?`,
-      message: `Le budget ${annee} de ce poste sera supprimé : le tableau de bord le comptera « sans budget ».`,
+      message: `Le budget ${annee} de ce poste sera supprimé : le tableau de bord l'affichera comme « sans budget ».`,
       libelleConfirmer: "Supprimer",
       danger: true,
     });

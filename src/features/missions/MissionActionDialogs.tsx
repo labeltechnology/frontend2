@@ -11,7 +11,10 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { estSaisieAConfirmer } from "@/features/carburant/ConfirmationSaisieDialog";
 import { useAnnulerMission, useDemarrerMission, useTerminerMission } from "@/features/missions/api";
+import { ConfirmationFinMissionDialog } from "@/features/missions/ConfirmationFinMissionDialog";
+import { formatNombre } from "@/lib/utils";
 import { aCompteurHoraire, lireCompteurHeures } from "@/features/engins/compteur-vehicule";
 import type { Mission } from "@/types/mission";
 import { ApiError } from "@/lib/api-client";
@@ -37,6 +40,8 @@ export function MissionActionDialogs({
   const [heuresDepart, setHeuresDepart] = useState("");
   const [heuresRetour, setHeuresRetour] = useState("");
   const [motif, setMotif] = useState("");
+  // Fin rapide en attente de confirmation (2026-10-01) : relevés saisis et points renvoyés par le serveur.
+  const [finAConfirmer, setFinAConfirmer] = useState<{ kilometrageRetour: number; compteurHeuresRetour?: number; points: string[] } | null>(null);
   const demarrer = useDemarrerMission();
   const terminer = useTerminerMission();
   const annuler = useAnnulerMission();
@@ -47,6 +52,7 @@ export function MissionActionDialogs({
     setHeuresDepart("");
     setHeuresRetour("");
     setMotif("");
+    setFinAConfirmer(null);
     onFermer();
   };
 
@@ -71,11 +77,20 @@ export function MissionActionDialogs({
     if (!Number.isFinite(valeur) || valeur < 0) return toast.error("Kilométrage invalide");
     const heures = lireCompteurHeures(heuresRetour);
     if (heures === null) return toast.error("Compteur horaire invalide");
+    await envoyerFin(valeur, heures, false);
+  };
+
+  const envoyerFin = async (kilometrageRetour: number, compteurHeuresRetour: number | undefined, confirmer: boolean) => {
+    if (!terminerCible) return;
     try {
-      await terminer.mutateAsync({ id: terminerCible.idMission, kilometrageRetour: valeur, compteurHeuresRetour: heures });
-      toast.success("Mission terminée");
+      await terminer.mutateAsync({ id: terminerCible.idMission, kilometrageRetour, compteurHeuresRetour, confirmer });
+      toast.success(confirmer ? "Mission terminée — fin rapide inscrite au journal d'audit" : "Mission terminée");
       fermer();
     } catch (e) {
+      if (!confirmer && estSaisieAConfirmer(e)) {
+        setFinAConfirmer({ kilometrageRetour, compteurHeuresRetour, points: e.details });
+        return;
+      }
       toast.error(e instanceof ApiError ? e.message : "Action impossible");
     }
   };
@@ -128,6 +143,9 @@ export function MissionActionDialogs({
           <div className="space-y-2">
             <Label htmlFor="kmRetour">Kilométrage au retour</Label>
             <Input id="kmRetour" type="number" min={0} value={kmRetour} onChange={(e) => setKmRetour(e.target.value)} />
+            {terminerCible?.kilometrageDepart != null && (
+              <p className="text-xs text-muted-foreground">Au départ : {formatNombre(terminerCible.kilometrageDepart)} km</p>
+            )}
           </div>
           {aCompteurHoraire(terminerCible?.engin) && (
             <div className="space-y-2">
@@ -146,6 +164,13 @@ export function MissionActionDialogs({
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <ConfirmationFinMissionDialog
+        points={finAConfirmer?.points ?? null}
+        enCours={terminer.isPending}
+        onCorriger={() => setFinAConfirmer(null)}
+        onConfirmer={() => finAConfirmer && envoyerFin(finAConfirmer.kilometrageRetour, finAConfirmer.compteurHeuresRetour, true)}
+      />
 
       <Dialog open={!!annulerCible} onOpenChange={(open) => !open && fermer()}>
         <DialogContent>

@@ -95,8 +95,8 @@ export function OngletBudget({ actif, types, peutModifier }: { actif: boolean; t
         <>
           <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
             <CarteChiffre titre={`Budget ${annee}`} valeur={texteMontant(donnees.montantAnnuel)} />
-            <CarteChiffre titre="Budget à date" valeur={texteMontant(donnees.budgetADate)} precision={`Au ${formatDate(donnees.dateReference)}`} />
-            <CarteChiffre titre="Dépense réelle à date" valeur={texteMontant(donnees.reelADate)} />
+            <CarteChiffre titre="Budget à ce jour" valeur={texteMontant(donnees.budgetADate)} precision={`Au ${formatDate(donnees.dateReference)}`} />
+            <CarteChiffre titre="Dépense réelle à ce jour" valeur={texteMontant(donnees.reelADate)} />
             <CarteChiffre
               titre="Écart"
               valeur={texteEcartMontant(donnees.ecart)}
@@ -154,7 +154,7 @@ export function OngletBudget({ actif, types, peutModifier }: { actif: boolean; t
                   </div>
                   <dl className="mt-3 grid grid-cols-3 gap-2 text-sm">
                     <div>
-                      <dt className="text-xs text-muted-foreground">Budget à date</dt>
+                      <dt className="text-xs text-muted-foreground">Budget à ce jour</dt>
                       <dd className="tabular-nums">{texteMontant(l.budgetADate)}</dd>
                     </div>
                     <div>

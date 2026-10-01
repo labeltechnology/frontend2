@@ -38,7 +38,7 @@ export function problemesMotDePasse(motDePasse: string, infos: { email?: string 
   const email = infos.email ?? "";
   if (email.includes("@")) perso.push(...normaliser(email.slice(0, email.indexOf("@"))).split(/[._+-]/));
   for (const s of [infos.nom, infos.prenom]) if (s) perso.push(...normaliser(s).split(/[-'.]/));
-  if (perso.some((m) => m.length >= 3 && normal.includes(m))) p.push("Ni votre nom, ni votre prénom, ni votre e-mail.");
+  if (perso.some((m) => m.length >= 3 && normal.includes(m))) p.push("Ni votre nom, ni votre prénom, ni votre adresse électronique.");
   if (NOMS_INTERDITS.some((m) => normal.includes(m))) p.push("Pas le nom de l'application ou de l'entreprise.");
   return p;
 }

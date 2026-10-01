@@ -36,7 +36,7 @@ const schema = z.object({
   clientAdresse: z.string().optional(),
   validiteJours: z.coerce.number().int().positive().optional().or(z.literal("")),
   mentionPied: z.string().optional(),
-  lignes: z.array(ligneSchema).min(1, "Au moins une ligne de prestation"),
+  lignes: z.array(ligneSchema).min(1, "Au moins une ligne de prestation est requise"),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -103,11 +103,11 @@ export function ProformaFormDialog({ open, onOpenChange }: ProformaFormDialogPro
           nombreJours: Number(l.nombreJours),
         })),
       });
-      toast.success("Facture proforma créée");
+      toast.success("Facture pro forma créée");
       reset({ clientNom: "", lignes: [LIGNE_VIDE] });
       onOpenChange(false);
     } catch (e) {
-      toast.error(e instanceof ApiError ? e.message : "Création de la facture proforma impossible");
+      toast.error(e instanceof ApiError ? e.message : "Création de la facture pro forma impossible");
     }
   };
 
@@ -115,19 +115,19 @@ export function ProformaFormDialog({ open, onOpenChange }: ProformaFormDialogPro
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
-          <DialogTitle>Nouvelle facture proforma</DialogTitle>
+          <DialogTitle>Nouvelle facture pro forma</DialogTitle>
           <DialogDescription>Devis non engageant, non lié à un contrat existant.</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2 sm:col-span-2">
-              <Label htmlFor="clientNom">Client / destinataire</Label>
+              <Label htmlFor="clientNom">Client ou destinataire</Label>
               <Input id="clientNom" {...register("clientNom")} />
               {errors.clientNom && <p className="text-sm text-destructive">{errors.clientNom.message}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="clientContact">Personne de contact</Label>
+              <Label htmlFor="clientContact">Personne à contacter</Label>
               <Input id="clientContact" {...register("clientContact")} />
             </div>
             <div className="space-y-2">
@@ -139,7 +139,7 @@ export function ProformaFormDialog({ open, onOpenChange }: ProformaFormDialogPro
               <Input id="clientAdresse" {...register("clientAdresse")} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="validiteJours">Validité du devis (jours, optionnel)</Label>
+              <Label htmlFor="validiteJours">Validité du devis (jours, facultatif)</Label>
               <Input id="validiteJours" type="number" min={1} {...register("validiteJours")} />
             </div>
           </div>
@@ -203,7 +203,7 @@ export function ProformaFormDialog({ open, onOpenChange }: ProformaFormDialogPro
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="mentionPied">Mention complémentaire (optionnel)</Label>
+            <Label htmlFor="mentionPied">Mention complémentaire (facultative)</Label>
             <Textarea id="mentionPied" rows={2} {...register("mentionPied")} />
           </div>
 
@@ -215,7 +215,7 @@ export function ProformaFormDialog({ open, onOpenChange }: ProformaFormDialogPro
           <DialogFooter>
             <Button type="submit" disabled={isSubmitting}>
               {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
-              Créer la facture proforma
+              Créer la facture pro forma
             </Button>
           </DialogFooter>
         </form>

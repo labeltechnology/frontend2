@@ -97,7 +97,7 @@ export function FacturesDialog({ contrat, onOpenChange }: FacturesDialogProps) {
 
         {sansTarif && (
           <p className="rounded-md border border-warning bg-warning/10 px-3 py-2 text-sm text-warning-foreground">
-            Ce contrat n'a pas de tarif journalier défini : fixe-le d'abord (action « Tarif journalier ») avant
+            Ce contrat n'a pas de tarif journalier défini : fixez-le d'abord (action « Tarif journalier ») avant
             d'enregistrer une facture.
           </p>
         )}

@@ -69,7 +69,7 @@ export function AffectationFormDialog({ open, onOpenChange }: AffectationFormDia
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Nouvelle affectation</DialogTitle>
-          <DialogDescription>Affecte durablement un conducteur à un véhicule.</DialogDescription>
+          <DialogDescription>Affectez durablement un conducteur à un véhicule.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">

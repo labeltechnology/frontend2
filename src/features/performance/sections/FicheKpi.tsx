@@ -19,7 +19,7 @@ export function FicheKpi({ indicateurs, peutModifier }: { indicateurs: KpiParc[]
     <section className="space-y-3" aria-labelledby="titre-kpi">
       <div className="flex flex-wrap items-end justify-between gap-2">
         <div>
-          <h2 id="titre-kpi" className="font-display text-lg font-semibold">KPI du parc</h2>
+          <h2 id="titre-kpi" className="font-display text-lg font-semibold">Indicateurs clés du parc</h2>
           <p className="text-sm text-muted-foreground">Valeur sur la période, comparée à l'objectif{peutModifier ? " (réglable)" : ""}.</p>
         </div>
         <Button variant="ghost" size="sm" onClick={() => setFicheOuverte((o) => !o)} aria-expanded={ficheOuverte}>
@@ -37,7 +37,7 @@ export function FicheKpi({ indicateurs, peutModifier }: { indicateurs: KpiParc[]
       {ficheOuverte && (
         <div className="overflow-x-auto rounded-xl border bg-card shadow-sm">
           <table className="w-full min-w-[860px] text-sm">
-            <caption className="sr-only">Fiche KPI du parc</caption>
+            <caption className="sr-only">Fiche des indicateurs clés du parc</caption>
             <thead className="bg-muted/50 text-left text-xs uppercase tracking-wide text-muted-foreground">
               <tr>
                 <th className="px-3 py-2">Indicateur</th>
@@ -94,7 +94,7 @@ function CarteKpiParc({ kpi, onModifier }: { kpi: KpiParc; onModifier?: () => vo
       <div className="mt-2 flex items-center justify-between gap-2 text-xs text-muted-foreground">
         <span className="inline-flex items-center gap-1">
           <Target className="h-3.5 w-3.5" aria-hidden="true" />
-          {kpi.objectif === null ? "Pas d'objectif" : `Objectif ${kpi.sens === "BAISSE" ? "≤" : "≥"} ${formaterValeurUnite(kpi.objectif, kpi.unite)}`}
+          {kpi.objectif === null ? "Aucun objectif" : `Objectif ${kpi.sens === "BAISSE" ? "≤" : "≥"} ${formaterValeurUnite(kpi.objectif, kpi.unite)}`}
         </span>
         <span className="flex items-center gap-1">
           {onModifier && (

@@ -48,7 +48,7 @@ export function LocationEntrantePage() {
     { key: "debut", header: "Début", render: (c) => formatDate(c.dateDebut) },
     { key: "finPrevue", header: "Fin prévue", render: (c) => formatDate(c.dateFinPrevue) },
     { key: "finReelle", header: "Fin réelle", render: (c) => formatDate(c.dateFinReelle) },
-    { key: "tarifJournalier", header: "Tarif / jour", render: (c) => formatMontant(c.tarifJournalier) },
+    { key: "tarifJournalier", header: "Tarif journalier", render: (c) => formatMontant(c.tarifJournalier) },
     { key: "statut", header: "Statut", render: (c) => <StatutBadge statut={c.statut} /> },
   ];
 
@@ -56,7 +56,7 @@ export function LocationEntrantePage() {
     <div className="space-y-6">
       <PageHeader
         title="Locations entrantes"
-        description="Véhicules loués chez un prestataire externe pour l'usage de l'entreprise, quand le parc n'en a pas de disponible."
+        description="Véhicules loués chez un prestataire externe pour l'usage de l'entreprise, lorsque le parc n'en dispose pas."
         actions={
           <Button onClick={() => setDialogOuvert(true)}>
             <Plus className="h-4 w-4" />

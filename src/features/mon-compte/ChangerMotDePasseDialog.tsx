@@ -48,7 +48,7 @@ export function ChangerMotDePasseDialog({ open, onOpenChange }: { open: boolean;
             <KeyRound className="h-5 w-5 text-primary" aria-hidden="true" />
             Changer mon mot de passe
           </DialogTitle>
-          <DialogDescription>Les sessions de l'appli conducteur de ce compte seront fermées.</DialogDescription>
+          <DialogDescription>Les sessions de l'application conducteur de ce compte seront fermées.</DialogDescription>
         </DialogHeader>
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="space-y-1">

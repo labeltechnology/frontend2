@@ -44,9 +44,9 @@ export function ZonesOperationDialog({ engin, onOpenChange }: ZonesOperationDial
     try {
       await assigner.mutateAsync({ idEngin: engin.idEngin, idZone: Number(idZoneSelectionnee) });
       setIdZoneSelectionnee("");
-      toast.success("Zone d'opération assignée");
+      toast.success("Zone d'opération affectée");
     } catch (e) {
-      toast.error(e instanceof ApiError ? e.message : "Assignation impossible");
+      toast.error(e instanceof ApiError ? e.message : "Affectation impossible");
     }
   };
 
@@ -74,7 +74,7 @@ export function ZonesOperationDialog({ engin, onOpenChange }: ZonesOperationDial
         <div className="flex gap-2">
           <Select value={idZoneSelectionnee} onValueChange={setIdZoneSelectionnee}>
             <SelectTrigger className="flex-1">
-              <SelectValue placeholder="Choisir une zone autorisée à assigner" />
+              <SelectValue placeholder="Choisir une zone autorisée à affecter" />
             </SelectTrigger>
             <SelectContent>
               {zonesDisponibles.length === 0 && (
@@ -88,13 +88,13 @@ export function ZonesOperationDialog({ engin, onOpenChange }: ZonesOperationDial
             </SelectContent>
           </Select>
           <Button onClick={onAssigner} disabled={!idZoneSelectionnee || assigner.isPending}>
-            Assigner
+            Affecter
           </Button>
         </div>
 
         <div className="space-y-2">
           {(!engin || engin.zonesOperation.length === 0) && (
-            <p className="text-sm text-muted-foreground">Aucune zone d'opération assignée — ce véhicule n'est pas surveillé sur ce plan.</p>
+            <p className="text-sm text-muted-foreground">Aucune zone d'opération affectée — ce véhicule n'est donc soumis à aucune surveillance de zone.</p>
           )}
           {engin?.zonesOperation.map((zone) => (
             <div key={zone.idZoneGeographique} className="flex items-center justify-between rounded-md border px-3 py-2">

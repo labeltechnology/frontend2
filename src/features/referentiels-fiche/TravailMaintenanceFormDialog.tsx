@@ -93,7 +93,7 @@ export function TravailMaintenanceFormDialog({ travail, open, onOpenChange }: Tr
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="libelle-travail">Libellé</Label>
-            <Input id="libelle-travail" placeholder="Ex. : Changement des plaquettes de frein" {...register("libelle")} />
+            <Input id="libelle-travail" placeholder="Ex. : changement des plaquettes de frein" {...register("libelle")} />
             {errors.libelle && <p className="text-sm text-destructive">{errors.libelle.message}</p>}
           </div>
           <div className="grid gap-4 sm:grid-cols-2">

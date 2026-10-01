@@ -38,7 +38,7 @@ export function LocationExternePage() {
     { key: "debut", header: "Début", render: (c) => formatDate(c.dateDebut) },
     { key: "finPrevue", header: "Fin prévue", render: (c) => formatDate(c.dateFinPrevue) },
     { key: "finReelle", header: "Fin réelle", render: (c) => formatDate(c.dateFinReelle) },
-    { key: "tarifJournalier", header: "Tarif / jour", render: (c) => formatMontant(c.tarifJournalier) },
+    { key: "tarifJournalier", header: "Tarif journalier", render: (c) => formatMontant(c.tarifJournalier) },
     { key: "statut", header: "Statut", render: (c) => <StatutBadge statut={c.statut} /> },
   ];
 

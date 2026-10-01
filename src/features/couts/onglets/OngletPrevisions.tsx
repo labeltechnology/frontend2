@@ -136,7 +136,7 @@ export function OngletPrevisions({ actif, types }: { actif: boolean; types: Type
         </p>
       )}
       {idType !== null && (
-        <p className="text-xs text-muted-foreground">Le budget carburant n'est comparé que pour tout le parc.</p>
+        <p className="text-xs text-muted-foreground">Le budget carburant n'est comparé qu'à l'échelle de l'ensemble du parc.</p>
       )}
 
       <GraphePrevisions points={points} serie={serie} />

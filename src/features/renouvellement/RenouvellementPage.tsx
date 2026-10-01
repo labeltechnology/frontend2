@@ -46,7 +46,7 @@ export function RenouvellementPage() {
             <RefreshCw className="h-6 w-6 text-primary" aria-hidden="true" />
             Renouvellement du parc
           </h1>
-          <p className="text-sm text-muted-foreground">Quand remplacer chaque véhicule, combien en faudra-t-il, et ce qu'ont rapporté ceux qui sont sortis.</p>
+          <p className="text-sm text-muted-foreground">Échéances de remplacement de chaque véhicule, besoins futurs du parc et produit des véhicules sortis.</p>
         </div>
         <Button variant="outline" onClick={genererPdf} disabled={generer.isPending}>
           {generer.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileDown className="h-4 w-4" />}

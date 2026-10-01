@@ -85,7 +85,7 @@ export function SuiviAide({ index }: { index: Map<string, PagePlacee> }) {
           <SearchX className="h-4 w-4" aria-hidden="true" />
           Recherches sans résultat
         </h3>
-        <p className="text-xs text-muted-foreground">Créez la page manquante, ou ajoutez ce mot aux « motsCles » d'une page existante.</p>
+        <p className="text-xs text-muted-foreground">Créez la page manquante, ou ajoutez ce mot aux mots-clés d'une page existante.</p>
         {stats.data && stats.data.recherchesSansResultat.length > 0 ? (
           <ul className="flex flex-wrap gap-2">
             {stats.data.recherchesSansResultat.map((r) => (
@@ -132,7 +132,7 @@ export function SuiviAide({ index }: { index: Map<string, PagePlacee> }) {
           </ol>
         </div>
         <div className="rounded-lg border border-border p-4">
-          <h3 className="mb-2 font-semibold">Garder l'aide fiable</h3>
+          <h3 className="mb-2 font-semibold">Maintenir la fiabilité de l'aide</h3>
           <ul className="list-disc space-y-1 pl-5 text-sm">
             {HABITUDES_MAINTENANCE.map((h) => <li key={h}>{h}</li>)}
           </ul>

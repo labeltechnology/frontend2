@@ -1,12 +1,13 @@
 import { NavLink } from "react-router-dom";
 import { MessagesSquare } from "lucide-react";
 import { useNonLus } from "@/features/messagerie/api";
+import { pluriel } from "@/lib/pluriel";
 import { cn } from "@/lib/utils";
 
 /** Accès à la messagerie dans la barre de navigation, avec le nombre de messages non lus. */
 export function BoutonMessagerieNav({ chemin }: { chemin: string }) {
   const { data: nonLus = 0 } = useNonLus(true);
-  const libelle = nonLus > 0 ? `Messagerie, ${nonLus} message(s) non lu(s)` : "Messagerie";
+  const libelle = nonLus > 0 ? `Messagerie, ${pluriel(nonLus, "message non lu")}` : "Messagerie";
   return (
     <NavLink
       to={chemin}

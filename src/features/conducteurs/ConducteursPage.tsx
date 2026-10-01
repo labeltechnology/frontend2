@@ -191,7 +191,7 @@ export function ConducteursPage() {
       // Permis (véhicules) ou certificat CACES (engins de chantier) selon la
       // catégorie du conducteur — voir CategorieConducteur, ajouté le 2026-09-22.
       key: "qualification",
-      header: "Permis / CACES",
+      header: "Permis/CACES",
       render: (c) =>
         c.categorie === "ENGIN_CHANTIER"
           ? c.numeroCaces
@@ -210,10 +210,10 @@ export function ConducteursPage() {
     { key: "statut", header: "Statut", render: (c) => <StatutBadge statut={c.statut} />, sortValue: (c) => c.statut },
     {
       key: "compte",
-      header: "Appli mobile",
+      header: "Application mobile",
       render: (c) =>
         c.emailCompte ? (
-          <span className="text-sm" title="Compte de connexion de l'appli mobile">
+          <span className="text-sm" title="Compte de connexion de l'application mobile">
             {c.emailCompte}
           </span>
         ) : (
@@ -226,7 +226,7 @@ export function ConducteursPage() {
     <div className="space-y-6">
       <PageHeader
         title="Conducteurs"
-        description="Personnel habilité à conduire les véhicules et véhicules du parc."
+        description="Personnel habilité à conduire les véhicules et engins du parc."
         actions={
           <Button onClick={ouvrirCreation}>
             <Plus className="h-4 w-4" />
@@ -238,7 +238,7 @@ export function ConducteursPage() {
       <Tabs defaultValue="liste">
         <TabsList>
           <TabsTrigger value="liste">Liste</TabsTrigger>
-          <TabsTrigger value="planning">Planning</TabsTrigger>
+          <TabsTrigger value="planning">Calendrier</TabsTrigger>
         </TabsList>
 
         <TabsContent value="liste" className="space-y-6">

@@ -12,6 +12,7 @@ import { RapportApercuDialog } from "@/features/rapports/RapportApercuDialog";
 import { bornesPeriode } from "@/features/rapports/periodes";
 import { ApiError } from "@/lib/api-client";
 import { cn } from "@/lib/utils";
+import { pluriel } from "@/lib/pluriel";
 import type { TypeEngin } from "@/types/engin";
 import type { Rapport } from "@/types/rapport";
 
@@ -71,7 +72,7 @@ export function OngletTco({ types, peutGenererRapport }: { types: TypeEngin[]; p
       {donnees && (
         <>
           <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
-            <CarteChiffre titre="Coût complet de la période" valeur={texteMontant(donnees.total)} precision={`${donnees.joursPeriode} jours · ${donnees.vehicules.length} véhicules`} />
+            <CarteChiffre titre="Coût complet de la période" valeur={texteMontant(donnees.total)} precision={`${pluriel(donnees.joursPeriode, "jour")} · ${pluriel(donnees.vehicules.length, "véhicule")}`} />
             <CarteChiffre titre="Coût complet par km" valeur={texteCoutUnitaire(donnees.coutParKm, "km")} precision="Véhicules routiers" />
             <CarteChiffre titre="Coût complet par heure" valeur={texteCoutUnitaire(donnees.coutParHeure, "h")} precision="Engins de chantier" />
             <CarteChiffre
@@ -127,7 +128,7 @@ export function OngletTco({ types, peutGenererRapport }: { types: TypeEngin[]; p
                     <th className="px-3 py-2 text-right">Fixes</th>
                     <th className="px-3 py-2 text-right">Coût complet</th>
                     <th className="px-3 py-2 text-right">Par véhicule</th>
-                    <th className="px-3 py-2 text-right">Par km / h</th>
+                    <th className="px-3 py-2 text-right">Par km ou par heure</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
@@ -158,7 +159,7 @@ export function OngletTco({ types, peutGenererRapport }: { types: TypeEngin[]; p
                     <th className="px-3 py-2 text-right">Variables</th>
                     <th className="px-3 py-2 text-right">Fixes</th>
                     <th className="px-3 py-2 text-right">Coût complet</th>
-                    <th className="px-3 py-2 text-right">Par km / h</th>
+                    <th className="px-3 py-2 text-right">Par km ou par heure</th>
                     <th className="px-3 py-2 text-right">Par jour</th>
                     <th className="px-3 py-2 text-right">Valeur nette</th>
                   </tr>

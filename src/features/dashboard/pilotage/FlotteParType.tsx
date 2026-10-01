@@ -1,5 +1,7 @@
+import { Fragment } from "react";
 import { Truck } from "lucide-react";
 import { CadreSection, EtatBloc } from "@/features/dashboard/sections/CadreSection";
+import { flotteParFamille } from "@/features/dashboard/pilotage/flotte-par-famille";
 import { part, texteUsageJour } from "@/features/dashboard/pilotage/pilotage";
 import { cn } from "@/lib/utils";
 import type { FlottePilotage, RepartitionFlotte } from "@/types/pilotage";
@@ -16,6 +18,9 @@ const SEGMENTS: { cle: keyof Omit<RepartitionFlotte, "total" | "surChantier">; l
  * sur chantier, atelier, panne, hors service), puis par type de matériel avec
  * l'utilisation des 30 derniers jours. Les réformés sont « hors service » ;
  * les vendus ne comptent plus.
+ *
+ * 2026-10-01 (demande de la direction) : détail catégorie → famille → type
+ * avec sous-totaux (flotte-par-famille.ts) ; les types en plus petit.
  */
 export function FlotteParType({
   flotte,
@@ -37,10 +42,10 @@ export function FlotteParType({
           <Synthese r={flotte.total} />
           <div className="overflow-x-auto">
             <table className="w-full min-w-[640px] text-sm">
-              <caption className="sr-only">Répartition par type de matériel</caption>
+              <caption className="sr-only">Répartition par catégorie, famille et type de matériel</caption>
               <thead>
                 <tr className="border-b text-left text-xs text-muted-foreground">
-                  <th className="py-2 pr-3 font-medium">Type de matériel</th>
+                  <th className="py-2 pr-3 font-medium">Catégorie / famille / type</th>
                   <th className="px-2 py-2 text-right font-medium">Total</th>
                   <th className="px-2 py-2 text-right font-medium">En service</th>
                   <th className="px-2 py-2 text-right font-medium">Atelier</th>
@@ -55,32 +60,55 @@ export function FlotteParType({
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y">
-                {flotte.types.map((t) => {
-                  const r = t.repartition;
-                  return (
-                    <tr key={t.idTypeEngin ?? "sans-type"}>
-                      <td className="py-2 pr-3 font-medium text-foreground">{t.libelle}</td>
-                      <td className="px-2 py-2 text-right tabular-nums">{r.total}</td>
-                      <td className="px-2 py-2 text-right tabular-nums">
-                        {r.enService} <span className="text-xs text-muted-foreground">({part(r.enService, r.total)} %)</span>
-                      </td>
-                      <td className="px-2 py-2 text-right tabular-nums">{r.atelier || "—"}</td>
-                      <td className={cn("px-2 py-2 text-right tabular-nums", r.panne > 0 && "font-semibold text-badge-dangerFg")}>
-                        {r.panne || "—"}
-                      </td>
-                      <td className="px-2 py-2 text-right tabular-nums">{r.horsService || "—"}</td>
-                      <td className="px-2 py-2">
-                        <Barre r={r} />
-                      </td>
-                      <td className="px-2 py-2 text-right tabular-nums">
-                        {t.tauxUtilisation === null ? "—" : `${Math.round(t.tauxUtilisation)} %`}
-                      </td>
-                      <td className="py-2 pl-2 text-right tabular-nums">{texteUsageJour(t.usageParJour, t.uniteUsage)}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
+              {flotteParFamille(flotte.types).map((c) => (
+                <tbody key={c.categorie} className="border-b last:border-b-0">
+                  <LigneFlotte
+                    niveau="categorie"
+                    libelle={c.libelle}
+                    r={c.repartition}
+                    taux={c.tauxUtilisation}
+                    usage={c.usageParJour}
+                    unite={c.uniteUsage}
+                  />
+                  {c.avecFamilles
+                    ? c.familles.map((f) => (
+                        <Fragment key={f.famille ?? "sans-famille"}>
+                          <LigneFlotte
+                            niveau="famille"
+                            libelle={f.libelle}
+                            r={f.repartition}
+                            taux={f.tauxUtilisation}
+                            usage={f.usageParJour}
+                            unite={f.uniteUsage}
+                          />
+                          {f.types.map((t) => (
+                            <LigneFlotte
+                              key={t.idTypeEngin ?? "sans-type"}
+                              niveau="type"
+                              libelle={t.libelle}
+                              r={t.repartition}
+                              taux={t.tauxUtilisation}
+                              usage={t.usageParJour}
+                              unite={t.uniteUsage}
+                            />
+                          ))}
+                        </Fragment>
+                      ))
+                    : c.familles
+                        .flatMap((f) => f.types)
+                        .map((t) => (
+                          <LigneFlotte
+                            key={t.idTypeEngin ?? "sans-type"}
+                            niveau="famille"
+                            libelle={t.libelle}
+                            r={t.repartition}
+                            taux={t.tauxUtilisation}
+                            usage={t.usageParJour}
+                            unite={t.uniteUsage}
+                          />
+                        ))}
+                </tbody>
+              ))}
             </table>
           </div>
           <p className="text-xs text-muted-foreground">
@@ -89,6 +117,54 @@ export function FlotteParType({
         </div>
       )}
     </CadreSection>
+  );
+}
+
+/** Ligne du tableau : catégorie (fond, gras), famille (normal) ou type (plus petit, en retrait). */
+function LigneFlotte({
+  niveau,
+  libelle,
+  r,
+  taux,
+  usage,
+  unite,
+}: {
+  niveau: "categorie" | "famille" | "type";
+  libelle: string;
+  r: RepartitionFlotte;
+  taux: number | null;
+  usage: number | null;
+  unite: string | null;
+}) {
+  const type = niveau === "type";
+  const cellule = cn("px-2 text-right tabular-nums", type ? "py-1 text-xs text-muted-foreground" : "py-2");
+  return (
+    <tr className={cn(niveau === "categorie" && "bg-muted/40 font-semibold", niveau === "famille" && "border-t border-border/60")}>
+      <td
+        className={cn(
+          "pr-3",
+          niveau === "categorie" && "py-2 pl-2 text-foreground",
+          niveau === "famille" && "py-2 pl-4 font-medium text-foreground",
+          type && "py-1 pl-8 text-xs text-muted-foreground",
+        )}
+      >
+        {libelle}
+      </td>
+      <td className={cellule}>{r.total}</td>
+      <td className={cellule}>
+        {r.enService} <span className="text-xs font-normal text-muted-foreground">({part(r.enService, r.total)} %)</span>
+      </td>
+      <td className={cellule}>{r.atelier || "—"}</td>
+      <td className={cn(cellule, r.panne > 0 && "font-semibold text-badge-dangerFg")}>{r.panne || "—"}</td>
+      <td className={cellule}>{r.horsService || "—"}</td>
+      <td className={cn("px-2", type ? "py-1" : "py-2")}>
+        <Barre r={r} />
+      </td>
+      <td className={cellule}>{taux === null ? "—" : `${Math.round(taux)} %`}</td>
+      <td className={cn("pl-2 text-right tabular-nums", type ? "py-1 text-xs text-muted-foreground" : "py-2")}>
+        {texteUsageJour(usage, unite)}
+      </td>
+    </tr>
   );
 }
 

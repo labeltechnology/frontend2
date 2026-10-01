@@ -25,8 +25,8 @@ import { toast } from "sonner";
 const schema = z.object({
   nom: z.string().min(1, "Requis"),
   prenom: z.string().min(1, "Requis"),
-  email: z.string().min(1, "Requis").email("Email invalide"),
-  motDePasse: z.string().min(12, "12 caractères minimum (politique de mot de passe, 2026-09-29)"),
+  email: z.string().min(1, "Requis").email("Adresse électronique invalide"),
+  motDePasse: z.string().min(12, "12 caractères minimum"),
   libelleRole: z.enum(ROLES as readonly [RoleLibelle, ...RoleLibelle[]]),
 });
 
@@ -89,7 +89,7 @@ export function UtilisateurFormDialog({ open, onOpenChange }: UtilisateurFormDia
             </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">Adresse électronique</Label>
             <Input id="email" type="email" {...register("email")} />
             {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
           </div>
@@ -97,7 +97,7 @@ export function UtilisateurFormDialog({ open, onOpenChange }: UtilisateurFormDia
             <Label htmlFor="motDePasse">Mot de passe</Label>
             <Input id="motDePasse" type="password" autoComplete="new-password" {...register("motDePasse")} />
             <p className="text-xs text-muted-foreground">
-              Au moins 12 caractères, ni mot courant, ni nom, prénom ou e-mail. À changer par l'utilisateur à sa première connexion.
+              Au moins 12 caractères, ni mot courant, ni nom, prénom ou adresse électronique. À changer par l'utilisateur à sa première connexion.
             </p>
             {errors.motDePasse && <p className="text-sm text-destructive">{errors.motDePasse.message}</p>}
           </div>

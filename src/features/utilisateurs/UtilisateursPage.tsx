@@ -50,7 +50,7 @@ export function UtilisateursPage() {
         </span>
       ),
     },
-    { key: "email", header: "Email", render: (u) => u.email },
+    { key: "email", header: "Adresse électronique", render: (u) => u.email },
     { key: "role", header: "Rôle", render: (u) => libelleRole(u.role.libelle) },
     { key: "statut", header: "Statut", render: (u) => <StatutBadge statut={u.statut} /> },
   ];

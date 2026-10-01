@@ -49,7 +49,7 @@ function DispositifsTab() {
   };
 
   const columns: DataTableColumn<DispositifGps>[] = [
-    { key: "numeroSerie", header: "N° série", render: (d) => <span className="font-medium">{d.numeroSerie}</span> },
+    { key: "numeroSerie", header: "N° de série", render: (d) => <span className="font-medium">{d.numeroSerie}</span> },
     { key: "engin", header: "Véhicule", render: (d) => d.libelleVehicule ?? "—" },
     { key: "statut", header: "Statut", render: (d) => <StatutBadge statut={d.statut} /> },
     { key: "installation", header: "Installé le", render: (d) => formatDateTime(d.dateInstallation) },
@@ -131,7 +131,7 @@ function PositionsTab() {
           <SelectContent>
             {dispositifs?.map((d) => (
               <SelectItem key={d.idDispositifGps} value={String(d.idDispositifGps)}>
-                {d.numeroSerie} — {d.libelleVehicule ?? "non posé"}
+                {d.numeroSerie} — {d.libelleVehicule ?? "non installé"}
               </SelectItem>
             ))}
           </SelectContent>
@@ -147,7 +147,7 @@ function PositionsTab() {
           emptyMessage="Aucune position enregistrée pour ce dispositif."
         />
       ) : (
-        <p className="text-sm text-muted-foreground">Choisis un dispositif pour voir ses dernières positions.</p>
+        <p className="text-sm text-muted-foreground">Choisissez un dispositif pour afficher ses dernières positions.</p>
       )}
     </div>
   );
@@ -214,7 +214,7 @@ function TrajetsTab() {
 export function GpsPage() {
   return (
     <div className="space-y-6">
-      <PageHeader title="GPS & trajets" description="Dispositifs GPS, positions et trajets des missions." />
+      <PageHeader title="GPS et trajets" description="Dispositifs GPS, positions et trajets des missions." />
       <Tabs defaultValue="carte">
         <TabsList>
           <TabsTrigger value="carte">Carte</TabsTrigger>

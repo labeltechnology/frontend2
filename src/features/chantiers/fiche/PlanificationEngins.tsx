@@ -34,6 +34,7 @@ import {
   type VehiculeFiche,
 } from "@/features/chantiers/fiche/engins-chantier";
 import { identifiantVehicule, libelleVehicule } from "@/lib/vehicule";
+import { accord, pluriel } from "@/lib/pluriel";
 
 const ZONE_PARC = "zone-parc";
 const ZONE_CHANTIER = "zone-chantier";
@@ -66,8 +67,8 @@ const ANNONCES: Announcements = {
 };
 
 const INSTRUCTIONS =
-  "Appuyez sur Espace ou Entrée pour saisir le véhicule, déplacez-le avec les flèches, puis Espace ou Entrée pour le déposer. " +
-  "Échap annule. Les boutons Ajouter et Retirer font la même chose sans glisser.";
+  "Appuyez sur Espace ou Entrée pour saisir le véhicule, déplacez-le avec les flèches, puis appuyez de nouveau sur Espace ou Entrée pour le déposer. " +
+  "La touche Échap annule le déplacement. Les boutons « Ajouter » et « Retirer » permettent la même opération sans glisser-déposer.";
 
 /**
  * Motif affiché sur la carte d'un véhicule du parc, pour la période du
@@ -404,14 +405,14 @@ export function PlanificationEngins({
                 onAjouter={() => ajouter(c.engin.idEngin)}
               />
             ))}
-            {parc.length === 0 && <li className="py-6 text-center text-sm text-muted-foreground">Aucun véhicule ne correspond.</li>}
+            {parc.length === 0 && <li className="py-6 text-center text-sm text-muted-foreground">Aucun véhicule ne correspond à votre recherche.</li>}
           </ul>
         </ZoneDepot>
 
         <ZoneDepot
           id={ZONE_CHANTIER}
           titre="Véhicules du chantier"
-          sousTitre={`${selection.length} véhicule${selection.length > 1 ? "s" : ""} — enregistrés avec la fiche`}
+          sousTitre={`${pluriel(selection.length, "véhicule")} — ${accord(selection.length, "enregistré")} avec la fiche`}
         >
           {enConflit.length > 0 && (
             <p className="mb-2 rounded-md bg-badge-dangerBg px-2 py-1.5 text-xs text-badge-dangerFg" role="alert">

@@ -130,7 +130,7 @@ export function SinistreDialog({
             <div className="space-y-1.5">
               <Label htmlFor="montantDommages">Dommages (Ar)</Label>
               <Input id="montantDommages" inputMode="decimal" placeholder={cible?.coutEstime != null ? `Coût estimé : ${cible.coutEstime}` : ""} {...champ("montantDommages")} />
-              <p className="text-xs text-muted-foreground">Vide = coût estimé de l'incident.</p>
+              <p className="text-xs text-muted-foreground">Si le champ est vide, le coût estimé de l'incident est retenu.</p>
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="franchise">Franchise (Ar)</Label>

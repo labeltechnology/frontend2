@@ -172,7 +172,7 @@ export function ConducteurFormDialog({ conducteur, open, onOpenChange }: Conduct
         <DialogHeader>
           <DialogTitle>{enEdition ? "Modifier le conducteur" : "Nouveau conducteur"}</DialogTitle>
           <DialogDescription>
-            {enEdition ? "Corrige la fiche de ce conducteur." : "Ajoute un conducteur au personnel de conduite."}
+            {enEdition ? "Corrigez la fiche de ce conducteur." : "Ajoutez un conducteur au personnel de conduite."}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

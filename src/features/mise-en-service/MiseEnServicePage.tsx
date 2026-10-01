@@ -22,7 +22,7 @@ export function MiseEnServicePage() {
     <div className="space-y-6">
       <PageHeader
         title="Mise en service"
-        description="Les réglages à faire pour que les chiffres du logiciel soient justes, dans l'ordre. Chaque point se coche seul quand la donnée existe."
+        description="Réglages à effectuer, dans l'ordre, pour garantir l'exactitude des chiffres du logiciel. Chaque point est coché automatiquement dès que la donnée existe."
         actions={
           <Button variant="outline" onClick={() => requete.refetch()} disabled={requete.isFetching}>
             <RefreshCw className={cn("h-4 w-4", requete.isFetching && "animate-spin")} aria-hidden="true" />

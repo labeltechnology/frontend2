@@ -55,6 +55,8 @@ export interface TypeEngin {
   seuilTauxJours?: number | null;
   seuilUsageMensuel?: number | null;
   coutReferenceUnite?: number | null;
+  /** Famille du type (2026-10-01, V67) : « Véhicule de service », « Camion »… ; regroupe les types sur le tableau de bord. */
+  famille?: string | null;
 }
 
 export interface Engin extends FicheTechniqueEngin {
@@ -169,6 +171,7 @@ export interface CreerTypeEnginRequest {
   seuilTauxJours?: number | null;
   seuilUsageMensuel?: number | null;
   coutReferenceUnite?: number | null;
+  famille?: string | null;
 }
 
 export interface ModifierTypeEnginRequest {
@@ -178,4 +181,5 @@ export interface ModifierTypeEnginRequest {
   seuilTauxJours?: number | null;
   seuilUsageMensuel?: number | null;
   coutReferenceUnite?: number | null;
+  famille?: string | null;
 }

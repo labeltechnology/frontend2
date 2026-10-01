@@ -13,7 +13,7 @@ import { PageHeader } from "@/components/data-table/PageHeader";
 import { StatutBadge } from "@/components/data-table/StatutBadge";
 import { useAuth } from "@/features/auth/useAuth";
 import { useOuvrirDiscussion } from "@/features/messagerie/BoutonDiscussion";
-import { missionModifiable } from "@/features/missions/actions-mission";
+import { missionModifiable, motifDemarrageImpossible } from "@/features/missions/actions-mission";
 import { MissionActionDialogs } from "@/features/missions/MissionActionDialogs";
 import { MissionFormDialog } from "@/features/missions/MissionFormDialog";
 import { useMissions } from "@/features/missions/api";
@@ -51,7 +51,7 @@ export function MissionsPage() {
     { key: "finPrevue", header: "Fin prévue", render: (m) => formatDateTime(m.dateFinPrevue), sortValue: (m) => m.dateFinPrevue },
     {
       key: "km",
-      header: "Km départ/retour",
+      header: "km départ/retour",
       render: (m) => `${formatNombre(m.kilometrageDepart)} / ${formatNombre(m.kilometrageRetour)}`,
     },
     { key: "statut", header: "Statut", render: (m) => <StatutBadge statut={m.statut} />, sortValue: (m) => m.statut },
@@ -105,9 +105,7 @@ export function MissionsPage() {
                   Discussion
                 </DropdownMenuItem>
               )}
-              <DropdownMenuItem disabled={mission.statut !== "PLANIFIEE"} onSelect={() => setDemarrerCible(mission)}>
-                Démarrer
-              </DropdownMenuItem>
+              <ActionDemarrer mission={mission} onDemarrer={() => setDemarrerCible(mission)} />
               <DropdownMenuItem disabled={mission.statut !== "EN_COURS"} onSelect={() => setTerminerCible(mission)}>
                 Terminer
               </DropdownMenuItem>
@@ -141,5 +139,22 @@ export function MissionsPage() {
         }}
       />
     </div>
+  );
+}
+
+/**
+ * « Démarrer » (2026-10-01) : grisé avec son motif quand la mission ne peut
+ * pas encore partir (prévue un autre jour, véhicule indisponible). Pour une
+ * mission déjà en cours, terminée ou annulée, simplement grisé.
+ */
+function ActionDemarrer({ mission, onDemarrer }: { mission: Mission; onDemarrer: () => void }) {
+  const motif = motifDemarrageImpossible(mission);
+  return (
+    <DropdownMenuItem disabled={motif !== null} onSelect={onDemarrer} className="flex-col items-start gap-0.5">
+      <span>Démarrer</span>
+      {motif !== null && mission.statut === "PLANIFIEE" && (
+        <span className="max-w-[16rem] text-[11px] leading-snug text-muted-foreground">{motif}</span>
+      )}
+    </DropdownMenuItem>
   );
 }

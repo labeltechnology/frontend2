@@ -8,7 +8,7 @@ export function AccessDeniedPage() {
       <ShieldAlert className="h-12 w-12 text-muted-foreground" />
       <div>
         <h1 className="text-xl font-semibold">Accès refusé</h1>
-        <p className="text-muted-foreground">Ton rôle ne permet pas d'accéder à cette page.</p>
+        <p className="text-muted-foreground">Votre rôle ne vous permet pas d'accéder à cette page.</p>
       </div>
       <Button asChild>
         <Link to="/">Retour au tableau de bord</Link>

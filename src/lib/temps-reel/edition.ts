@@ -67,6 +67,6 @@ export function avisModificationConcurrente(
     description:
       evenement.operation === "SUPPRIME"
         ? "Vos modifications en cours ne pourront pas être enregistrées."
-        : "Enregistrer maintenant écraserait ses changements : fermez puis rouvrez pour voir la nouvelle version.",
+        : "Un enregistrement maintenant écraserait ces modifications : fermez puis rouvrez la fiche pour afficher la nouvelle version.",
   };
 }

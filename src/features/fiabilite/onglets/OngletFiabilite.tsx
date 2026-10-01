@@ -13,6 +13,7 @@ import { RapportApercuDialog } from "@/features/rapports/RapportApercuDialog";
 import { bornesPeriode } from "@/features/rapports/periodes";
 import { ApiError } from "@/lib/api-client";
 import { cn, formatDate, formatDateTime } from "@/lib/utils";
+import { accord } from "@/lib/pluriel";
 import type { TypeEngin } from "@/types/engin";
 import type { Rapport } from "@/types/rapport";
 
@@ -74,7 +75,7 @@ export function OngletFiabilite({ types, peutGenererRapport }: { types: TypeEngi
               valeur={`${nombreFr(d.joursImmobilises)} j`}
               precision={
                 d.coutImmobilisation === null
-                  ? "Coût non chiffré : réglez-le par type"
+                  ? "Coût non chiffré : renseignez-le dans les réglages par type"
                   : `Coût : ${texteMontant(d.coutImmobilisation)}${d.nombreSansCoutImmobilisation > 0 ? ` (${d.nombreSansCoutImmobilisation} sans coût réglé)` : ""}`
               }
             />
@@ -85,10 +86,10 @@ export function OngletFiabilite({ types, peutGenererRapport }: { types: TypeEngi
               precision={`${d.mttr.nombre} réparation${d.mttr.nombre > 1 ? "s" : ""} terminée${d.mttr.nombre > 1 ? "s" : ""}`}
             />
             <CarteChiffre
-              titre="Entretiens faits à temps"
+              titre="Entretiens réalisés dans les délais"
               valeur={textePourcent(d.echeances.tauxATemps)}
               classeValeur={classeTauxObjectif(d.echeances.tauxATemps, OBJECTIF_ECHEANCES)}
-              precision={`${d.echeances.nombreNonFaitesEnRetard} en retard à faire`}
+              precision={`${d.echeances.nombreNonFaitesEnRetard} en retard, ${accord(d.echeances.nombreNonFaitesEnRetard, "non réalisé")}`}
             />
             <CarteChiffre
               titre="Maintenances contrôlées"
@@ -196,7 +197,7 @@ export function OngletFiabilite({ types, peutGenererRapport }: { types: TypeEngi
           </div>
 
           <section className="space-y-2" aria-labelledby="titre-echeances">
-            <h2 id="titre-echeances" className="font-display text-lg font-semibold">Respect du planning d'entretien</h2>
+            <h2 id="titre-echeances" className="font-display text-lg font-semibold">Respect du calendrier d'entretien</h2>
             <p className="text-xs text-muted-foreground">
               {d.echeances.nombreFaitesATemps} entretien{d.echeances.nombreFaitesATemps > 1 ? "s" : ""} à temps, {d.echeances.nombreFaitesEnRetard} en retard,{" "}
               {d.echeances.nombreNonFaitesEnRetard} dépassé{d.echeances.nombreNonFaitesEnRetard > 1 ? "s" : ""} et pas encore fait

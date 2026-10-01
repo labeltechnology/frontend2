@@ -9,6 +9,7 @@ import { ACTIVITES, classeTaux, libelleMoisAdoption, texteTaux } from "@/feature
 import { ApiError } from "@/lib/api-client";
 import { libelleRole } from "@/lib/droits";
 import { exporterExcel } from "@/lib/export-excel";
+import { accord, pluriel } from "@/lib/pluriel";
 import { formatDate, formatDateTime } from "@/lib/utils";
 import type { ActiviteUtilisateur } from "@/types/suivi-logiciel";
 
@@ -34,7 +35,7 @@ export function OngletAdoption({ actif }: { actif: boolean }) {
         sousTitre: "30 derniers jours",
         colonnes: [
           { libelle: "Nom", format: "TEXTE" },
-          { libelle: "E-mail", format: "TEXTE" },
+          { libelle: "Adresse électronique", format: "TEXTE" },
           { libelle: "Rôle", format: "TEXTE" },
           { libelle: "Activité", format: "TEXTE" },
           { libelle: "Dernière connexion", format: "TEXTE" },
@@ -56,10 +57,10 @@ export function OngletAdoption({ actif }: { actif: boolean }) {
           titre="Taux d'adoption (30 jours)"
           valeur={texteTaux(a.tauxAdoption)}
           classeValeur={classeTaux(a.tauxAdoption)}
-          precision={`${a.utilisateursConnectes} compte(s) sur ${a.comptesActifs} connecté(s)`}
+          precision={`${pluriel(a.utilisateursConnectes, "compte")} sur ${a.comptesActifs} ${accord(a.utilisateursConnectes, "connecté")}`}
         />
         <CarteChiffre titre="Comptes actifs" valeur={a.comptesActifs} />
-        <CarteChiffre titre="Connexions (30 jours)" valeur={a.connexions} precision={`Dont ${texteTaux(a.partMobile)} depuis l'appli`} />
+        <CarteChiffre titre="Connexions (30 jours)" valeur={a.connexions} precision={`Dont ${texteTaux(a.partMobile)} depuis l'application`} />
         <CarteChiffre titre="Saisies (30 jours)" valeur={a.saisies} precision="Créations et modifications" />
       </div>
       <p className="rounded-xl border bg-muted/30 px-4 py-3 text-sm text-muted-foreground">

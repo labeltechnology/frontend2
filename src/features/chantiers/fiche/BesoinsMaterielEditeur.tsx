@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { pluriel } from "@/lib/pluriel";
 import type { TypeEngin } from "@/types/engin";
 import {
   nouvelleLigneBesoin,
@@ -40,7 +41,7 @@ function Jauge({ couverture }: { couverture: CouvertureType }) {
         aria-valuemin={0}
         aria-valuemax={requis}
         aria-valuenow={affectes}
-        aria-label={`${couverture.libelle} : ${affectes} affecté(s) sur ${requis}`}
+        aria-label={`${couverture.libelle} : ${pluriel(affectes, "affecté")} sur ${requis}`}
       >
         <div className={cn("h-full rounded-full transition-all", CLASSES_ETAT[etat].barre)} style={{ width: `${ratio * 100}%` }} />
       </div>

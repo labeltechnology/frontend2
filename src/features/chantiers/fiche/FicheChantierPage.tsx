@@ -347,7 +347,7 @@ export function FicheChantierPage() {
               ? figee
                 ? "Chantier terminé ou annulé : la fiche est en lecture seule."
                 : "Consultation — la modification est réservée aux administrateurs et responsables de parc."
-              : "Placez le chantier sur la carte et déposez les véhicules à employer, puis enregistrez tout en une fois."}
+              : "Placez le chantier sur la carte et déposez les véhicules à employer, puis enregistrez l'ensemble en une seule fois."}
           </p>
         </div>
         <div className="flex shrink-0 flex-wrap gap-2">
@@ -426,7 +426,7 @@ export function FicheChantierPage() {
       <Rubrique
         icone={<Truck className="h-4 w-4" />}
         titre="Véhicules à employer"
-        description="Glissez les véhicules du parc vers le chantier (ou utilisez les boutons + et ×), puis ajustez si besoin la période de chaque véhicule. Tout véhicule est disponible sauf en panne ou déjà prévu ailleurs sur la même période. Un véhicule retiré voit son rattachement terminé à l'enregistrement."
+        description="Glissez les véhicules du parc vers le chantier (ou utilisez les boutons + et ×), puis ajustez si nécessaire la période de chaque véhicule. Tout véhicule est disponible, sauf s'il est en panne ou déjà prévu sur un autre chantier pendant la même période. Un véhicule retiré voit son rattachement terminé à l'enregistrement."
       >
         {!periode && (
           <p className="text-sm text-muted-foreground">
@@ -452,7 +452,7 @@ export function FicheChantierPage() {
       <Rubrique
         icone={<Users className="h-4 w-4" />}
         titre="Conducteurs du chantier"
-        description="Glissez les conducteurs vers le chantier et ajustez leur période. Un conducteur déjà sur un autre chantier à ces dates n'est accepté que si les deux rattachements sont « multi-sites » ; une mission bloque toujours."
+        description="Glissez les conducteurs vers le chantier et ajustez leur période. Un conducteur déjà sur un autre chantier à ces dates n'est accepté que si les deux rattachements sont « multi-sites » ; une mission sur la même période empêche toujours le rattachement."
       >
         {!consultation && <p className="text-sm text-muted-foreground">La liste des conducteurs n'est pas accessible à votre profil.</p>}
         {consultation && !periode && (

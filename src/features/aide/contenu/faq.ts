@@ -18,20 +18,20 @@ export const themesFaq: SectionAide[] = [
     pages: [
       q(
         "faq-mission-ou-affectation",
-        "Quelle différence entre une mission et une affectation ?",
-        "Une mission est un trajet ponctuel, avec un début et une fin prévus. Une affectation attribue durablement un véhicule à un conducteur, sans date de fin. Un véhicule affecté peut quand même partir en mission.",
+        "Quelle est la différence entre une mission et une affectation ?",
+        "Une mission est un trajet ponctuel, avec un début et une fin prévus. Une affectation attribue durablement un véhicule à un conducteur, sans date de fin. Un véhicule affecté peut toutefois partir en mission.",
         { motsCles: ["mission", "affectation", "différence"], voirAussi: ["guide-planifier-mission", "guide-affecter-vehicule"] },
       ),
       q(
         "faq-mission-ne-demarre-pas",
-        "Pourquoi ma mission ne veut-elle pas démarrer ?",
+        "Pourquoi ma mission ne démarre-t-elle pas ?",
         "Au démarrage, l'application vérifie l'assurance et la visite technique du véhicule. Si l'une d'elles manque ou a expiré, le démarrage est refusé. Enregistrez le document à jour, puis recommencez.",
         { motsCles: ["démarrer", "refus", "assurance", "visite technique"], voirAussi: ["depannage-mission-sans-assurance", "guide-enregistrer-document"] },
       ),
       q(
         "faq-couleurs-rapport",
         "Que veulent dire les couleurs du rapport d'un véhicule ?",
-        "Vert : tout va bien. Jaune : à surveiller bientôt. Rouge : une action est nécessaire. Gris : une information manque ou n'est pas accessible à votre rôle.",
+        "Vert : situation normale. Jaune : échéance proche, à surveiller. Rouge : une action est nécessaire. Gris : une information manque ou n'est pas accessible à votre rôle.",
         { motsCles: ["couleur", "vert", "rouge", "jaune", "gris", "rapport véhicule"], voirAussi: ["guide-consulter-rapport-vehicule"] },
       ),
       q(
@@ -43,13 +43,13 @@ export const themesFaq: SectionAide[] = [
       q(
         "faq-presence-chantier",
         "Comment savoir si un véhicule est vraiment sur son chantier ?",
-        "Fiche du chantier, onglet **Terrain** : chaque nuit, les positions GPS de la veille sont comparées aux zones du chantier, sinon à un rayon autour de sa position (300 m par défaut). Deux jours d'absence de suite déclenchent une alerte.",
+        "Fiche du chantier, onglet **Terrain** : chaque nuit, les positions GPS de la veille sont comparées aux zones du chantier, sinon à un rayon autour de sa position (300 m par défaut). Deux jours d'absence consécutifs déclenchent une alerte.",
         { motsCles: ["présence", "chantier", "gps", "terrain", "absent", "inactif"], ecrans: ["/chantiers"], capacite: "SUIVI_CHANTIER" },
       ),
       q(
         "faq-demande-materiel",
         "Comment demander un véhicule pour mon chantier ?",
-        "Fiche du chantier, onglet **Demandes** : type, quantité, période et priorité. La gestion du parc accepte ou refuse, puis prévoit les véhicules ; vous êtes prévenu par message et la demande passe « servie ».",
+        "Fiche du chantier, onglet **Demandes** : type, quantité, période et priorité. Le service de gestion du parc accepte ou refuse la demande, puis affecte les véhicules ; vous êtes informé par message et la demande passe au statut « Servie ».",
         { motsCles: ["demande", "matériel", "véhicule", "chef de chantier", "besoin"], ecrans: ["/chantiers"], capacite: "DEMANDER_MATERIEL" },
       ),
     ],
@@ -80,26 +80,26 @@ export const themesFaq: SectionAide[] = [
     pages: [
       q(
         "faq-alerte-monte",
-        "Pourquoi la priorité d'une alerte a-t-elle augmenté toute seule ?",
+        "Pourquoi la priorité d'une alerte a-t-elle augmenté automatiquement ?",
         "Une alerte non traitée monte d'un niveau après un délai : 7 jours de Faible à Moyenne, 3 jours vers Élevée, 2 jours vers Critique. La mention « ↑ depuis … » montre son niveau de départ.",
         { motsCles: ["escalade", "priorité", "critique", "monte"], voirAussi: ["guide-traiter-alerte", "guide-regler-controles"] },
       ),
       q(
         "faq-alerte-close-seule",
-        "Pourquoi une alerte s'est-elle fermée toute seule ?",
-        "Sa cause a disparu : document renouvelé, maintenance planifiée ou faite, stock réapprovisionné, sortie ou retour de chantier saisi… Dans le filtre **Toutes**, son statut indique « Close auto » et le motif. Le journal d'audit garde la trace.",
+        "Pourquoi une alerte s'est-elle fermée automatiquement ?",
+        "Sa cause a disparu : document renouvelé, maintenance planifiée ou réalisée, stock réapprovisionné, sortie ou retour de chantier saisi… Dans le filtre **Toutes**, son statut indique « Clôturée automatiquement » et le motif. Le journal d'audit garde la trace.",
         { motsCles: ["close auto", "fermée", "disparue", "automatique", "motif"], voirAussi: ["guide-traiter-alerte"] },
       ),
       q(
         "faq-alertes-gps-repetees",
         "Je reçois la même alerte GPS toutes les 15 minutes : est-ce normal ?",
-        "Oui, tant que le problème dure, le contrôle se répète. Les alertes du même type sont regroupées sur une seule ligne avec leur nombre. Un clic sur **Tout traiter** les ferme ensemble.",
+        "Oui, tant que le problème persiste, le contrôle se répète. Les alertes du même type sont regroupées sur une seule ligne avec leur nombre. Un clic sur **Tout traiter** les ferme ensemble.",
         { motsCles: ["gps", "répétée", "15 minutes", "doublon"], voirAussi: ["guide-traiter-alerte"] },
       ),
       q(
         "faq-proforma",
-        "Pourquoi dois-je joindre un proforma pour terminer une maintenance ?",
-        "Pour une maintenance chez un garage externe, le proforma justifie le coût. Sans lui, le bouton **Terminer** reste bloqué. L'atelier interne n'en demande pas.",
+        "Pourquoi dois-je joindre une facture pro forma pour terminer une maintenance ?",
+        "Pour une maintenance chez un garage externe, la facture pro forma justifie le coût. Sans elle, le bouton **Terminer** reste bloqué. L'atelier interne n'en demande pas.",
         { motsCles: ["proforma", "garage", "terminer", "facture"], voirAussi: ["guide-terminer-maintenance"] },
       ),
     ],
@@ -111,7 +111,7 @@ export const themesFaq: SectionAide[] = [
     pages: [
       q(
         "faq-menu-absent",
-        "Pourquoi je ne vois pas un menu qu'un collègue voit ?",
+        "Pourquoi un menu visible par un collègue n'apparaît-il pas pour moi ?",
         "Les menus dépendent du rôle de chaque compte. Par exemple, Utilisateurs et Paramètres sont réservés à l'administration. Si vous en avez besoin, demandez un changement de rôle à l'administrateur.",
         { motsCles: ["menu", "absent", "manquant", "invisible", "rôle"], voirAussi: ["demarrer-roles"] },
       ),
@@ -124,13 +124,13 @@ export const themesFaq: SectionAide[] = [
       q(
         "faq-changer-mot-de-passe",
         "Comment changer mon mot de passe ?",
-        "Cliquez sur votre avatar en bas de l'écran, puis sur **Changer mon mot de passe**. Il faut au moins 12 caractères : une courte phrase, sans votre nom ni un mot courant, est plus sûre et plus facile à retenir.",
+        "Cliquez sur votre photo de profil en bas de l'écran, puis sur **Changer mon mot de passe**. Il faut au moins 12 caractères : une courte phrase, sans votre nom ni un mot courant, est plus sûre et plus facile à retenir.",
         { motsCles: ["mot de passe", "changer", "modifier", "sécurité", "12 caractères"], voirAussi: ["depannage-mot-de-passe-refuse"] },
       ),
       q(
         "faq-changer-photo",
-        "Comment mettre ma photo ?",
-        "Cliquez sur votre avatar en bas de l'écran, puis sur **Changer ma photo** : choisissez une image, cadrez-la, enregistrez. Sa position GPS n'est pas conservée. Un conducteur et son compte partagent la même photo ; le responsable du parc peut la mettre depuis **Conducteurs** (**Photo…**).",
+        "Comment ajouter ma photo de profil ?",
+        "Cliquez sur votre photo de profil en bas de l'écran, puis sur **Changer ma photo** : choisissez une image, cadrez-la, enregistrez. Les données de localisation de l'image ne sont pas conservées. Un conducteur et son compte partagent la même photo ; le responsable du parc peut l'ajouter depuis **Conducteurs** (**Photo…**).",
         { motsCles: ["photo", "avatar", "profil", "image", "portrait"], ecrans: ["/conducteurs", "/utilisateurs"] },
       ),
     ],

@@ -96,7 +96,7 @@ export function CartePositionChantier({ position, onChange, zones = [], lectureS
       return;
     }
     if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
-      setErreurSaisie("Latitude entre -90 et 90, longitude entre -180 et 180.");
+      setErreurSaisie("La latitude doit être comprise entre -90 et 90, et la longitude entre -180 et 180.");
       return;
     }
     setErreurSaisie(null);

@@ -31,7 +31,7 @@ export function TableauTypes({ types }: { types: SyntheseTypePerformance[] }) {
               <li key={t.idTypeEngin ?? t.libelle}>{texteEnTrop(t)}</li>
             ))}
           </ul>
-          <p className="mt-1 text-xs opacity-90">À confirmer avant de vendre, restituer ou transférer : réserve, pics saisonniers hors période.</p>
+          <p className="mt-1 text-xs opacity-90">À vérifier avant toute vente, restitution ou transfert : besoins de réserve et pics saisonniers hors période.</p>
         </div>
       )}
 
@@ -42,7 +42,7 @@ export function TableauTypes({ types }: { types: SyntheseTypePerformance[] }) {
               <th className="px-3 py-2">Type</th>
               <th className="px-3 py-2 text-right">Véhicules</th>
               <th className="px-3 py-2">Utilisation</th>
-              <th className="px-3 py-2 text-right">Usage / mois</th>
+              <th className="px-3 py-2 text-right">Utilisation mensuelle</th>
               <th className="px-3 py-2 text-right">Coût total</th>
               <th className="px-3 py-2 text-right">Coût unitaire</th>
               <th className="px-3 py-2">Référence</th>

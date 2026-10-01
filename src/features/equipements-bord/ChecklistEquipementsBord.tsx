@@ -16,7 +16,7 @@ export interface LigneChecklist {
 
 const TITRES: Record<CategorieElementBord, string> = {
   SECURITE: "Éléments de sécurité",
-  OUTIL: "Outils du chauffeur / boîte à outils",
+  OUTIL: "Outils du chauffeur (boîte à outils)",
 };
 
 interface ChecklistEquipementsBordProps {
@@ -53,7 +53,7 @@ export function ChecklistEquipementsBord({ lignes, valeurs, onChange, disabled }
               <thead className="bg-muted/60 text-left">
                 <tr>
                   <th className="px-3 py-2 font-medium">{TITRES[categorie]}</th>
-                  <th className="w-36 px-3 py-2 text-center font-medium">Oui / Non</th>
+                  <th className="w-36 px-3 py-2 text-center font-medium">Oui/Non</th>
                   <th className="px-3 py-2 font-medium">Observation</th>
                 </tr>
               </thead>

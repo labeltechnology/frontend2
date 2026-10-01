@@ -3,6 +3,7 @@ import type { LucideIcon } from "lucide-react";
 import { CadreSection, EtatBloc } from "@/features/dashboard/sections/CadreSection";
 import type { TonIndicateur } from "@/features/dashboard/sections/CarteIndicateur";
 import { cn } from "@/lib/utils";
+import { pluriel } from "@/lib/pluriel";
 
 /** Une ligne cliquable : titre, détail et étiquette colorée à droite (libellé toujours écrit). */
 export interface LigneLien {
@@ -90,7 +91,7 @@ export function ListeLiens({
         </ul>
       )}
       {!enChargement && !enErreur && lignes.length > nombreVisible && (
-        <p className="mt-3 text-xs text-muted-foreground">+ {lignes.length - nombreVisible} autre(s).</p>
+        <p className="mt-3 text-xs text-muted-foreground">+ {pluriel(lignes.length - nombreVisible, "autre")}.</p>
       )}
       {pied && !enChargement && !enErreur && lignes.length > 0 && <p className="mt-2 text-xs text-muted-foreground">{pied}</p>}
     </CadreSection>

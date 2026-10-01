@@ -128,7 +128,7 @@ export function blocEmplacement({ engin, rattachements, missions, aujourdhui }: 
   const morceaux: string[] = [];
   if (autresMissions > 0) morceaux.push(autresMissions === 1 ? "1 mission" : `${autresMissions} missions`);
   if (autresChantiers > 0) morceaux.push(autresChantiers === 1 ? "1 chantier" : `${autresChantiers} chantiers`);
-  const resume = morceaux.length > 0 ? `À venir ensuite : ${morceaux.join(", ")}` : "Rien d'autre de prévu";
+  const resume = morceaux.length > 0 ? `À venir ensuite : ${morceaux.join(", ")}` : "Aucune autre affectation prévue";
 
   return {
     cle: "emplacement",

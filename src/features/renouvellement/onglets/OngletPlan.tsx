@@ -54,7 +54,7 @@ export function OngletPlan({ actif }: { actif: boolean }) {
           precision={`${(d.energie.parEnergie.ELECTRIQUE ?? 0) + (d.energie.parEnergie.HYBRIDE ?? 0)} sur ${d.energie.nombreVehicules}`}
         />
         <CarteChiffre
-          titre="Coût par km : électrifié / thermique"
+          titre="Coût par km : électrifié/thermique"
           valeur={<span className="text-base">{texteCoutUnitaire(d.energie.coutKmElectrifie, "km")} / {texteCoutUnitaire(d.energie.coutKmThermique, "km")}</span>}
           precision="12 derniers mois, véhicules routiers"
         />
@@ -116,7 +116,7 @@ export function OngletPlan({ actif }: { actif: boolean }) {
                 <th className="px-3 py-2">Échéance</th>
                 <th className="px-3 py-2 text-right">Âge</th>
                 <th className="px-3 py-2 text-right">Compteur</th>
-                <th className="px-3 py-2 text-right">Coût / unité</th>
+                <th className="px-3 py-2 text-right">Coût unitaire</th>
                 <th className="px-3 py-2 text-right">Pannes (12 mois)</th>
                 <th className="px-3 py-2 text-right">Valeur nette</th>
                 <th className="px-3 py-2">Motifs</th>
@@ -169,7 +169,7 @@ export function OngletPlan({ actif }: { actif: boolean }) {
                 <th className="px-3 py-2 text-right">Location longue durée</th>
                 <th className="px-3 py-2 text-right">Crédit-bail</th>
                 <th className="px-3 py-2 text-right">Mode non saisi</th>
-                <th className="px-3 py-2 text-right">Électriques / hybrides</th>
+                <th className="px-3 py-2 text-right">Électriques ou hybrides</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">

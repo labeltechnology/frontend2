@@ -7,6 +7,7 @@ import { NIVEAUX_PROBLEME } from "@/features/couts/couts";
 import { nombreFr, texteCoutUnitaire, texteEcart } from "@/features/performance/performance";
 import { ApiError } from "@/lib/api-client";
 import { cn, formatDate } from "@/lib/utils";
+import { accord, pluriel } from "@/lib/pluriel";
 import type { NiveauProbleme } from "@/types/couts";
 
 const FILTRES: { cle: NiveauProbleme | "TOUS"; libelle: string }[] = [
@@ -132,10 +133,10 @@ export function OngletProblemes({ actif, peutRegler }: { actif: boolean; peutReg
                 <td className="px-3 py-2 text-right tabular-nums">{texteCoutUnitaire(v.coutMaintenanceParUnite, v.uniteUsage)}</td>
                 <td className="px-3 py-2 text-right tabular-nums">{texteCoutUnitaire(v.moyenneType, v.uniteUsage)}</td>
                 <td className="px-3 py-2 text-right tabular-nums">{texteEcart(v.ecartPourcent) ?? "—"}</td>
-                <td className="px-3 py-2 text-right tabular-nums" title={`${v.pannes} panne(s) déclarée(s), ${v.reparationsCorrectives} réparation(s) corrective(s)`}>
+                <td className="px-3 py-2 text-right tabular-nums" title={`${pluriel(v.pannes, "panne déclarée", "pannes déclarées")}, ${pluriel(v.reparationsCorrectives, "réparation corrective", "réparations correctives")}`}>
                   {v.pannesRetenues}
                 </td>
-                <td className="px-3 py-2 text-right tabular-nums">{v.ageAns === null ? "—" : `${nombreFr(v.ageAns, 1)} ans`}</td>
+                <td className="px-3 py-2 text-right tabular-nums">{v.ageAns === null ? "—" : `${nombreFr(v.ageAns, 1)} ${accord(v.ageAns, "an")}`}</td>
                 <td className="px-3 py-2 text-right tabular-nums">
                   {nombreFr(v.compteur)} {v.uniteUsage}
                 </td>

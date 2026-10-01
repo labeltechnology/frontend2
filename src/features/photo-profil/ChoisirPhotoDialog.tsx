@@ -156,7 +156,7 @@ export function ChoisirPhotoDialog({
       toile.width = taille;
       toile.height = taille;
       const contexte = toile.getContext("2d");
-      if (!contexte) return rejeter(new Error("Canvas indisponible"));
+      if (!contexte) return rejeter(new Error("Traitement de l'image impossible"));
       contexte.fillStyle = "#ffffff";
       contexte.fillRect(0, 0, taille, taille);
       contexte.imageSmoothingQuality = "high";
@@ -214,7 +214,7 @@ export function ChoisirPhotoDialog({
           <div className="flex flex-col items-center gap-3">
             <div
               role="img"
-              aria-label="Recadrage de la photo : glissez l'image ou utilisez les flèches, + et - pour zoomer"
+              aria-label="Recadrage de la photo : glissez l'image ou utilisez les flèches, ainsi que + et − pour agrandir ou réduire"
               tabIndex={0}
               onPointerDown={surAppui}
               onPointerMove={surDeplacement}

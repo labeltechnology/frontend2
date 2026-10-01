@@ -30,7 +30,7 @@ export const groupeAdministration: GroupeAide = {
         "Historique consultable de toutes les opérations significatives effectuées dans l'application (création, modification, suppression, changements de statut…), par utilisateur et par entité.",
       fonctionnalites: ["Rechercher par entité, par utilisateur, par période"],
       reglesCles: [
-        "Chaque ligne du journal est définitive (append-only) : rien n'y est jamais modifié ni supprimé.",
+        "Chaque ligne du journal est définitive : rien n'y est jamais modifié ni supprimé.",
         "Contrairement au simple « créé par / modifié par » affiché sur chaque fiche, le journal conserve l'historique complet, pas seulement la dernière opération.",
       ],
       rolesRequis: ["Administrateur, DG ou responsable du parc"],
@@ -42,11 +42,11 @@ export const groupeAdministration: GroupeAide = {
         "Réglages globaux de l'application : identité de l'entreprise, taux de TVA, coordonnées bancaires, logo, et intégration GPS Traccar.",
       fonctionnalites: [
         "Identité de l'entreprise : nom, adresse, contact, NIF, STAT",
-        "Taux de TVA appliqué aux nouvelles factures de location et proforma",
+        "Taux de TVA appliqué aux nouvelles factures de location et factures pro forma",
         "Coordonnées bancaires affichées sur les factures",
-        "Logo de l'entreprise : téléverser, remplacer ou supprimer — affiché en en-tête des factures de location et proforma",
+        "Logo de l'entreprise : téléverser, remplacer ou supprimer — affiché en en-tête des factures de location et factures pro forma",
         "Mention libre affichée en pied de page des factures",
-        "Section « Intégration GPS (Traccar) » — voir le groupe GPS & suivi",
+        "Section « Intégration GPS (Traccar) » — voir le groupe GPS et suivi",
       ],
       reglesCles: [
         "Un changement de taux de TVA ne s'applique qu'aux factures émises après ce changement — les factures déjà émises gardent le taux qui était en vigueur à leur émission.",

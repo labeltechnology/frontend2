@@ -48,7 +48,7 @@ export function TerminerContratDialog({ contrat, onOpenChange }: TerminerContrat
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-2">
-          <Label htmlFor="dateFinReelle">Date de fin réelle (laisser vide = aujourd'hui)</Label>
+          <Label htmlFor="dateFinReelle">Date de fin réelle (laisser vide pour retenir la date du jour)</Label>
           <Input
             id="dateFinReelle"
             type="date"

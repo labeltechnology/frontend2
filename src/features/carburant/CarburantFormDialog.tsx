@@ -145,7 +145,7 @@ export function CarburantFormDialog({ open, onOpenChange, idEnginInitial = null 
               {errors.idEngin && <p className="text-sm text-destructive">{errors.idEngin.message}</p>}
             </div>
             <div className="space-y-2">
-              <Label>Conducteur (optionnel)</Label>
+              <Label>Conducteur (facultatif)</Label>
               <Select value={watch("idConducteur")} onValueChange={(v) => setValue("idConducteur", v)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Sélectionner" />
@@ -200,7 +200,7 @@ export function CarburantFormDialog({ open, onOpenChange, idEnginInitial = null 
               {errors.quantiteLitres && <p className="text-sm text-destructive">{errors.quantiteLitres.message}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="prixUnitaire">Prix / litre</Label>
+              <Label htmlFor="prixUnitaire">Prix au litre</Label>
               <Input id="prixUnitaire" type="number" step="0.01" min={0} {...register("prixUnitaire")} />
               {errors.prixUnitaire && <p className="text-sm text-destructive">{errors.prixUnitaire.message}</p>}
             </div>
@@ -216,7 +216,7 @@ export function CarburantFormDialog({ open, onOpenChange, idEnginInitial = null 
             </div>
           )}
           <div className="space-y-2">
-            <Label htmlFor="station">Station (optionnel)</Label>
+            <Label htmlFor="station">Station (facultatif)</Label>
             <Input id="station" {...register("station")} />
           </div>
           <DialogFooter>

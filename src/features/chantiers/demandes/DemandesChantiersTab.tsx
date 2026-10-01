@@ -5,6 +5,7 @@ import { ListeDemandes } from "@/features/chantiers/demandes/ListeDemandes";
 import { useDemandes, useIndicateursDemandes } from "@/features/chantiers/demandes/demandes-api";
 import { LIBELLES_STATUT_DEMANDE, libelleDelai } from "@/features/chantiers/demandes/demandes";
 import { ReservesCritiquesCarte } from "@/features/chantiers/organisation/ReservesCritiquesCarte";
+import { pluriel } from "@/lib/pluriel";
 import type { StatutDemande } from "@/types/chantier";
 
 const TOUTES = "TOUTES";
@@ -26,11 +27,11 @@ export function DemandesChantiersTab({ gestion, idUtilisateur }: { gestion: bool
       {ind && (
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
           <CarteChiffre titre="En attente" valeur={ind.enAttente} classeValeur={ind.enAttenteCritiques > 0 ? "text-destructive" : undefined}
-            precision={`dont ${ind.enAttenteCritiques} critique(s)`} />
+            precision={`dont ${pluriel(ind.enAttenteCritiques, "critique")}`} />
           <CarteChiffre titre="Délai moyen de réponse" valeur={libelleDelai(ind.delaiMoyenReponseHeures, "h")} />
-          <CarteChiffre titre="Délai moyen demande → service" valeur={libelleDelai(ind.delaiMoyenServiceJours, "j")} />
+          <CarteChiffre titre="Délai moyen entre la demande et la mise à disposition" valeur={libelleDelai(ind.delaiMoyenServiceJours, "j")} />
           <CarteChiffre titre="Taux d'acceptation" valeur={ind.tauxAcceptation == null ? "—" : `${ind.tauxAcceptation} %`}
-            precision={`${ind.servies} servie(s), ${ind.acceptees} à servir`} />
+            precision={`${pluriel(ind.servies, "servie")}, ${ind.acceptees} à servir`} />
         </div>
       )}
       <Select value={statut} onValueChange={setStatut}>

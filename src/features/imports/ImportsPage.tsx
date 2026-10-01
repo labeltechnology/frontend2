@@ -7,6 +7,7 @@ import { Pastille } from "@/features/fiabilite/EtatChargement";
 import { telechargerModele, useApercuImport, useImporter } from "@/features/imports/api";
 import { erreurFichier, STATUTS_LIGNE, TYPES_IMPORT } from "@/features/imports/imports";
 import { ApiError } from "@/lib/api-client";
+import { accord, pluriel } from "@/lib/pluriel";
 import { cn } from "@/lib/utils";
 import type { ResultatImport, StatutLigneImport, TypeImport } from "@/types/importation";
 
@@ -62,7 +63,7 @@ export function ImportsPage() {
       const r = await importer.mutateAsync({ type, fichier });
       setResultat(r);
       if (r.enregistre) {
-        toast.success(`${r.nombreLignes} ligne(s) importée(s)`);
+        toast.success(pluriel(r.nombreLignes, "ligne importée"));
         for (const cle of LISTES[type]) queryClient.invalidateQueries({ queryKey: [cle] });
       } else {
         toast.error("Rien n'a été importé : corrigez les erreurs puis recommencez.");
@@ -88,7 +89,7 @@ export function ImportsPage() {
       <div>
         <h1 className="flex items-center gap-2 font-display text-2xl font-semibold tracking-tight">
           <FileUp className="h-6 w-6 text-primary" aria-hidden="true" />
-          Import Excel / CSV
+          Import Excel ou CSV
         </h1>
         <p className="text-sm text-muted-foreground">
           Reprendre des véhicules, des conducteurs ou un relevé de carte carburant sans ressaisie. Rien n'est enregistré tant que le fichier
@@ -134,7 +135,7 @@ export function ImportsPage() {
         )}
         <Button className="ml-auto" onClick={lancer} disabled={!pret || importer.isPending}>
           {importer.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
-          Importer {resultat && !resultat.enregistre ? `${resultat.nombreLignes} ligne(s)` : ""}
+          Importer {resultat && !resultat.enregistre ? pluriel(resultat.nombreLignes, "ligne") : ""}
         </Button>
       </section>
 
@@ -143,8 +144,9 @@ export function ImportsPage() {
           {resultat.enregistre && (
             <p className="flex items-center gap-2 rounded-xl border bg-badge-successBg px-4 py-3 text-sm text-badge-successFg">
               <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
-              Import terminé : {resultat.nombreLignes} ligne(s) enregistrée(s) depuis « {resultat.fichier} ».
-              {resultat.nombreAvertissements > 0 && ` ${resultat.nombreAvertissements} alerte(s) « Saisie à vérifier » créée(s).`}
+              Import terminé : {pluriel(resultat.nombreLignes, "ligne enregistrée")} depuis « {resultat.fichier} ».
+              {resultat.nombreAvertissements > 0 &&
+                ` ${pluriel(resultat.nombreAvertissements, "alerte")} « Saisie à vérifier » ${accord(resultat.nombreAvertissements, "créée")}.`}
             </p>
           )}
           {resultat.colonnesManquantes.length > 0 && (

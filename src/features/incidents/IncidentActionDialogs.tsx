@@ -44,10 +44,10 @@ export function IncidentActionDialogs({ assignerCible, cloturerCible, onFermer }
   const onAssigner = async () => {
     if (!assignerCible) return;
     const id = Number(idUtilisateur);
-    if (!id) return toast.error("Sélectionne un responsable");
+    if (!id) return toast.error("Sélectionnez un responsable");
     try {
       await assigner.mutateAsync({ id: assignerCible.idIncident, idUtilisateur: id });
-      toast.success("Responsable assigné");
+      toast.success("Responsable affecté");
       fermer();
     } catch (e) {
       toast.error(e instanceof ApiError ? e.message : "Action impossible");
@@ -77,7 +77,7 @@ export function IncidentActionDialogs({ assignerCible, cloturerCible, onFermer }
       <Dialog open={!!assignerCible} onOpenChange={(open) => !open && fermer()}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Assigner un responsable</DialogTitle>
+            <DialogTitle>Affecter un responsable</DialogTitle>
             <DialogDescription>{libelleVehicule(assignerCible?.engin)}</DialogDescription>
           </DialogHeader>
           <div className="space-y-2">
@@ -98,7 +98,7 @@ export function IncidentActionDialogs({ assignerCible, cloturerCible, onFermer }
           <DialogFooter>
             <Button onClick={onAssigner} disabled={assigner.isPending}>
               {assigner.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
-              Assigner
+              Affecter
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -116,7 +116,7 @@ export function IncidentActionDialogs({ assignerCible, cloturerCible, onFermer }
               <Textarea id="compteRendu" value={compteRendu} onChange={(e) => setCompteRendu(e.target.value)} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="coutEstime">Coût estimé (optionnel)</Label>
+              <Label htmlFor="coutEstime">Coût estimé (facultatif)</Label>
               <Input
                 id="coutEstime"
                 type="number"

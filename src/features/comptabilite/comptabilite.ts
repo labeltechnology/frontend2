@@ -9,7 +9,7 @@ import type { ParametresComptables, SourceComptable } from "@/types/comptabilite
 export const SOURCES: { cle: SourceComptable; libelle: string; description: string }[] = [
   { cle: "VENTES_LOCATION", libelle: "Factures de location (ventes)", description: "Client au débit, vente et TVA au crédit. Journal des ventes." },
   { cle: "FACTURES_GARAGE", libelle: "Factures de garage", description: "Entretien au débit, fournisseur au crédit. Journal des achats." },
-  { cle: "LOCATION_ENTRANTE", libelle: "Location d'engins (entrante)", description: "Location au débit, prestataire au crédit. Journal des achats." },
+  { cle: "LOCATION_ENTRANTE", libelle: "Location d'engins (prise en location)", description: "Location au débit, prestataire au crédit. Journal des achats." },
   { cle: "CARBURANT", libelle: "Carburant", description: "Carburant au débit, contrepartie au crédit. Journal des achats." },
   {
     cle: "MAINTENANCE_INTERNE",

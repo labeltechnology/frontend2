@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { lazy, type ReactNode } from "react";
 import { Accueil } from "@/routes/Accueil";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AppLayout } from "@/components/layout/AppLayout";
@@ -6,50 +6,66 @@ import { AuthProvider } from "@/features/auth/AuthContext";
 import { LoginPage } from "@/features/auth/LoginPage";
 import { RequireAuth } from "@/features/auth/RequireAuth";
 import { DashboardPage } from "@/features/dashboard/DashboardPage";
-import { AnalyticsPage } from "@/features/analytics/AnalyticsPage";
-import { EnginsPage } from "@/features/engins/EnginsPage";
-import { FicheEnginPage } from "@/features/engins/FicheEnginPage";
-import { RapportEnginPage } from "@/features/rapport-engin/RapportEnginPage";
-import { HistoriqueEnginPage } from "@/features/historique-engin/HistoriqueEnginPage";
-import { TypesEnginPage } from "@/features/engins/TypesEnginPage";
-import { ReferentielsFichePage } from "@/features/referentiels-fiche/ReferentielsFichePage";
-import { ConducteursPage } from "@/features/conducteurs/ConducteursPage";
-import { MissionsPage } from "@/features/missions/MissionsPage";
-import { AffectationsPage } from "@/features/affectations/AffectationsPage";
-import { ChantiersPage } from "@/features/chantiers/ChantiersPage";
-import { PlanChantierPage } from "@/features/chantiers/PlanChantierPage";
-import { FicheChantierPage } from "@/features/chantiers/fiche/FicheChantierPage";
-import { AlertesPage } from "@/features/alertes/AlertesPage";
-import { MessageriePage } from "@/features/messagerie/MessageriePage";
-import { GpsPage } from "@/features/gps/GpsPage";
-import { MaintenancePage } from "@/features/maintenance/MaintenancePage";
-import { FournisseursPage } from "@/features/fournisseurs/FournisseursPage";
-import { GaragesPage } from "@/features/garages/GaragesPage";
-import { LocationExternePage } from "@/features/location-externe/LocationExternePage";
-import { LocationEntrantePage } from "@/features/location-entrante/LocationEntrantePage";
-import { PrestatairesLocationPage } from "@/features/prestataire-location/PrestatairesLocationPage";
-import { ZonesPage } from "@/features/zones/ZonesPage";
-import { CarburantPage } from "@/features/carburant/CarburantPage";
-import { DocumentsPage } from "@/features/documents/DocumentsPage";
-import { IncidentsPage } from "@/features/incidents/IncidentsPage";
-import { RapportsPage } from "@/features/rapports/RapportsPage";
-import { PerformancePage } from "@/features/performance/PerformancePage";
-import { CoutsPage } from "@/features/couts/CoutsPage";
-import { FiabilitePage } from "@/features/fiabilite/FiabilitePage";
-import { RenouvellementPage } from "@/features/renouvellement/RenouvellementPage";
-import { ExportComptablePage } from "@/features/comptabilite/ExportComptablePage";
-import { ImportsPage } from "@/features/imports/ImportsPage";
-import { RecommandationsPage } from "@/features/recommandations/RecommandationsPage";
-import { SuiviLogicielPage } from "@/features/suivi-logiciel/SuiviLogicielPage";
-import { ProformaPage } from "@/features/proforma/ProformaPage";
-import { AuditPage } from "@/features/audit/AuditPage";
-import { UtilisateursPage } from "@/features/utilisateurs/UtilisateursPage";
-import { MiseEnServicePage } from "@/features/mise-en-service/MiseEnServicePage";
-import { ParametresPage } from "@/features/parametres/ParametresPage";
-import { AidePage } from "@/features/aide/AidePage";
 import { AccessDeniedPage } from "@/routes/AccessDeniedPage";
 import { NotFoundPage } from "@/routes/NotFoundPage";
 import { RouteGardee } from "@/routes/RouteGardee";
+
+
+/*
+ * Pages chargées à la demande (2026-10-01). Avant ce découpage, les 45 écrans
+ * et leurs bibliothèques partaient dans un seul fichier de 2,4 Mo : ouvrir la
+ * page de connexion téléchargeait aussi les graphiques (recharts) et les
+ * cartes (Leaflet), que la plupart des visites n'ouvrent jamais. Rollup crée
+ * désormais un fichier par page, chargé au premier affichage.
+ *
+ * Restent chargées immédiatement : la connexion (premier écran), le tableau
+ * de bord (page d'accueil), et les pages d'erreur — les différer n'aurait fait
+ * qu'ajouter une attente visible.
+ *
+ * Le `.then` est nécessaire parce que les pages sont des exports NOMMÉS, alors
+ * que `lazy` attend un export par défaut.
+ */
+const AnalyticsPage = lazy(() => import("@/features/analytics/AnalyticsPage").then((m) => ({ default: m.AnalyticsPage })));
+const EnginsPage = lazy(() => import("@/features/engins/EnginsPage").then((m) => ({ default: m.EnginsPage })));
+const FicheEnginPage = lazy(() => import("@/features/engins/FicheEnginPage").then((m) => ({ default: m.FicheEnginPage })));
+const RapportEnginPage = lazy(() => import("@/features/rapport-engin/RapportEnginPage").then((m) => ({ default: m.RapportEnginPage })));
+const HistoriqueEnginPage = lazy(() => import("@/features/historique-engin/HistoriqueEnginPage").then((m) => ({ default: m.HistoriqueEnginPage })));
+const TypesEnginPage = lazy(() => import("@/features/engins/TypesEnginPage").then((m) => ({ default: m.TypesEnginPage })));
+const ReferentielsFichePage = lazy(() => import("@/features/referentiels-fiche/ReferentielsFichePage").then((m) => ({ default: m.ReferentielsFichePage })));
+const ConducteursPage = lazy(() => import("@/features/conducteurs/ConducteursPage").then((m) => ({ default: m.ConducteursPage })));
+const MissionsPage = lazy(() => import("@/features/missions/MissionsPage").then((m) => ({ default: m.MissionsPage })));
+const AffectationsPage = lazy(() => import("@/features/affectations/AffectationsPage").then((m) => ({ default: m.AffectationsPage })));
+const ChantiersPage = lazy(() => import("@/features/chantiers/ChantiersPage").then((m) => ({ default: m.ChantiersPage })));
+const PlanChantierPage = lazy(() => import("@/features/chantiers/PlanChantierPage").then((m) => ({ default: m.PlanChantierPage })));
+const FicheChantierPage = lazy(() => import("@/features/chantiers/fiche/FicheChantierPage").then((m) => ({ default: m.FicheChantierPage })));
+const AlertesPage = lazy(() => import("@/features/alertes/AlertesPage").then((m) => ({ default: m.AlertesPage })));
+const MessageriePage = lazy(() => import("@/features/messagerie/MessageriePage").then((m) => ({ default: m.MessageriePage })));
+const GpsPage = lazy(() => import("@/features/gps/GpsPage").then((m) => ({ default: m.GpsPage })));
+const MaintenancePage = lazy(() => import("@/features/maintenance/MaintenancePage").then((m) => ({ default: m.MaintenancePage })));
+const FournisseursPage = lazy(() => import("@/features/fournisseurs/FournisseursPage").then((m) => ({ default: m.FournisseursPage })));
+const GaragesPage = lazy(() => import("@/features/garages/GaragesPage").then((m) => ({ default: m.GaragesPage })));
+const LocationExternePage = lazy(() => import("@/features/location-externe/LocationExternePage").then((m) => ({ default: m.LocationExternePage })));
+const LocationEntrantePage = lazy(() => import("@/features/location-entrante/LocationEntrantePage").then((m) => ({ default: m.LocationEntrantePage })));
+const PrestatairesLocationPage = lazy(() => import("@/features/prestataire-location/PrestatairesLocationPage").then((m) => ({ default: m.PrestatairesLocationPage })));
+const ZonesPage = lazy(() => import("@/features/zones/ZonesPage").then((m) => ({ default: m.ZonesPage })));
+const CarburantPage = lazy(() => import("@/features/carburant/CarburantPage").then((m) => ({ default: m.CarburantPage })));
+const DocumentsPage = lazy(() => import("@/features/documents/DocumentsPage").then((m) => ({ default: m.DocumentsPage })));
+const IncidentsPage = lazy(() => import("@/features/incidents/IncidentsPage").then((m) => ({ default: m.IncidentsPage })));
+const RapportsPage = lazy(() => import("@/features/rapports/RapportsPage").then((m) => ({ default: m.RapportsPage })));
+const PerformancePage = lazy(() => import("@/features/performance/PerformancePage").then((m) => ({ default: m.PerformancePage })));
+const CoutsPage = lazy(() => import("@/features/couts/CoutsPage").then((m) => ({ default: m.CoutsPage })));
+const FiabilitePage = lazy(() => import("@/features/fiabilite/FiabilitePage").then((m) => ({ default: m.FiabilitePage })));
+const RenouvellementPage = lazy(() => import("@/features/renouvellement/RenouvellementPage").then((m) => ({ default: m.RenouvellementPage })));
+const ExportComptablePage = lazy(() => import("@/features/comptabilite/ExportComptablePage").then((m) => ({ default: m.ExportComptablePage })));
+const ImportsPage = lazy(() => import("@/features/imports/ImportsPage").then((m) => ({ default: m.ImportsPage })));
+const RecommandationsPage = lazy(() => import("@/features/recommandations/RecommandationsPage").then((m) => ({ default: m.RecommandationsPage })));
+const SuiviLogicielPage = lazy(() => import("@/features/suivi-logiciel/SuiviLogicielPage").then((m) => ({ default: m.SuiviLogicielPage })));
+const ProformaPage = lazy(() => import("@/features/proforma/ProformaPage").then((m) => ({ default: m.ProformaPage })));
+const AuditPage = lazy(() => import("@/features/audit/AuditPage").then((m) => ({ default: m.AuditPage })));
+const UtilisateursPage = lazy(() => import("@/features/utilisateurs/UtilisateursPage").then((m) => ({ default: m.UtilisateursPage })));
+const MiseEnServicePage = lazy(() => import("@/features/mise-en-service/MiseEnServicePage").then((m) => ({ default: m.MiseEnServicePage })));
+const ParametresPage = lazy(() => import("@/features/parametres/ParametresPage").then((m) => ({ default: m.ParametresPage })));
+const AidePage = lazy(() => import("@/features/aide/AidePage").then((m) => ({ default: m.AidePage })));
 
 /**
  * Page gardée par les rôles de l'entrée de menu {@code chemin} de

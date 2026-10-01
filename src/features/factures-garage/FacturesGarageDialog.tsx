@@ -64,7 +64,7 @@ export function FacturesGarageDialog({ garage, onOpenChange }: FacturesGarageDia
 
   const onCreer = async () => {
     if (!idMaintenanceChoisie) {
-      toast.error("Choisis une intervention à facturer");
+      toast.error("Choisissez une intervention à facturer");
       return;
     }
     try {
@@ -79,7 +79,7 @@ export function FacturesGarageDialog({ garage, onOpenChange }: FacturesGarageDia
   const onPayer = async (id: number) => {
     try {
       await payer.mutateAsync({ id });
-      toast.success("Facture marquée payée");
+      toast.success("Facture marquée comme payée");
     } catch (e) {
       toast.error(e instanceof ApiError ? e.message : "Action impossible");
     }
@@ -153,7 +153,7 @@ export function FacturesGarageDialog({ garage, onOpenChange }: FacturesGarageDia
                     <Button
                       variant="outline"
                       size="icon"
-                      title="Marquer payée"
+                      title="Marquer comme payée"
                       disabled={payer.isPending}
                       onClick={() => onPayer(facture.idFactureGarage)}
                     >

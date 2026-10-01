@@ -88,7 +88,7 @@ export function GaleriePhotosEngin({ idEngin }: { idEngin: number | undefined })
         {photos?.map((photo) => (
           <div key={photo.idEnginPhoto} className="space-y-1">
             <div className="relative overflow-hidden rounded-md border">
-              <AuthenticatedImage url={photo.url} alt={photo.nomFichierOriginal ?? "Photo de le véhicule"} className="h-28 w-full" />
+              <AuthenticatedImage url={photo.url} alt={photo.nomFichierOriginal ?? "Photo du véhicule"} className="h-28 w-full" />
               {photo.estPrincipale && (
                 <Badge variant="success" className="absolute left-1 top-1">
                   Principale

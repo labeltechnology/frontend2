@@ -10,6 +10,7 @@ import {
   type FiltreStatut,
 } from "@/features/maintenance/liste/maintenance-liste";
 import { cn } from "@/lib/utils";
+import { pluriel } from "@/lib/pluriel";
 import type { TypeMaintenance } from "@/types/maintenance";
 
 const STATUTS: { valeur: FiltreStatut; libelle: string }[] = [
@@ -96,7 +97,7 @@ export function BarreFiltresMaintenance({
           ))}
         </div>
         <span className="text-xs text-muted-foreground" aria-live="polite">
-          {resultat === total ? `${total} maintenance(s)` : `${resultat} sur ${total}`}
+          {resultat === total ? pluriel(total, "maintenance") : `${resultat} sur ${total}`}
         </span>
       </div>
     </div>

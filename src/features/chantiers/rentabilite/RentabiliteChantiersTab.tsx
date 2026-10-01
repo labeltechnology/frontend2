@@ -46,7 +46,7 @@ export function RentabiliteChantiersTab({ gestion }: { gestion: boolean }) {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-sm text-muted-foreground">
-          Chantiers en cours ou terminés, du plus coûteux au moins coûteux (coûts réels à date). La marge compare le refacturable
+          Chantiers en cours ou terminés, du plus coûteux au moins coûteux (coûts réels à ce jour). La marge compare le refacturable
           au coût réel.
         </p>
         <Button type="button" variant="outline" onClick={exporter} disabled={!data || data.length === 0 || export_}>

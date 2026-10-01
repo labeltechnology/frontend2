@@ -71,9 +71,9 @@ function TypeChantierDialog({ type, onClose }: { type: TypeChantier | null; onCl
   const probleme = !libelle.trim()
     ? "Indiquez le libellé."
     : !(f >= 0.3 && f <= 1)
-      ? "Le facteur d'entretien va de 0,3 à 1."
+      ? "Le facteur d'entretien doit être compris entre 0,3 et 1."
       : !(h >= 0.5 && h <= 24)
-        ? "Les heures par jour vont de 0,5 à 24."
+        ? "Le nombre d'heures par jour doit être compris entre 0,5 et 24."
         : null;
 
   const valider = async () => {

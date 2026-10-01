@@ -61,7 +61,7 @@ export function OngletConduite({ actif }: { actif: boolean }) {
               Score = 100 − 5 × points pour 100 km (survitesse 3 points, accélération, freinage ou virage brusque 2 points). Pas de score sous
               50 km dans le mois. Bon ≥ 85, à surveiller ≥ 70, à former en dessous.
               {!donnees.alarmesTraccarRecues &&
-                " Aucune alarme de manœuvre brusque n'a encore été reçue de Traccar : les boîtiers ne les envoient peut-être pas, seule la survitesse est alors comptée."}
+                " Aucune alarme de manœuvre brusque n'a encore été reçue de Traccar : il est possible que les boîtiers n'envoient pas ce type d'alarme ; dans ce cas, seule la survitesse est prise en compte."}
             </span>
           </p>
 

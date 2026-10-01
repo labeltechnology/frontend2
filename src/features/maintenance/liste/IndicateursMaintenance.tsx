@@ -1,6 +1,7 @@
 import { CalendarClock, CheckCircle2, Coins, Wrench, type LucideIcon } from "lucide-react";
 import type { FiltreStatut, IndicateursMaintenance as Indicateurs } from "@/features/maintenance/liste/maintenance-liste";
 import { cn, formatMontant } from "@/lib/utils";
+import { pluriel } from "@/lib/pluriel";
 
 interface Tuile {
   cle: string;
@@ -39,7 +40,7 @@ export function IndicateursMaintenance({
       cle: "en-cours",
       libelle: "En cours",
       valeur: String(indicateurs.enCours),
-      detail: `${indicateurs.vehiculesImmobilises} véhicule(s) immobilisé(s)`,
+      detail: pluriel(indicateurs.vehiculesImmobilises, "véhicule immobilisé"),
       icone: Wrench,
       ton: indicateurs.enCours > 0 ? "text-badge-infoFg" : "text-foreground",
       filtre: "EN_COURS",

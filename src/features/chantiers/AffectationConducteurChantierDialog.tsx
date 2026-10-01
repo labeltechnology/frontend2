@@ -92,7 +92,7 @@ export function AffectationConducteurChantierDialog({
         <DialogHeader>
           <DialogTitle>Conducteurs rattachés {chantier ? `— ${chantier.nom}` : ""}</DialogTitle>
           <DialogDescription>
-            Ajoute ou retire des conducteurs de ce chantier. Un conducteur peut être rattaché à plusieurs chantiers
+            Ajoutez ou retirez des conducteurs de ce chantier. Un conducteur peut être rattaché à plusieurs chantiers
             en même temps.
           </DialogDescription>
         </DialogHeader>

@@ -46,7 +46,7 @@ export function problemeDemande(
   if (chantier.statut !== "PLANIFIE" && chantier.statut !== "EN_COURS") return "Le chantier est terminé ou annulé.";
   if (s.idTypeEngin === null) return "Choisissez le type de véhicule.";
   const q = Number(s.quantite);
-  if (!Number.isInteger(q) || q < 1 || q > QUANTITE_MAX) return `La quantité va de 1 à ${QUANTITE_MAX}.`;
+  if (!Number.isInteger(q) || q < 1 || q > QUANTITE_MAX) return `La quantité doit être comprise entre 1 et ${QUANTITE_MAX}.`;
   if (!s.dateDebut || !s.dateFin || s.dateFin < s.dateDebut) return "Indiquez une période valide.";
   if (s.dateDebut < aujourdhui) return "La période ne peut pas commencer dans le passé.";
   if (s.dateDebut < chantier.dateDebutPrevue || s.dateFin > chantier.dateFinPrevue) {

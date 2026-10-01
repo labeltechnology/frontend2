@@ -37,7 +37,7 @@ export const NIVEAUX_CONDUITE: Record<NiveauConduite, { libelle: string; classes
 };
 
 export const CAUSES_ECART: Record<CauseEcart, string> = {
-  USAGE: "Plus ou moins de km (ou d'heures) que prévu",
+  USAGE: "Kilométrage (ou nombre d'heures) différent de la prévision",
   CONSOMMATION: "Consommation différente de la prévision",
   PRIX: "Prix du litre différent de la prévision",
   AUCUNE: "Aucun écart significatif",
@@ -193,7 +193,7 @@ export function lirePartsMensuelles(textes: string[]): number[] | null | string 
     parts.push(n);
   }
   const total = parts.reduce((s, p) => s + p, 0);
-  if (Math.abs(total - 100) > 0.5) return `Le total des parts fait ${nombreFr(total, 1)} % au lieu de 100 %.`;
+  if (Math.abs(total - 100) > 0.5) return `Le total des parts s'élève à ${nombreFr(total, 1)} % au lieu de 100 %.`;
   return parts;
 }
 

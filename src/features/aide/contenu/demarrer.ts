@@ -35,7 +35,7 @@ export const pagesDemarrer: PageTexte[] = [
     type: "TEXTE",
     id: "demarrer-connexion",
     titre: "Se connecter pour la première fois",
-    resume: "Ouvrir l'application avec l'email et le mot de passe reçus de l'administrateur.",
+    resume: "Ouvrir l'application avec l'adresse électronique et le mot de passe reçus de l'administrateur.",
     revision: REVISION_INITIALE,
     motsCles: ["connexion", "login", "mot de passe", "identifiant", "email", "se connecter", "déconnexion"],
     ecrans: ["/connexion"],
@@ -44,13 +44,13 @@ export const pagesDemarrer: PageTexte[] = [
         titre: "Avant de commencer",
         liste: [
           "L'administrateur vous a créé un compte et vous a donné un mot de passe provisoire.",
-          "Vous avez l'adresse de l'application dans votre navigateur.",
+          "Vous disposez de l'adresse de l'application et l'avez ouverte dans votre navigateur.",
         ],
       },
       {
         titre: "Étapes",
         liste: [
-          "Saisissez votre **Email**.",
+          "Saisissez votre **Adresse électronique**.",
           "Saisissez votre **Mot de passe**.",
           "Cliquez sur **Se connecter**.",
         ],
@@ -65,12 +65,12 @@ export const pagesDemarrer: PageTexte[] = [
       {
         titre: "Bon à savoir",
         liste: [
-          "Pour vous déconnecter, cliquez sur votre avatar dans la barre en bas, puis sur **Se déconnecter**.",
+          "Pour vous déconnecter, cliquez sur votre photo de profil dans la barre en bas, puis sur **Se déconnecter**.",
           "Ne partagez jamais votre mot de passe : chaque action est enregistrée à votre nom.",
         ],
       },
     ],
-    captures: [{ fichier: "demarrer-connexion-01.png", alt: "Page de connexion avec les champs Email et Mot de passe", legende: "La page de connexion." }],
+    captures: [{ fichier: "demarrer-connexion-01.png", alt: "Page de connexion avec les champs Adresse électronique et Mot de passe", legende: "La page de connexion." }],
     voirAussi: ["depannage-identifiants", "depannage-session-expiree"],
   },
   {
@@ -90,19 +90,19 @@ export const pagesDemarrer: PageTexte[] = [
         tableau: {
           colonnes: ["Élément", "À quoi il sert"],
           lignes: [
-            ["**Tableau de bord**", "Page d'accueil de votre métier : chiffres clés, liste « À traiter », planning ou factures selon le rôle."],
+            ["**Tableau de bord**", "Page d'accueil de votre métier : chiffres clés, liste « À traiter », calendrier des interventions ou factures selon le rôle."],
             ["**Pilotage**", "Analytique, Performance, Coûts, Fiabilité, Renouvellement, Recommandations, Rapports."],
             ["**Parc**", "Véhicules, types, documents, conducteurs, zones."],
             ["**Exploitation**", "Missions, affectations, chantiers, GPS, carburant, incidents, alertes."],
             ["**Atelier**", "Maintenance, garages externes, fournisseurs."],
-            ["**Finances**", "Locations, prestataires, factures proforma, export comptable."],
+            ["**Finances**", "Locations, prestataires, factures pro forma, export comptable."],
             ["**Administration**", "Mise en service, utilisateurs, paramètres, import, journal d'audit, aide."],
             ["★", "Vos pages favorites et les pages ouvertes récemment (étoile à côté du titre d'une page)."],
             ["**Messagerie**", "Messages entre collègues ; une pastille compte les non-lus."],
             ["Loupe", "Trouver un véhicule, une mission, un chantier, un conducteur, une action ou une page (Ctrl+K)."],
             ["**?**", "Aide sur la page où vous êtes."],
             ["Soleil / lune", "Thème clair ou sombre."],
-            ["Avatar", "Votre compte, **Paramètres** et déconnexion."],
+            ["Photo de profil", "Votre compte, **Paramètres** et déconnexion."],
           ],
         },
       },
@@ -121,7 +121,7 @@ export const pagesDemarrer: PageTexte[] = [
     sections: [
       {
         titre: "Les rôles",
-        paragraphes: ["Votre rôle décide des menus et des boutons que vous voyez. Le serveur vérifie aussi chaque action."],
+        paragraphes: ["Votre rôle détermine les menus et les boutons affichés. Le serveur vérifie aussi chaque action."],
         tableau: {
           colonnes: ["Rôle", "Peut faire"],
           lignes: [
@@ -131,7 +131,7 @@ export const pagesDemarrer: PageTexte[] = [
             ["Chef de maintenance", "Toute la maintenance : interventions, pièces, garages, entretien."],
             ["Assistant maintenance", "Consulter ; planifier des maintenances."],
             ["Conducteur", "Son véhicule : pleins, incidents, départ et retour de mission."],
-            ["Administrateur (informatique)", "Comptes, paramètres, journal d'audit ; lecture du métier."],
+            ["Administrateur (informatique)", "Comptes, paramètres, journal d'audit ; consultation des données métier."],
             ["Comptable", "Consulter, notamment factures et rapports."],
             ["Chef de chantier", "Demander du matériel et tenir le journal de ses chantiers ; consulter leur terrain."],
           ],

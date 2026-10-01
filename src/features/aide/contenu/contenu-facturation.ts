@@ -15,7 +15,7 @@ export const groupeFacturation: GroupeAide = {
       id: "factures-location",
       titre: "Factures de location",
       resume:
-        "Facture émise pour une période de location externe d'un véhicule (référence FL-xxxxx). Se gère depuis « Locations externes » → action « Factures » d'un contrat, pas depuis un écran séparé.",
+        "Facture émise pour une période de location externe d'un véhicule (référence FL-xxxxx). Elle se gère depuis « Locations externes » → action « Factures » d'un contrat, pas depuis un écran séparé.",
       fonctionnalites: [
         "Émettre une facture pour une période (nécessite un tarif journalier déjà défini sur le contrat)",
         "Aperçu PDF imprimable avant téléchargement",
@@ -31,7 +31,7 @@ export const groupeFacturation: GroupeAide = {
       id: "factures-garage",
       titre: "Factures de garage",
       resume:
-        "Facture d'une intervention de maintenance réalisée par un garage externe (référence FG-xxxxx). Se gère depuis « Garages externes » → action « Factures », pas depuis un écran séparé.",
+        "Facture d'une intervention de maintenance réalisée par un garage externe (référence FG-xxxxx). Elle se gère depuis « Garages externes » → action « Factures », pas depuis un écran séparé.",
       fonctionnalites: ["Émettre la facture d'une intervention terminée", "Marquer payée / annuler"],
       reglesCles: [
         "Montant = coût total déjà calculé de l'intervention (jamais de saisie manuelle).",
@@ -42,17 +42,17 @@ export const groupeFacturation: GroupeAide = {
     },
     {
       id: "factures-proforma",
-      titre: "Factures proforma",
+      titre: "Factures pro forma",
       resume:
         "Devis libre et indépendant (non lié à un contrat de location) : destinataire et lignes de prestations saisis manuellement. Seul document de facturation à avoir sa propre page dans le menu.",
       fonctionnalites: [
-        "Créer une proforma (destinataire, lignes libres : libellé / prix unitaire / quantité)",
+        "Créer une facture pro forma (destinataire, lignes libres : libellé / prix unitaire / quantité)",
         "Aperçu PDF",
       ],
       reglesCles: [
         "Aucun statut ni cycle de vie : un devis non engageant se refait plutôt qu'il ne se corrige — pas d'action « payer » ou « annuler ».",
         "Les montants HT/TVA/TTC sont toujours calculés à partir des lignes et du taux de TVA figé à la création, jamais stockés tels quels.",
-        "N'est jamais convertie automatiquement en facture de location — ce sont deux documents totalement indépendants.",
+        "Une facture pro forma n'est jamais convertie automatiquement en facture de location — ce sont deux documents totalement indépendants.",
       ],
       rolesRequis: ["DG ou responsable du parc"],
     },

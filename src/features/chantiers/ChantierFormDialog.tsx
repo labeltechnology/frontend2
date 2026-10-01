@@ -143,8 +143,8 @@ export function ChantierFormDialog({ open, onOpenChange, chantier }: ChantierFor
           <DialogTitle>{enEdition ? "Modifier le chantier" : "Nouveau chantier"}</DialogTitle>
           <DialogDescription>
             {enEdition
-              ? "Corrige les informations du chantier. Les besoins en matériel se gèrent depuis « Besoins en matériel » sur la liste."
-              : "Crée un chantier auquel des véhicules et conducteurs pourront être rattachés."}
+              ? "Corrigez les informations du chantier. Les besoins en matériel se gèrent depuis « Besoins en matériel », dans la liste."
+              : "Créez un chantier auquel des véhicules et des conducteurs pourront être rattachés."}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -179,7 +179,7 @@ export function ChantierFormDialog({ open, onOpenChange, chantier }: ChantierFor
           {!enEdition && (
             <div className="space-y-2 rounded-md border border-border p-3">
               <div className="flex items-center justify-between">
-                <Label>Besoins en matériel (optionnel)</Label>
+                <Label>Besoins en matériel (facultatif)</Label>
                 <Button type="button" variant="ghost" size="sm" onClick={ajouterLigneBesoin}>
                   <Plus className="h-4 w-4" />
                   Ajouter un type

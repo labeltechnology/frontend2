@@ -41,7 +41,7 @@ export function ObjectifKpiDialog({ kpi, onOpenChange }: { kpi: KpiParc | null; 
         <DialogHeader>
           <DialogTitle>Objectif : {kpi?.libelle}</DialogTitle>
           <DialogDescription>
-            {kpi?.sens === "BAISSE" ? "Plus la valeur est basse, mieux c'est." : "Plus la valeur est haute, mieux c'est."} Laissez vide
+            {kpi?.sens === "BAISSE" ? "Une valeur basse est préférable." : "Une valeur élevée est préférable."} Laissez vide
             pour ne pas fixer d'objectif.
           </DialogDescription>
         </DialogHeader>

@@ -154,8 +154,8 @@ export function MissionFormDialog({
           <DialogTitle>{enEdition ? "Modifier la mission" : "Nouvelle mission"}</DialogTitle>
           <DialogDescription>
             {enEdition
-              ? "Corrige les dates, le motif ou l'affectation de cette mission planifiée."
-              : "Planifie une mission pour un véhicule et un conducteur."}
+              ? "Corrigez les dates, le motif ou l'affectation de cette mission planifiée."
+              : "Planifiez une mission pour un véhicule et un conducteur."}
           </DialogDescription>
           <LienAide idPage="guide-planifier-mission" libelle="Comment faire ?" />
         </DialogHeader>

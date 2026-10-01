@@ -111,7 +111,7 @@ export function DocumentFormDialog({ open, onOpenChange }: DocumentFormDialogPro
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Véhicule (optionnel)</Label>
+              <Label>Véhicule (facultatif)</Label>
               <Select value={watch("idEngin")} onValueChange={(v) => setValue("idEngin", v)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Sélectionner" />
@@ -126,7 +126,7 @@ export function DocumentFormDialog({ open, onOpenChange }: DocumentFormDialogPro
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>Conducteur (optionnel)</Label>
+              <Label>Conducteur (facultatif)</Label>
               <Select value={watch("idConducteur")} onValueChange={(v) => setValue("idConducteur", v)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Sélectionner" />

@@ -7,7 +7,7 @@ import type { GroupeAide } from "@/types/aide";
  */
 export const groupeGps: GroupeAide = {
   id: "gps",
-  titre: "GPS & suivi",
+  titre: "GPS et suivi",
   icone: "MapPin",
   articles: [
     {
@@ -22,7 +22,7 @@ export const groupeGps: GroupeAide = {
         "Onglet Carte : voir « Carte GPS » ci-dessous",
       ],
       reglesCles: [
-        "Chaque position reçue déclenche automatiquement les contrôles suivants : survitesse, déplacement anormal, arrêt prolongé, sortie d'une zone interdite, sortie de toutes les zones d'opération autorisées de le véhicule.",
+        "Chaque position reçue déclenche automatiquement les contrôles suivants : survitesse, déplacement anormal, arrêt prolongé, sortie d'une zone interdite, sortie de toutes les zones d'opération autorisées du véhicule.",
         "Une perte de connexion prolongée d'un dispositif est détectée et signalée.",
         "Un GPS resté désactivé pendant qu'une mission est en cours est signalé.",
       ],
@@ -35,7 +35,7 @@ export const groupeGps: GroupeAide = {
       fonctionnalites: [
         "Vue flotte : un marqueur par véhicule équipé d'un GPS actif, coloré selon son statut, actualisé automatiquement toutes les 30 secondes",
         "Vue détaillée : sélectionner un véhicule pour voir son trajet complet (ligne + positions)",
-        "Zones géographiques superposées (cercles ou tracés polygonaux, vert = autorisée, rouge = interdite)",
+        "Zones géographiques superposées (cercles ou tracés polygonaux, en vert les zones autorisées, en rouge les zones interdites)",
         "Infobulle sur un marqueur : immatriculation (ou n° de série) et modèle du véhicule, statut, dernière transmission, vitesse, photo principale sur demande",
       ],
       reglesCles: [
@@ -72,7 +72,7 @@ export const groupeGps: GroupeAide = {
       reglesCles: [
         "Chaque alerte a une priorité (Faible, Moyenne, Élevée, Critique).",
         "Une alerte de priorité Critique déclenche une notification immédiate.",
-        "Les alertes très proches dans le temps et similaires sont automatiquement dédupliquées (fenêtre de 15 minutes) pour éviter le bruit.",
+        "Les alertes très proches dans le temps et similaires sont automatiquement regroupées (sur 15 minutes) pour éviter les doublons.",
       ],
     },
   ],

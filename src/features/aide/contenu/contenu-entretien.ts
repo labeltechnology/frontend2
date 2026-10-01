@@ -7,26 +7,26 @@ import type { GroupeAide } from "@/types/aide";
  */
 export const groupeEntretien: GroupeAide = {
   id: "entretien",
-  titre: "Entretien & consommation",
+  titre: "Entretien et consommation",
   icone: "Wrench",
   articles: [
     {
       id: "maintenance",
-      titre: "Maintenance & pièces",
+      titre: "Maintenance et pièces",
       resume:
         "Suivi des interventions d'entretien (atelier interne ou garage externe) et des pièces utilisées, avec calcul automatique du coût.",
       fonctionnalites: [
         "Onglet Maintenances : créer, démarrer, ajouter des pièces, clôturer une intervention",
-        "Onglet Pièces : gérer le stock de pièces, assigner un fournisseur",
-        "Assigner un garage externe à une intervention (laisser vide = atelier interne)",
-        "Téléverser le proforma d'un garage externe avant de clôturer une intervention externe",
+        "Onglet Pièces : gérer le stock de pièces, affecter un fournisseur",
+        "Affecter un garage externe à une intervention (laisser vide pour l'atelier interne)",
+        "Téléverser la facture pro forma d'un garage externe avant de clôturer une intervention externe",
       ],
       reglesCles: [
         "Le coût total d'une intervention est calculé automatiquement à partir des pièces utilisées.",
         "Le prix d'une pièce est figé au moment où elle est utilisée sur une intervention (un changement de prix ultérieur ne modifie jamais une intervention déjà enregistrée).",
         "La prochaine date d'entretien et son rappel sont calculés automatiquement à la clôture.",
         "Une alerte est déclenchée si le stock d'une pièce descend en dessous du seuil bas.",
-        "Une intervention rattachée à un garage externe ne peut pas être clôturée tant qu'aucun proforma n'a été téléversé — le bouton « Terminer » reste bloqué, ce n'est pas un simple avertissement.",
+        "Une intervention rattachée à un garage externe ne peut pas être clôturée tant qu'aucune facture pro forma n'a été téléversée — le bouton « Terminer » reste bloqué, ce n'est pas un simple avertissement.",
       ],
     },
     {
@@ -50,12 +50,12 @@ export const groupeEntretien: GroupeAide = {
       fonctionnalites: [
         "Enregistrer un plein (quantité, prix unitaire, kilométrage)",
         "Consulter la consommation moyenne (L/100 km) d'un véhicule",
-        "Joindre un reçu/facture (optionnel)",
+        "Joindre un reçu ou une facture (facultatif)",
       ],
       reglesCles: [
         "Le montant du plein est calculé automatiquement : quantité × prix unitaire.",
         "Le kilométrage saisi au plein suit la même règle que partout ailleurs : il ne peut jamais diminuer.",
-        "Une consommation nettement supérieure à l'historique propre de le véhicule déclenche une alerte « consommation anormale ».",
+        "Une consommation nettement supérieure à l'historique propre du véhicule déclenche une alerte « consommation anormale ».",
       ],
     },
     {
@@ -75,16 +75,16 @@ export const groupeEntretien: GroupeAide = {
     },
     {
       id: "incidents",
-      titre: "Incidents & accidents",
+      titre: "Incidents et accidents",
       resume: "Déclaration et suivi des incidents ou accidents impliquant un véhicule.",
       fonctionnalites: [
         "Déclarer un incident (gravité, description, photos/justificatifs)",
-        "Assigner un responsable de traitement",
+        "Affecter un responsable de traitement",
         "Clôturer avec un compte rendu",
       ],
       reglesCles: [
         "Gravité : Faible, Moyenne, Élevée ou Critique.",
-        "Assigner un responsable fait passer l'incident de « Déclaré » à « En traitement ».",
+        "Affecter un responsable fait passer l'incident de « Déclaré » à « En traitement ».",
         "Un compte rendu est obligatoire pour pouvoir clôturer un incident.",
         "Un incident de gravité Critique déclenche une notification immédiate.",
       ],

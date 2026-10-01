@@ -61,7 +61,7 @@ export function OngletConnexions({ actif }: { actif: boolean }) {
                       {l.nomUtilisateur ? `${l.emailSaisi} · ${libelleRole(l.role)}` : "Compte inconnu"}
                     </span>
                   </td>
-                  <td className="px-3 py-2">{l.canal === "WEB" ? "Web" : "Appli"}</td>
+                  <td className="px-3 py-2">{l.canal === "WEB" ? "Web" : "Application"}</td>
                   <td className="px-3 py-2">
                     {l.succes ? (
                       <Pastille libelle="Réussie" classes="bg-badge-successBg text-badge-successFg" />

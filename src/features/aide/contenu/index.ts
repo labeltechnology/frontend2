@@ -48,7 +48,7 @@ export const CENTRE_AIDE: RubriqueAide[] = [
   {
     id: "contact",
     titre: "Contact et nouveautés",
-    description: "Joindre le support, voir ce qui a changé.",
+    description: "Contacter l'assistance et consulter les nouveautés.",
     icone: "Megaphone",
     pages: [pageContact, pageNouveautes, pageSuivi],
     sections: [],

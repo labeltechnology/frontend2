@@ -24,7 +24,7 @@ import type { JournalAudit } from "@/types/audit";
  *
  *  1. En-tête : date, heure de la dernière actualisation, témoin « En direct ».
  *  2. KPI critiques (6).
- *  3. Alertes urgentes (critiques puis avertissements) + statut du parc par
+ *  3. Notifications (critiques puis avertissements ; « Alertes urgentes » avant le 2026-10-01) + statut du parc par
  *     catégorie puis type de matériel (2026-09-30, remplace le mur du parc ici).
  *  4. État de la flotte par type de matériel.
  *  5. Véhicules immobilisés, chiffrés.

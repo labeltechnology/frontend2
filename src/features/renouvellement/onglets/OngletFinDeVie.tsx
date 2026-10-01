@@ -7,6 +7,7 @@ import { EtatChargement, Pastille } from "@/features/fiabilite/EtatChargement";
 import { useFinDeVie } from "@/features/renouvellement/api";
 import { CessionDialog } from "@/features/renouvellement/CessionDialog";
 import { MOTIFS_CESSION, texteResultatCession } from "@/features/renouvellement/renouvellement";
+import { pluriel } from "@/lib/pluriel";
 import { cn, formatDate } from "@/lib/utils";
 import type { FinDeVieVehicule } from "@/types/renouvellement";
 
@@ -25,7 +26,7 @@ export function OngletFinDeVie({ actif, peutModifier }: { actif: boolean; peutMo
     <div className="space-y-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="grid flex-1 grid-cols-2 gap-3 md:grid-cols-4">
-          <CarteChiffre titre="Véhicules sortis du parc" valeur={d.nombreSortis} precision={d.nombreACompleter > 0 ? `${d.nombreACompleter} cession(s) à compléter` : undefined} />
+          <CarteChiffre titre="Véhicules sortis du parc" valeur={d.nombreSortis} precision={d.nombreACompleter > 0 ? `${pluriel(d.nombreACompleter, "cession")} à compléter` : undefined} />
           <CarteChiffre titre="Produit des cessions" valeur={texteMontant(d.montantCessions)} />
           <CarteChiffre titre="Plus-values" valeur={texteMontant(d.montantPlusValues)} classeValeur={d.montantPlusValues > 0 ? "text-badge-successFg" : undefined} />
           <CarteChiffre titre="Moins-values" valeur={texteMontant(d.montantMoinsValues)} classeValeur={d.montantMoinsValues > 0 ? "text-badge-dangerFg" : undefined} />
@@ -49,7 +50,7 @@ export function OngletFinDeVie({ actif, peutModifier }: { actif: boolean; peutMo
                 <th className="px-3 py-2 text-right">Prix d'achat</th>
                 <th className="px-3 py-2 text-right">Valeur nette</th>
                 <th className="px-3 py-2 text-right">Prix de cession</th>
-                <th className="px-3 py-2 text-right">Plus / moins-value</th>
+                <th className="px-3 py-2 text-right">Plus-value ou moins-value</th>
                 <th className="px-3 py-2" />
               </tr>
             </thead>

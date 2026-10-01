@@ -27,7 +27,7 @@ const schema = z.object({
   nomSociete: z.string().min(1, "Requis"),
   personneContact: z.string().optional(),
   telephone: z.string().optional(),
-  email: z.union([z.string().email("Email invalide"), z.literal("")]).optional(),
+  email: z.union([z.string().email("Adresse électronique invalide"), z.literal("")]).optional(),
   adresse: z.string().optional(),
   referenceContrat: z.string().optional(),
   dateDebut: z.string().min(1, "Requis"),
@@ -93,7 +93,7 @@ export function ContratLocationFormDialog({ open, onOpenChange }: ContratLocatio
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Nouveau contrat de location externe</DialogTitle>
-          <DialogDescription>Met un véhicule de l'entreprise à disposition d'une société externe.</DialogDescription>
+          <DialogDescription>Mettez un véhicule de l'entreprise à disposition d'une société externe.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
@@ -131,7 +131,7 @@ export function ContratLocationFormDialog({ open, onOpenChange }: ContratLocatio
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">Adresse électronique</Label>
               <Input id="email" type="email" {...register("email")} />
               {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
             </div>
@@ -160,7 +160,7 @@ export function ContratLocationFormDialog({ open, onOpenChange }: ContratLocatio
             <Textarea id="conditions" rows={3} {...register("conditions")} />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="tarifJournalier">Tarif journalier (optionnel — requis pour facturer ce contrat)</Label>
+            <Label htmlFor="tarifJournalier">Tarif journalier (facultatif — requis pour facturer ce contrat)</Label>
             <Input id="tarifJournalier" type="number" min={0} step="0.01" {...register("tarifJournalier")} />
           </div>
           <DialogFooter>

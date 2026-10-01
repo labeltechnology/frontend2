@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { dateCourte, grouperConversations, initialesNom } from "@/features/messagerie/messagerie";
 import { AvatarPersonne } from "@/features/photo-profil/AvatarPersonne";
 import { libelleRole } from "@/lib/droits";
+import { pluriel } from "@/lib/pluriel";
 import { cn } from "@/lib/utils";
 import type { Conversation } from "@/types/messagerie";
 
@@ -75,7 +76,7 @@ export function ListeConversations({
                       {c.nonLus > 0 && (
                         <span
                           className="ml-auto min-w-5 rounded-full bg-primary px-1.5 py-0.5 text-center text-[11px] font-semibold tabular-nums text-primary-foreground"
-                          aria-label={`${c.nonLus} non lu(s)`}
+                          aria-label={pluriel(c.nonLus, "non lu")}
                         >
                           {c.nonLus > 99 ? "99+" : c.nonLus}
                         </span>

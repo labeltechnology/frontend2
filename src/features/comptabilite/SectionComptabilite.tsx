@@ -21,7 +21,7 @@ const code = (max: number) =>
     .trim()
     .min(1, "Obligatoire")
     .max(max, `${max} caractères maximum`)
-    .regex(/^[A-Za-z0-9._-]+$/, "Lettres, chiffres, point, tiret ou souligné");
+    .regex(/^[A-Za-z0-9._-]+$/, "Lettres, chiffres, point, tiret ou trait de soulignement");
 
 const schema = z.object({
   separateur: z.enum([";", ","]),

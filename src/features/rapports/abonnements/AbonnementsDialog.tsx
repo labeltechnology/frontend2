@@ -92,7 +92,7 @@ export function AbonnementsDialog({ open, onOpenChange }: { open: boolean; onOpe
   const envoyerMaintenant = async (f: FrequenceEnvoi) => {
     try {
       const envoi = await envoyer.mutateAsync({ frequence: f, idUtilisateur: idCible });
-      toast.success(`E-mail envoyé à ${envoi.destinataire}`);
+      toast.success(`Courriel envoyé à ${envoi.destinataire}`);
     } catch (e) {
       toast.error(messageErreur(e, "L'envoi a échoué"));
     }
@@ -110,10 +110,10 @@ export function AbonnementsDialog({ open, onOpenChange }: { open: boolean; onOpe
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Mail className="h-5 w-5 text-primary" aria-hidden="true" />
-            Recevoir des rapports par e-mail
+            Recevoir des rapports par courriel
           </DialogTitle>
           <DialogDescription>
-            Cochez les rapports à recevoir en PDF. Chaque envoi couvre la semaine ou le mois écoulé, en un seul e-mail.
+            Cochez les rapports à recevoir en PDF. Chaque envoi couvre la semaine ou le mois écoulé, en un seul courriel.
           </DialogDescription>
         </DialogHeader>
 
@@ -140,7 +140,7 @@ export function AbonnementsDialog({ open, onOpenChange }: { open: boolean; onOpe
           {p && !p.messagerieConfiguree && (
             <p className="flex items-start gap-2 rounded-xl border border-badge-warningFg/30 bg-badge-warningBg px-4 py-3 text-sm text-badge-warningFg">
               <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-              La messagerie du serveur n'est pas configurée : les abonnements sont enregistrés mais aucun e-mail ne partira. Prévenez
+              La messagerie du serveur n'est pas configurée : les abonnements sont enregistrés mais aucun courriel ne partira. Prévenez
               l'administrateur.
             </p>
           )}

@@ -85,7 +85,7 @@ export const CATALOGUE: DefinitionRapport[] = [
   {
     type: "CHANTIER",
     titre: "Rapport par chantier",
-    description: "Véhicules rattachés à un chantier : rattachements de la période et présents aujourd'hui.",
+    description: "Véhicules rattachés à un chantier : rattachements de la période et véhicules présents à ce jour.",
     famille: "SYNTHESES",
     icone: "chantier",
     cible: "CHANTIER",
@@ -165,7 +165,7 @@ export const CATALOGUE: DefinitionRapport[] = [
   {
     type: "PARC",
     titre: "État du parc",
-    description: "Photo du parc aujourd'hui : nombre de véhicules et répartition par statut.",
+    description: "Situation du parc à ce jour : nombre de véhicules et répartition par statut.",
     famille: "PARC",
     icone: "parc",
     cible: "AUCUNE",
@@ -195,7 +195,7 @@ export const CATALOGUE: DefinitionRapport[] = [
   {
     type: "FIABILITE_CONFORMITE",
     titre: "Maintenance, fiabilité et conformité",
-    description: "Disponibilité, immobilisations et leur coût, temps entre pannes, délai de réparation, contrôle qualité, respect du planning d'entretien et conformité.",
+    description: "Disponibilité, immobilisations et leur coût, temps entre pannes, délai de réparation, contrôle qualité, respect du calendrier d'entretien et conformité.",
     famille: "PARC",
     icone: "maintenance",
     cible: "AUCUNE",
@@ -215,7 +215,7 @@ export const CATALOGUE: DefinitionRapport[] = [
   {
     type: "PERFORMANCE_UTILISATION",
     titre: "Performance et utilisation",
-    description: "Taux d'utilisation réel, véhicules sous-utilisés ou en trop, coût par km et par heure comparé à la référence, KPI du parc.",
+    description: "Taux d'utilisation réel, véhicules sous-utilisés ou en surnombre, coût par km et par heure comparé à la référence, indicateurs clés du parc.",
     famille: "PARC",
     icone: "utilisation",
     cible: "AUCUNE",
@@ -234,7 +234,7 @@ export const CATALOGUE: DefinitionRapport[] = [
   },
   {
     type: "DOCUMENTS_A_EXPIRER",
-    titre: "Documents à expirer",
+    titre: "Documents arrivant à expiration",
     description: "Documents expirés ou arrivant à échéance dans les 30 jours.",
     famille: "PARC",
     icone: "documents",
@@ -283,7 +283,7 @@ export function validerParametres(type: TypeRapport, p: ParametresRapport): stri
     return "Indiquez le début et la fin de la période.";
   }
   if (p.dateDebutPeriode && p.dateFinPeriode && p.dateDebutPeriode > p.dateFinPeriode) {
-    return "La fin de la période est avant son début.";
+    return "La date de fin de la période est antérieure à la date de début.";
   }
   return null;
 }

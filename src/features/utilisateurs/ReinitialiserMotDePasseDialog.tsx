@@ -50,7 +50,7 @@ export function ReinitialiserMotDePasseDialog({
         <DialogHeader>
           <DialogTitle>Réinitialiser le mot de passe</DialogTitle>
           <DialogDescription>
-            {utilisateur?.prenom} {utilisateur?.nom} ({utilisateur?.email}). Communiquez-le de vive voix, jamais par e-mail : il le
+            {utilisateur?.prenom} {utilisateur?.nom} ({utilisateur?.email}). Communiquez-le de vive voix, jamais par courriel : il le
             changera depuis son menu.
           </DialogDescription>
         </DialogHeader>

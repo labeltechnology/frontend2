@@ -38,7 +38,7 @@ export const SCHEMAS: SchemaAide[] = [
     etapes: [
       { libelle: "Planifiée", note: "Avec ou sans date prévue" },
       { libelle: "En cours", ton: "ATTENTION", note: "Véhicule immobilisé" },
-      { libelle: "Terminée", ton: "POSITIF", note: "Coût figé, proforma si garage" },
+      { libelle: "Terminée", ton: "POSITIF", note: "Coût figé, facture pro forma si garage externe" },
     ],
     sorties: [{ depuis: "Planifiée", vers: "Planifiée", note: "Replanifier : nouvelle date, ou date retirée" }],
   },
@@ -82,7 +82,7 @@ export const SCHEMAS: SchemaAide[] = [
       { libelle: "Loupe (Ctrl+K)" },
       { libelle: "?" },
       { libelle: "Thème" },
-      { libelle: "Avatar" },
+      { libelle: "Photo de profil" },
     ],
   },
 ];

@@ -29,9 +29,10 @@ async function demarrerMission(id: number, kilometrageDepart: number, compteurHe
   return data;
 }
 
-async function terminerMission(id: number, kilometrageRetour: number, compteurHeuresRetour?: number): Promise<Mission> {
+/** confirmer : fin rapide confirmée après un 422 « Saisie à confirmer » (2026-10-01). */
+async function terminerMission(id: number, kilometrageRetour: number, compteurHeuresRetour?: number, confirmer = false): Promise<Mission> {
   const { data } = await apiClient.patch<Mission>(`/api/missions/${id}/terminer`, null, {
-    params: { kilometrageRetour, compteurHeuresRetour },
+    params: { kilometrageRetour, compteurHeuresRetour, ...(confirmer ? { confirmer: true } : {}) },
   });
   return data;
 }
@@ -82,8 +83,17 @@ export function useDemarrerMission() {
 export function useTerminerMission() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, kilometrageRetour, compteurHeuresRetour }: { id: number; kilometrageRetour: number; compteurHeuresRetour?: number }) =>
-      terminerMission(id, kilometrageRetour, compteurHeuresRetour),
+    mutationFn: ({
+      id,
+      kilometrageRetour,
+      compteurHeuresRetour,
+      confirmer,
+    }: {
+      id: number;
+      kilometrageRetour: number;
+      compteurHeuresRetour?: number;
+      confirmer?: boolean;
+    }) => terminerMission(id, kilometrageRetour, compteurHeuresRetour, confirmer),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: missionsKeys.liste }),
   });
 }

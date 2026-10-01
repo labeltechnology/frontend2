@@ -69,7 +69,7 @@ export function SectionWebhooks() {
       await navigator.clipboard.writeText(texte);
       toast.success("Secret copié");
     } catch {
-      toast.error("Copie impossible : sélectionnez le texte à la main");
+      toast.error("Copie impossible : sélectionnez et copiez le texte manuellement");
     }
   };
 

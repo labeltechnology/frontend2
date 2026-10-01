@@ -86,7 +86,7 @@ export function TableauVehicules({ vehicules, types }: { vehicules: PerformanceV
               <th className="px-3 py-2 text-right">Usage</th>
               <th className="px-3 py-2 text-right">Coût total</th>
               <th className="px-3 py-2 text-right">Coût unitaire</th>
-              <th className="px-3 py-2">Écart référence</th>
+              <th className="px-3 py-2">Écart à la référence</th>
               <th className="px-3 py-2">État</th>
             </tr>
           </thead>

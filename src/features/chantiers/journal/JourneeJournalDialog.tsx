@@ -161,7 +161,7 @@ export function JourneeJournalDialog({
           </div>
         </div>
         {erreurJour && jour && <p className="text-sm text-destructive">{erreurJour}</p>}
-        {effectifInvalide && <p className="text-sm text-destructive">Effectif : un nombre entier de 0 à 10 000.</p>}
+        {effectifInvalide && <p className="text-sm text-destructive">L'effectif doit être un nombre entier compris entre 0 et 10 000.</p>}
 
         <div className="space-y-1.5">
           <Label htmlFor="journal-travaux">Travaux réalisés</Label>
@@ -206,7 +206,7 @@ export function JourneeJournalDialog({
               })}
             </ul>
           )}
-          {heuresInvalides && <p className="text-sm text-destructive">Heures : de 0 à 24 par véhicule.</p>}
+          {heuresInvalides && <p className="text-sm text-destructive">Le nombre d'heures doit être compris entre 0 et 24 par véhicule.</p>}
         </section>
 
         {actuelle && (

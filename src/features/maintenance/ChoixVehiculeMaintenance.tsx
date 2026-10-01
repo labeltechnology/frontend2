@@ -6,6 +6,7 @@ import { useEngins } from "@/features/engins/api";
 import { vehiculesProposes } from "@/features/maintenance/choix-vehicule";
 import { formatNombre } from "@/lib/utils";
 import { libelleVehicule } from "@/lib/vehicule";
+import { pluriel } from "@/lib/pluriel";
 import type { Engin } from "@/types/engin";
 
 const AFFICHES_MAX = 60;
@@ -63,7 +64,7 @@ export function ChoixVehiculeMaintenance({ onChoisir }: { onChoisir: (engin: Eng
           ))}
           {proposes.length > AFFICHES_MAX && (
             <li className="px-1 pt-1 text-xs text-muted-foreground">
-              {proposes.length - AFFICHES_MAX} autre(s) : précisez la recherche.
+              {pluriel(proposes.length - AFFICHES_MAX, "autre")} : précisez la recherche.
             </li>
           )}
         </ul>

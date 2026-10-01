@@ -83,7 +83,7 @@ export function IncidentsPage() {
                 disabled={incident.statut === "CLOTURE"}
                 onSelect={() => setAssignerCible(incident)}
               >
-                Assigner un responsable
+                Affecter un responsable
               </DropdownMenuItem>
               <DropdownMenuItem
                 disabled={incident.statut === "CLOTURE"}

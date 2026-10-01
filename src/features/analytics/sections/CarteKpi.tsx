@@ -31,7 +31,7 @@ export function CarteKpi({
       <p className="mt-1 font-display text-xl font-bold tabular-nums text-foreground">{valeur}</p>
       <p className="mt-1 flex items-center gap-1 text-xs">
         {ecart === null ? (
-          <span className="text-muted-foreground">{precision ?? "Pas de période précédente à comparer"}</span>
+          <span className="text-muted-foreground">{precision ?? "Aucune période précédente de comparaison"}</span>
         ) : (
           <>
             <span
@@ -44,7 +44,7 @@ export function CarteKpi({
               {ecart > 0 ? "+" : ""}
               {ecart.toFixed(1)} %
             </span>
-            <span className="text-muted-foreground">vs période précédente</span>
+            <span className="text-muted-foreground">par rapport à la période précédente</span>
           </>
         )}
       </p>

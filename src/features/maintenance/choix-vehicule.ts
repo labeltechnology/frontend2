@@ -1,5 +1,6 @@
 import { filtrerVehicules } from "@/features/engins/recherche-vehicules";
 import { comparerVehicules } from "@/lib/vehicule";
+import { pluriel } from "@/lib/pluriel";
 import type { Engin } from "@/types/engin";
 import type { Maintenance } from "@/types/maintenance";
 
@@ -30,10 +31,10 @@ export function avertissementsVehicule(engin: Engin, maintenances: readonly Main
   const enCours = siennes.filter((m) => m.statut === "EN_COURS").length;
   const planifiees = siennes.filter((m) => m.statut === "PLANIFIEE").length;
   if (enCours > 0) {
-    avertissements.push({ niveau: "attention", message: `Déjà ${enCours} maintenance(s) en cours sur ce véhicule.` });
+    avertissements.push({ niveau: "attention", message: `Déjà ${pluriel(enCours, "maintenance en cours", "maintenances en cours")} sur ce véhicule.` });
   }
   if (planifiees > 0) {
-    avertissements.push({ niveau: "info", message: `${planifiees} maintenance(s) déjà planifiée(s) : vérifiez qu'elle n'y figure pas.` });
+    avertissements.push({ niveau: "info", message: `${pluriel(planifiees, "maintenance déjà planifiée", "maintenances déjà planifiées")} : vérifiez que la maintenance à créer n'y figure pas déjà.` });
   }
   if (engin.statut === "EN_MISSION") {
     avertissements.push({ niveau: "info", message: "Véhicule en mission : la maintenance ne pourra être que planifiée." });

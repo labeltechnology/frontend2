@@ -50,7 +50,7 @@ export function CoutsPage() {
       <Tabs value={onglet} onValueChange={(v) => setParams({ onglet: v }, { replace: true })}>
         <TabsList className="flex h-auto flex-wrap justify-start">
           <TabsTrigger value="tco">Coût complet (TCO)</TabsTrigger>
-          <TabsTrigger value="problemes">Véhicules à problèmes</TabsTrigger>
+          <TabsTrigger value="problemes">Véhicules à surveiller</TabsTrigger>
           <TabsTrigger value="budget">Budget carburant</TabsTrigger>
           <TabsTrigger value="previsions">Prévisions</TabsTrigger>
           <TabsTrigger value="conduite">Conduite</TabsTrigger>

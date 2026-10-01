@@ -7,14 +7,14 @@ import type { GroupeAide } from "@/types/aide";
  */
 export const groupeLocations: GroupeAide = {
   id: "locations",
-  titre: "Locations & prestataires",
+  titre: "Locations et prestataires",
   icone: "Handshake",
   articles: [
     {
       id: "locations-externes",
       titre: "Locations externes",
       resume:
-        "L'entreprise loue un de SES véhicules à une société externe — l'entreprise reste propriétaire de le véhicule pendant toute la durée du contrat.",
+        "L'entreprise loue l'un de ses propres véhicules à une société externe — l'entreprise reste propriétaire du véhicule pendant toute la durée du contrat.",
       fonctionnalites: [
         "Créer un contrat de location (véhicule, société locataire, dates)",
         "Fixer/modifier le tarif journalier",
@@ -23,7 +23,7 @@ export const groupeLocations: GroupeAide = {
       ],
       reglesCles: [
         "Un véhicule ne peut avoir qu'un seul contrat de location externe actif à la fois.",
-        "Le montant d'une facture = tarif journalier × nombre de jours de la période choisie.",
+        "Le montant d'une facture est égal au tarif journalier × nombre de jours de la période choisie.",
         "Les factures sont toujours créées manuellement pour une période choisie, jamais générées automatiquement.",
         "Le tarif appliqué et la TVA sont figés au moment de l'émission de la facture : un changement ultérieur du tarif du contrat ou du taux de TVA ne modifie jamais une facture déjà émise.",
       ],
@@ -33,7 +33,7 @@ export const groupeLocations: GroupeAide = {
       id: "locations-entrantes",
       titre: "Locations entrantes",
       resume:
-        "Sens inverse des Locations externes : l'entreprise loue un véhicule CHEZ un prestataire externe pour son propre usage, en général quand aucun véhicule disponible du type requis n'est au parc.",
+        "Sens inverse des Locations externes : l'entreprise loue un véhicule auprès d'un prestataire externe pour son propre usage, en général quand aucun véhicule disponible du type requis n'est au parc.",
       fonctionnalites: [
         "Créer un contrat de location (véhicule déjà existant au parc, prestataire, dates)",
         "Fixer/modifier le tarif journalier",
@@ -55,7 +55,7 @@ export const groupeLocations: GroupeAide = {
       id: "prestataires-location",
       titre: "Prestataires de location",
       resume:
-        "Liste maîtresse des sociétés externes chez qui l'entreprise peut louer un véhicule — évite de ressaisir les coordonnées à chaque nouveau contrat de location entrante.",
+        "Répertoire des sociétés externes chez qui l'entreprise peut louer un véhicule — évite de ressaisir les coordonnées à chaque nouveau contrat de location entrante.",
       fonctionnalites: ["Créer / modifier une fiche prestataire", "Activer / désactiver"],
       reglesCles: [
         "Seuls les prestataires actifs apparaissent dans le sélecteur d'un nouveau contrat de location entrante.",

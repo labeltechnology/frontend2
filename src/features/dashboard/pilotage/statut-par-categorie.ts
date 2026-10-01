@@ -1,5 +1,6 @@
 import { LIBELLES_CATEGORIE, lienVehiculesFiltres } from "@/features/engins/filtre-url";
 import { GROUPES_STATUT, type SanteParc, type SanteVehicule } from "@/features/dashboard/sante-parc";
+import { normaliserFamille, SANS_FAMILLE } from "@/features/engins/familles-type";
 import type { CategorieEngin, StatutEngin } from "@/types/engin";
 
 /**
@@ -8,6 +9,9 @@ import type { CategorieEngin, StatutEngin } from "@/types/engin";
  * chiffrée à la place des tuiles). Reprend la santé calculée par
  * sante-parc.ts : un véhicule « en alerte » ici l'est aussi sur le mur du
  * parc et dans son rapport. Logique pure, testée.
+ *
+ * 2026-10-01 : troisième niveau, la famille du type (« Véhicule de service »
+ * → 4x4, léger, bus), entre la catégorie et le type.
  */
 export interface CompteursStatut {
   total: number;
@@ -26,11 +30,24 @@ export interface LigneType {
   lien: string | null;
 }
 
+/** Famille de types (null = types sans famille, libellé « Autres »). */
+export interface LigneFamille {
+  famille: string | null;
+  libelle: string;
+  compteurs: CompteursStatut;
+  types: LigneType[];
+}
+
 export interface LigneCategorie {
   categorie: CategorieEngin;
   libelle: string;
   compteurs: CompteursStatut;
+  /** Tous les types de la catégorie (sans regroupement). */
   types: LigneType[];
+  /** Types regroupés par famille ; une seule entrée « sans famille » si aucune famille n'est renseignée. */
+  familles: LigneFamille[];
+  /** Vrai si au moins un type de la catégorie a une famille : l'écran affiche alors le niveau famille. */
+  avecFamilles: boolean;
   lien: string;
 }
 
@@ -60,6 +77,12 @@ function comparerTypes(a: LigneType, b: LigneType): number {
   return b.compteurs.total - a.compteurs.total || a.libelle.localeCompare(b.libelle, "fr");
 }
 
+/** Familles : les plus nombreuses d'abord, puis par libellé ; « Autres » en dernier. */
+function comparerFamilles(a: LigneFamille, b: LigneFamille): number {
+  if ((a.famille === null) !== (b.famille === null)) return a.famille === null ? 1 : -1;
+  return b.compteurs.total - a.compteurs.total || a.libelle.localeCompare(b.libelle, "fr");
+}
+
 export function statutParCategorie(sante: SanteParc): LigneCategorie[] {
   const santes = sante.groupes.flatMap((g) => g.vehicules);
   return ORDRE_CATEGORIES.map((categorie) => {
@@ -69,19 +92,40 @@ export function statutParCategorie(sante: SanteParc): LigneCategorie[] {
       const id = s.engin.typeEngin?.idTypeEngin ?? null;
       parType.set(id, [...(parType.get(id) ?? []), s]);
     }
-    const types: LigneType[] = [...parType.entries()]
-      .map(([id, liste]) => ({
-        idTypeEngin: id,
-        libelle: id === null ? "Sans type" : liste[0].engin.typeEngin.libelle,
-        compteurs: compter(liste),
-        lien: id === null ? null : lienVehiculesFiltres({ idTypeEngin: id }),
+    const lignesTypes: { famille: string | null; ligne: LigneType; santes: SanteVehicule[] }[] = [...parType.entries()].map(
+      ([id, liste]) => ({
+        famille: id === null ? null : normaliserFamille(liste[0].engin.typeEngin.famille),
+        santes: liste,
+        ligne: {
+          idTypeEngin: id,
+          libelle: id === null ? "Sans type" : liste[0].engin.typeEngin.libelle,
+          compteurs: compter(liste),
+          lien: id === null ? null : lienVehiculesFiltres({ idTypeEngin: id }),
+        },
+      }),
+    );
+    const parFamille = new Map<string, { famille: string | null; lignes: typeof lignesTypes }>();
+    for (const l of lignesTypes) {
+      const cle = l.famille?.toLocaleLowerCase("fr") ?? "";
+      const groupe = parFamille.get(cle) ?? { famille: l.famille, lignes: [] };
+      groupe.lignes.push(l);
+      parFamille.set(cle, groupe);
+    }
+    const familles: LigneFamille[] = [...parFamille.values()]
+      .map((g) => ({
+        famille: g.famille,
+        libelle: g.famille ?? SANS_FAMILLE,
+        compteurs: compter(g.lignes.flatMap((l) => l.santes)),
+        types: g.lignes.map((l) => l.ligne).sort(comparerTypes),
       }))
-      .sort(comparerTypes);
+      .sort(comparerFamilles);
     return {
       categorie,
       libelle: LIBELLES_CATEGORIE[categorie],
       compteurs: compter(dansCategorie),
-      types,
+      types: lignesTypes.map((l) => l.ligne).sort(comparerTypes),
+      familles,
+      avecFamilles: familles.some((f) => f.famille !== null),
       lien: lienVehiculesFiltres({ categorie }),
     };
   }).filter((c) => c.compteurs.total > 0);

@@ -253,7 +253,7 @@ export function PlanChantierPage() {
     <div className="space-y-6">
       <PageHeader
         title={`Plan du chantier${chantier ? ` — ${chantier.nom}` : ""}`}
-        description="Place les éléments du terrain directement sur la carte (local technique, local médical, stockage) et, pour un chantier de construction routière, trace la route."
+        description="Placez les éléments du terrain directement sur la carte (local technique, local médical, stockage) et, pour un chantier de construction routière, tracez la route."
         actions={
           <div className="flex items-center gap-2">
             {vueSatellite && (
@@ -299,8 +299,8 @@ export function PlanChantierPage() {
             <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
               <span>
                 {outilActif.forme === "POINT"
-                  ? "Clique sur la carte pour placer l'icône (tu peux recliquer pour la déplacer)"
-                  : `Clique sur la carte pour placer les sommets (${pointsTemp.length} placé${pointsTemp.length > 1 ? "s" : ""}, ${outilActif.minPoints} minimum)`}
+                  ? "Cliquez sur la carte pour placer l'icône (cliquez de nouveau pour la déplacer)."
+                  : `Cliquez sur la carte pour placer les sommets (${pointsTemp.length} placé${pointsTemp.length > 1 ? "s" : ""}, ${outilActif.minPoints} minimum)`}
               </span>
               <Button type="button" variant="ghost" size="sm" onClick={onAnnulerDessin}>
                 Annuler

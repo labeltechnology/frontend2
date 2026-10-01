@@ -160,7 +160,7 @@ function FiltreRole({ actif, onChange }: { actif: boolean; onChange: (actif: boo
   return (
     <label className="flex items-center justify-between gap-2 rounded-lg border border-border px-3 py-2 text-sm">
       <span>Seulement mes tâches</span>
-      <Switch checked={actif} onCheckedChange={onChange} aria-label="Afficher seulement les tâches permises à mon rôle" />
+      <Switch checked={actif} onCheckedChange={onChange} aria-label="Afficher seulement les tâches autorisées pour mon rôle" />
     </label>
   );
 }
@@ -173,7 +173,7 @@ function ResultatsRecherche({ q, resultats, onChoisir }: { q: string; resultats:
         <p className="font-medium">Aucune page ne correspond à « {q} ».</p>
         <p className="text-sm text-muted-foreground">Essayez un autre mot, ou le texte exact du message d'erreur. Votre recherche est notée pour compléter l'aide.</p>
         <Link to={cheminPage("contact-support")} onClick={onChoisir} className="inline-block text-sm font-medium text-primary hover:underline">
-          Contacter le support
+          Contacter l'assistance
         </Link>
       </div>
     );

@@ -69,7 +69,7 @@ export function MaintenanceActionDialogs({
     if (!ajouterPieceCible) return;
     const idPieceNombre = Number(idPiece);
     const quantiteNombre = Number(quantite);
-    if (!idPieceNombre) return toast.error("Sélectionne une pièce");
+    if (!idPieceNombre) return toast.error("Sélectionnez une pièce.");
     if (!Number.isInteger(quantiteNombre) || quantiteNombre <= 0) return toast.error("Quantité invalide");
     try {
       await ajouterPiece.mutateAsync({
@@ -108,9 +108,9 @@ export function MaintenanceActionDialogs({
     if (!fichier) return;
     try {
       await televerserProforma.mutateAsync(fichier);
-      toast.success("Proforma téléversé");
+      toast.success("Facture pro forma téléversée");
     } catch (err) {
-      toast.error(err instanceof ApiError ? err.message : "Envoi du proforma impossible");
+      toast.error(err instanceof ApiError ? err.message : "Envoi de la facture pro forma impossible");
     }
   };
 
@@ -159,7 +159,7 @@ export function MaintenanceActionDialogs({
             <DialogDescription>{libelleVehicule(terminerCible?.engin)}</DialogDescription>
           </DialogHeader>
           <div className="space-y-2">
-            <Label htmlFor="prochaineDateEntretien">Prochaine date d'entretien (optionnel)</Label>
+            <Label htmlFor="prochaineDateEntretien">Prochaine date d'entretien (facultatif)</Label>
             <Input
               id="prochaineDateEntretien"
               type="date"
@@ -172,7 +172,7 @@ export function MaintenanceActionDialogs({
 
           {estGarageExterne && (
             <div className="space-y-2 rounded-md border px-3 py-2">
-              <Label>Proforma du garage externe</Label>
+              <Label>Facture pro forma du garage externe</Label>
               <input
                 ref={proformaInputRef}
                 type="file"
@@ -184,12 +184,12 @@ export function MaintenanceActionDialogs({
               {!proformaEnChargement && proforma && (
                 <p className="flex items-center gap-2 text-sm text-muted-foreground">
                   <FileText className="h-4 w-4" />
-                  {proforma.nomFichierOriginal ?? "Proforma téléversé"}
+                  {proforma.nomFichierOriginal ?? "Facture pro forma téléversée"}
                 </p>
               )}
               {!proformaEnChargement && !proforma && (
                 <p className="text-sm text-warning-foreground">
-                  Aucun proforma téléversé — obligatoire avant de clôturer une maintenance en garage externe.
+                  Aucune facture pro forma téléversée — obligatoire avant de clôturer une maintenance en garage externe.
                 </p>
               )}
               <Button
@@ -204,7 +204,7 @@ export function MaintenanceActionDialogs({
                 ) : (
                   <Upload className="h-4 w-4" />
                 )}
-                {proforma ? "Remplacer le proforma" : "Téléverser le proforma"}
+                {proforma ? "Remplacer la facture pro forma" : "Téléverser la facture pro forma"}
               </Button>
             </div>
           )}

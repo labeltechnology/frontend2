@@ -64,8 +64,8 @@ export const CarteBlocRapport = forwardRef<HTMLDivElement, CarteBlocRapportProps
             {action}
             {lienDetail && (
               <Button asChild variant="ghost" size="sm">
-                <Link to={lienDetail} aria-label={`Voir détail — ${bloc.titre}`}>
-                  Voir détail
+                <Link to={lienDetail} aria-label={`Voir le détail — ${bloc.titre}`}>
+                  Voir le détail
                   <ChevronRight aria-hidden="true" />
                 </Link>
               </Button>

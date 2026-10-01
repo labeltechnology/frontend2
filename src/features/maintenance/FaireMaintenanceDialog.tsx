@@ -233,7 +233,7 @@ function ContenuFaireMaintenance({ engin, onFermer, onChangerVehicule }: Contenu
           toast.success(`Maintenance commencée — ${libelleVehicule(engin)} passe en maintenance`);
         } catch (e) {
           toast.warning(
-            `Maintenance créée mais pas commencée : ${e instanceof ApiError ? e.message : "erreur inattendue"}. Démarrez-la depuis l'écran Maintenance.`,
+            `Maintenance créée, mais non démarrée :${e instanceof ApiError ? e.message : "erreur inattendue"}. Démarrez-la depuis l'écran Maintenance.`,
           );
         }
         // Le statut de l'engin change au démarrage : le rapport et la liste des véhicules doivent le relire.
@@ -243,7 +243,7 @@ function ContenuFaireMaintenance({ engin, onFermer, onChangerVehicule }: Contenu
       }
       const problemes = await enregistrerPieces(maintenance.idMaintenance, demarree);
       if (problemes.length > 0) {
-        toast.warning(`Maintenance enregistrée, mais pas tout : ${problemes.join(" ; ")}. Complétez depuis l'écran Maintenance.`);
+        toast.warning(`Maintenance enregistrée, mais certains éléments n'ont pas pu l'être : ${problemes.join(" ; ")}. Complétez-la depuis l'écran Maintenance.`);
       }
       onFermer();
     } catch (e) {
@@ -365,7 +365,7 @@ function ContenuFaireMaintenance({ engin, onFermer, onChangerVehicule }: Contenu
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="faire-maintenance-poste">Poste d'entretien périodique (optionnel)</Label>
+            <Label htmlFor="faire-maintenance-poste">Poste d'entretien périodique (facultatif)</Label>
             <Select value={idPoste} onValueChange={setIdPoste}>
               <SelectTrigger id="faire-maintenance-poste">
                 <SelectValue />
@@ -383,7 +383,7 @@ function ContenuFaireMaintenance({ engin, onFermer, onChangerVehicule }: Contenu
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="faire-maintenance-description">Précisions (optionnel)</Label>
+            <Label htmlFor="faire-maintenance-description">Précisions (facultatif)</Label>
             <Textarea
               id="faire-maintenance-description"
               value={description}
@@ -394,7 +394,7 @@ function ContenuFaireMaintenance({ engin, onFermer, onChangerVehicule }: Contenu
           </div>
 
           <fieldset className="space-y-2">
-            <legend className="text-sm font-medium">Quand ?</legend>
+            <legend className="text-sm font-medium">Date d'exécution</legend>
             <div className="grid gap-2 sm:grid-cols-2">
               <label
                 className={cn(
@@ -416,7 +416,7 @@ function ContenuFaireMaintenance({ engin, onFermer, onChangerVehicule }: Contenu
                   <span className="block text-xs text-muted-foreground">
                     {enMission
                       ? "Impossible : le véhicule est en mission."
-                      : "La maintenance passe en cours et le véhicule en maintenance."}
+                      : "La maintenance passe à l'état « En cours » et le véhicule, à l'état « En maintenance »."}
                   </span>
                 </span>
               </label>
@@ -443,7 +443,7 @@ function ContenuFaireMaintenance({ engin, onFermer, onChangerVehicule }: Contenu
             </div>
             {moment === "PLANIFIER" && (
               <div className="space-y-1 pt-1 sm:w-1/2">
-                <Label htmlFor="faire-maintenance-date">Date prévue (optionnel)</Label>
+                <Label htmlFor="faire-maintenance-date">Date prévue (facultatif)</Label>
                 <Input
                   id="faire-maintenance-date"
                   type="datetime-local"
@@ -451,7 +451,7 @@ function ContenuFaireMaintenance({ engin, onFermer, onChangerVehicule }: Contenu
                   value={datePrevue}
                   onChange={(e) => setDatePrevue(e.target.value)}
                 />
-                <p className="text-xs text-muted-foreground">Placée à cette date dans le planning des véhicules.</p>
+                <p className="text-xs text-muted-foreground">Inscrite à cette date dans le calendrier des véhicules.</p>
               </div>
             )}
           </fieldset>

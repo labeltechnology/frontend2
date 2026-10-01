@@ -8,7 +8,7 @@ const LIBELLES_ORIGINE: Record<OrigineIntervention, string> = {
   FICHE_CREATION: "Fiche de création",
   SAISIE: "Saisie sur la fiche",
   MAINTENANCE: "Clôture de maintenance",
-  REPRISE: "Reprise (avant historique)",
+  REPRISE: "Reprise de l'historique antérieur",
 };
 
 /** Onglet « Entretien » : chaque intervention d'entretien périodique enregistrée (V44), de la plus récente à la plus ancienne. */

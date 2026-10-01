@@ -101,7 +101,7 @@ export function CoutsVehiculeFiche({ idEngin, peutModifier }: Props) {
             {champ("prixAchat", achat ? "Prix d'achat" : "Valeur du véhicule (information)")}
             {achat ? (
               <>
-                {champ("dateDebutAmortissement", "Début de l'amortissement", "Vide = date d'acquisition de la fiche.", "date")}
+                {champ("dateDebutAmortissement", "Début de l'amortissement", "Si le champ est vide, la date d'acquisition de la fiche est retenue.", "date")}
                 {champ("dureeAmortissementMois", "Durée d'amortissement (mois)", "Exemple : 60 pour 5 ans.")}
                 {champ("valeurResiduelle", "Valeur résiduelle", "Valeur de revente estimée en fin d'amortissement.")}
               </>
@@ -119,7 +119,7 @@ export function CoutsVehiculeFiche({ idEngin, peutModifier }: Props) {
             {champ("vignetteAnnuelle", "Vignette")}
             {champ("autresChargesAnnuelles", "Autres charges", "Parking, abonnement GPS…")}
           </div>
-          <p className="text-xs text-muted-foreground">Les pneus se suivent en maintenance, sur le poste d'entretien « Remplacement des pneus ».</p>
+          <p className="text-xs text-muted-foreground">Le suivi des pneus s'effectue dans le module Maintenance, au poste d'entretien « Remplacement des pneus ».</p>
         </section>
 
         {data && (

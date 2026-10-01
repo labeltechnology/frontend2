@@ -127,7 +127,7 @@ function PhotoPrincipalePopup({ idEngin }: { idEngin: number }) {
   return (
     <AuthenticatedImage
       url={principale.url}
-      alt={principale.nomFichierOriginal ?? "Photo de le véhicule"}
+      alt={principale.nomFichierOriginal ?? "Photo du véhicule"}
       className="mt-2 h-24 w-40 rounded"
     />
   );

@@ -15,7 +15,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useCreerTypeEngin, useModifierTypeEngin } from "@/features/engins/api";
+import { useCreerTypeEngin, useModifierTypeEngin, useTypesEngin } from "@/features/engins/api";
+import { famillesAProposer, normaliserFamille } from "@/features/engins/familles-type";
 import { ApiError } from "@/lib/api-client";
 import type { CategorieEngin, TypeEngin } from "@/types/engin";
 import { lireNombreFacultatif, uniteUsage, versChamp } from "@/features/performance/reglages-type";
@@ -25,6 +26,8 @@ const schema = z.object({
   libelle: z.string().min(1, "Requis"),
   vitesseMaximale: z.coerce.number().positive("Doit être positive"),
   categorie: z.enum(["VEHICULE_ROUTIER", "ENGIN_CHANTIER"]),
+  // Famille (2026-10-01) : regroupement entre la catégorie et le type, facultatif.
+  famille: z.string().max(60, "60 caractères au plus").optional(),
   // Performance et utilisation (2026-09-28) : tout facultatif, champ vide = non réglé.
   seuilTauxJours: z.string().optional().refine((v) => lireNombreFacultatif(v, 100) !== null, "Entre 0 et 100"),
   seuilUsageMensuel: z.string().optional().refine((v) => lireNombreFacultatif(v) !== null, "Nombre positif"),
@@ -56,6 +59,7 @@ export function TypeEnginFormDialog({ typeEngin, open, onOpenChange }: TypeEngin
   const creerTypeEngin = useCreerTypeEngin();
   const modifierTypeEngin = useModifierTypeEngin();
   const enEdition = typeEngin != null;
+  const { data: types } = useTypesEngin();
 
   const {
     register,
@@ -76,6 +80,7 @@ export function TypeEnginFormDialog({ typeEngin, open, onOpenChange }: TypeEngin
         libelle: typeEngin.libelle,
         vitesseMaximale: typeEngin.vitesseMaximale ?? undefined,
         categorie: typeEngin.categorie,
+        famille: typeEngin.famille ?? "",
         seuilTauxJours: versChamp(typeEngin.seuilTauxJours),
         seuilUsageMensuel: versChamp(typeEngin.seuilUsageMensuel),
         coutReferenceUnite: versChamp(typeEngin.coutReferenceUnite),
@@ -85,6 +90,7 @@ export function TypeEnginFormDialog({ typeEngin, open, onOpenChange }: TypeEngin
         libelle: "",
         vitesseMaximale: undefined,
         categorie: "VEHICULE_ROUTIER",
+        famille: "",
         seuilTauxJours: "",
         seuilUsageMensuel: "",
         coutReferenceUnite: "",
@@ -93,12 +99,14 @@ export function TypeEnginFormDialog({ typeEngin, open, onOpenChange }: TypeEngin
   }, [open, typeEngin, reset]);
 
   const unite = uniteUsage(watch("categorie"));
+  const familles = famillesAProposer(types, watch("categorie") ?? "VEHICULE_ROUTIER");
 
   const onSubmit = async (values: FormValues) => {
     const requete = {
       libelle: values.libelle,
       vitesseMaximale: values.vitesseMaximale,
       categorie: values.categorie,
+      famille: normaliserFamille(values.famille),
       seuilTauxJours: lireNombreFacultatif(values.seuilTauxJours, 100) ?? null,
       seuilUsageMensuel: lireNombreFacultatif(values.seuilUsageMensuel) ?? null,
       coutReferenceUnite: lireNombreFacultatif(values.coutReferenceUnite) ?? null,
@@ -155,6 +163,19 @@ export function TypeEnginFormDialog({ typeEngin, open, onOpenChange }: TypeEngin
               </SelectContent>
             </Select>
             {errors.categorie && <p className="text-sm text-destructive">{errors.categorie.message}</p>}
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="famille">Famille (facultative)</Label>
+            <Input id="famille" list="familles-type" maxLength={60} placeholder="ex. Véhicule de service, Camion" {...register("famille")} />
+            <datalist id="familles-type">
+              {familles.map((f) => (
+                <option key={f} value={f} />
+              ))}
+            </datalist>
+            <p className="text-xs text-muted-foreground">
+              Regroupe les types sur le tableau de bord de direction (ex. « Véhicule de service » : 4x4, léger, bus).
+            </p>
+            {errors.famille && <p className="text-sm text-destructive">{errors.famille.message}</p>}
           </div>
           <fieldset className="space-y-3 rounded-md border border-border p-3">
             <legend className="px-1 text-sm font-medium">Performance et utilisation (facultatif)</legend>

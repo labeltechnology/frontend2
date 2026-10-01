@@ -24,7 +24,7 @@ export function motifTraitement(alertes: readonly Alerte[]): string | null {
 export const LIBELLES_ETAT_TRAITEMENT: Record<EtatTraitement, string> = {
   OUVERTE: "À traiter",
   MANUELLE: "Traitée",
-  AUTOMATIQUE: "Close auto",
+  AUTOMATIQUE: "Clôturée automatiquement",
 };
 
 /** « À traiter », « Traitée le 30/09/2026 10:15 » ou « Close automatiquement le … : <motif> ». */
@@ -32,7 +32,7 @@ export function texteSuivi(alerte: Alerte): string {
   if (!alerte.traitee) return "À traiter";
   const le = alerte.dateTraitement ? ` le ${formatDateTime(alerte.dateTraitement)}` : "";
   if (alerte.traitementAutomatique) {
-    return `Close automatiquement${le}${alerte.motifTraitement ? ` : ${alerte.motifTraitement}` : ""}`;
+    return `Clôturée automatiquement${le}${alerte.motifTraitement ? ` : ${alerte.motifTraitement}` : ""}`;
   }
   return `Traitée${le}`;
 }

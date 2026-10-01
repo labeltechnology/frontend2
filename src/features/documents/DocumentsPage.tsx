@@ -87,7 +87,7 @@ export function DocumentsPage() {
     <div className="space-y-6">
       <PageHeader
         title="Documents"
-        description="Documents administratifs des véhicules et conducteurs (règle : jamais de suppression, seulement un remplacement versionné)."
+        description="Documents administratifs des véhicules et conducteurs (aucune suppression possible : chaque document est remplacé par une nouvelle version)."
         actions={
           <Button onClick={() => setDialogOuvert(true)}>
             <Plus className="h-4 w-4" />

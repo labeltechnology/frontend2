@@ -60,7 +60,7 @@ export function SectionEnvoiRapports() {
   const onSubmit = async (valeurs: Valeurs) => {
     try {
       await mettreAJour.mutateAsync(valeurs);
-      toast.success("Planning des envois enregistré");
+      toast.success("Calendrier des envois enregistré");
     } catch (e) {
       toast.error(e instanceof ApiError ? e.message : "Enregistrement impossible");
     }
@@ -69,9 +69,9 @@ export function SectionEnvoiRapports() {
   const envoyerTest = async () => {
     try {
       const envoi = await test.mutateAsync();
-      toast.success(`E-mail d'essai envoyé à ${envoi.destinataire}`);
+      toast.success(`Courriel d'essai envoyé à ${envoi.destinataire}`);
     } catch (e) {
-      toast.error(e instanceof ApiError ? e.message : "L'e-mail d'essai n'est pas parti");
+      toast.error(e instanceof ApiError ? e.message : "Échec de l'envoi du courriel d'essai");
     }
   };
 
@@ -89,10 +89,10 @@ export function SectionEnvoiRapports() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Mail className="h-5 w-5" aria-hidden />
-            Rapports par e-mail
+            Rapports par courriel
           </CardTitle>
           <CardDescription>
-            Chaque utilisateur choisit ses rapports depuis la page Rapports (« Recevoir par e-mail »). Le serveur envoie un seul e-mail par
+            Chaque utilisateur choisit ses rapports depuis la page Rapports (« Recevoir par courriel »). Le serveur envoie un seul courriel par
             personne avec les PDF de la semaine ou du mois écoulé.
           </CardDescription>
         </CardHeader>
@@ -127,7 +127,7 @@ export function SectionEnvoiRapports() {
               onClick={envoyerTest}
             >
               {test.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-              M'envoyer un e-mail d'essai
+              M'envoyer un courriel d'essai
             </Button>
           </div>
 

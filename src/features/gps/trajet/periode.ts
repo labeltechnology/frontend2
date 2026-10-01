@@ -65,7 +65,7 @@ export function estErreur(b: Bornes | { erreur: string }): b is { erreur: string
 
 /** « moins d'1 min », « 12 min », « 2 h 05 », « 1 j 3 h ». */
 export function formatDuree(minutes: number): string {
-  if (minutes < 1) return "moins d'1 min";
+  if (minutes < 1) return "moins d'une minute";
   if (minutes < 60) return `${minutes} min`;
   if (minutes < 24 * 60) return `${Math.floor(minutes / 60)} h ${deux(minutes % 60)}`;
   const jours = Math.floor(minutes / (24 * 60));

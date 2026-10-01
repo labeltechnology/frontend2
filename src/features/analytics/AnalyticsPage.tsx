@@ -43,7 +43,7 @@ const TITRES_KPI: Record<string, string> = {
   coutTotal: "Coût total",
   carburant: "Carburant",
   maintenance: "Maintenance",
-  km: "Km parcourus",
+  km: "Kilomètres parcourus",
   incidents: "Incidents",
 };
 
@@ -194,7 +194,7 @@ export function AnalyticsPage() {
           valeur={moyenneConso === null ? "—" : `${formatNombre(moyenneConso, 1)} L/100 km`}
           ecart={moyenneConso !== null && moyenneConsoPrecedente !== null ? ecartPourcent(moyenneConso, moyenneConsoPrecedente) : null}
           hausseSouhaitable={false}
-          precision={moyenneConso === null ? "Pas assez de pleins sur la période" : undefined}
+          precision={moyenneConso === null ? "Nombre de pleins insuffisant sur la période" : undefined}
         />
       </div>
 

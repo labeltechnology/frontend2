@@ -24,7 +24,7 @@ export function OngletBesoins({ actif }: { actif: boolean }) {
         <CarteChiffre titre="Véhicules en surplus" valeur={d.nombreEnSurplus} precision="À réaffecter ou à céder" />
         <CarteChiffre
           titre="Tendance mesurée"
-          valeur={<span className="text-base">6 mois contre 6 mois</span>}
+          valeur={<span className="text-base">6 derniers mois comparés aux 6 mois précédents</span>}
           precision={`Du ${formatDate(d.debutAncien)} au ${formatDate(d.fin)}`}
         />
       </div>
@@ -41,7 +41,7 @@ export function OngletBesoins({ actif }: { actif: boolean }) {
             <tr>
               <th className="px-3 py-2">Type</th>
               <th className="px-3 py-2 text-right">En service</th>
-              <th className="px-3 py-2 text-right">Usage 6 derniers mois</th>
+              <th className="px-3 py-2 text-right">Utilisation sur les 6 derniers mois</th>
               <th className="px-3 py-2 text-right">Tendance</th>
               <th className="px-3 py-2 text-right">Pic simultané</th>
               <th className="px-3 py-2 text-right">Chantiers</th>

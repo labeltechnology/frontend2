@@ -88,7 +88,7 @@ export function ReplanifierMaintenanceDialog({ maintenance, onFermer }: { mainte
             {passe && <p className="text-sm text-destructive">La date ne peut pas être dans le passé.</p>}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="replanifier-motif">Motif (optionnel)</Label>
+            <Label htmlFor="replanifier-motif">Motif (facultatif)</Label>
             <Textarea
               id="replanifier-motif"
               value={motif}

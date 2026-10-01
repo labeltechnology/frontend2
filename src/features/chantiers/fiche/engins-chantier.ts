@@ -181,7 +181,7 @@ export function problemePeriode(
 ): string | null {
   const { dateDebut, dateFin } = vehicule;
   if (!dateDebut || !dateFin) return "Indiquez le début et la fin de la période du véhicule.";
-  if (dateFin < dateDebut) return "La fin précède le début.";
+  if (dateFin < dateDebut) return "La date de fin précède la date de début.";
   if (dateDebut < periodeChantier.debut || dateFin > periodeChantier.fin) {
     return `Hors des dates du chantier (du ${formatDate(periodeChantier.debut)} au ${formatDate(periodeChantier.fin)}).`;
   }

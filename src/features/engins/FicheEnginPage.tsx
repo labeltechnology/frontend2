@@ -46,6 +46,7 @@ import type {
 import type { EntretienInitialRequest } from "@/types/entretien";
 import { toast } from "sonner";
 import { identifiantVehicule, libelleVehicule } from "@/lib/vehicule";
+import { accord, pluriel } from "@/lib/pluriel";
 import { BandeauNonEnregistre } from "@/components/confirmation/BandeauNonEnregistre";
 import { useGardeModifications } from "@/components/confirmation/useGardeModifications";
 import { useTitreFilAriane } from "@/components/layout/fil-ariane/ContexteFilAriane";
@@ -159,7 +160,7 @@ const documentSchema = z
     dateExpiration: z.string().optional(),
   })
   .refine((d) => !d.dateDebut || !d.dateExpiration || d.dateExpiration >= d.dateDebut, {
-    message: "L'expiration ne peut pas précéder le début",
+    message: "La date d'expiration ne peut pas précéder la date de début",
     path: ["dateExpiration"],
   });
 
@@ -370,7 +371,7 @@ export function FicheEnginPage() {
       } else if (compteur !== undefined && (!Number.isFinite(compteur) || compteur < 0)) {
         erreurs[poste.idPosteEntretien] = "Compteur invalide";
       } else if (compteur !== undefined && compteur > compteurInitial) {
-        erreurs[poste.idPosteEntretien] = `Supérieur au compteur d'entrée de le véhicule (${compteurInitial} ${unite})`;
+        erreurs[poste.idPosteEntretien] = `Supérieur au compteur d'entrée du véhicule (${compteurInitial} ${unite})`;
       }
       lignes.push({
         idPosteEntretien: poste.idPosteEntretien,
@@ -458,7 +459,7 @@ export function FicheEnginPage() {
           entretiens: entretiensInitiaux,
         });
         toast.success(
-          documents.length > 0 ? `Véhicule créé avec ${documents.length} document(s)` : "Véhicule créé",
+          documents.length > 0 ? `Véhicule créé avec ${pluriel(documents.length, "document")}` : "Véhicule créé",
         );
         // Les photos ne peuvent partir qu'une fois l'engin créé (il leur faut son identifiant).
         if (photosInitiales.photos.length > 0) {
@@ -469,7 +470,7 @@ export function FicheEnginPage() {
           );
           if (echecs > 0) {
             toast.warning(
-              `${echecs} photo(s) sur ${photosInitiales.photos.length} n'ont pas pu être envoyées — ajoutez-les depuis l'onglet « Photos » de la fiche.`,
+              `${pluriel(echecs, "photo")} sur ${photosInitiales.photos.length} ${accord(echecs, "n'a pas pu être envoyée — ajoutez-la", "n'ont pas pu être envoyées — ajoutez-les")} depuis l'onglet « Photos » de la fiche.`,
             );
           }
         }
@@ -527,7 +528,7 @@ export function FicheEnginPage() {
   const photoPrincipaleEngin = photosEngin?.find((p) => p.estPrincipale) ?? photosEngin?.[0];
   const photoBanniere = enEdition ? (
     photoPrincipaleEngin && (
-      <AuthenticatedImage url={photoPrincipaleEngin.url} alt={`Photo de ${engin ? libelleVehicule(engin) : "du véhicule"}`} className="h-full w-full" />
+      <AuthenticatedImage url={photoPrincipaleEngin.url} alt={`Photo ${engin ? "de " + libelleVehicule(engin) : "du véhicule"}`} className="h-full w-full" />
     )
   ) : (
     photosInitiales.principale && (
@@ -590,7 +591,7 @@ export function FicheEnginPage() {
       description: "Assurance, visite technique, carte grise, conformité fiscale, licence, carte carburant.",
       icone: FileText,
       teinte: "succes",
-      resume: `${nbDocumentsRenseignes} / ${documentsProposes.length} renseigné(s)`,
+      resume: `${nbDocumentsRenseignes} / ${documentsProposes.length} ${accord(nbDocumentsRenseignes, "renseigné")}`,
     },
     {
       cle: "rubrique-bord",
@@ -598,15 +599,15 @@ export function FicheEnginPage() {
       description: "Éléments de sécurité et boîte à outils présents à bord.",
       icone: ShieldCheck,
       teinte: "danger",
-      resume: `${nbEquipementsControles} / ${lignesEquipements.length} contrôlé(s)`,
+      resume: `${nbEquipementsControles} / ${lignesEquipements.length} ${accord(nbEquipementsControles, "contrôlé")}`,
     },
     {
       cle: "rubrique-entretien",
       titre: "Entretien",
-      description: "Dernières vidanges et contrôles connus : les échéances se calculent seules.",
+      description: "Dernières vidanges et derniers contrôles connus : les échéances sont calculées automatiquement.",
       icone: Wrench,
       teinte: "alerte",
-      resume: `${nbEntretiensRenseignes} / ${postesProposes.length} renseigné(s)`,
+      resume: `${nbEntretiensRenseignes} / ${postesProposes.length} ${accord(nbEntretiensRenseignes, "renseigné")}`,
     },
   ];
 
@@ -626,7 +627,7 @@ export function FicheEnginPage() {
       description: "Photos du véhicule et choix de la photo principale.",
       icone: Camera,
       teinte: "succes",
-      resume: photosEngin ? `${photosEngin.length} photo(s)` : undefined,
+      resume: photosEngin ? pluriel(photosEngin.length, "photo") : undefined,
     },
     {
       cle: "bord",
@@ -634,7 +635,7 @@ export function FicheEnginPage() {
       description: "Contrôle des éléments de sécurité et de la boîte à outils.",
       icone: ShieldCheck,
       teinte: "danger",
-      resume: etatBord ? `${etatBord.filter((l) => l.present === false).length} manquant(s)` : undefined,
+      resume: etatBord ? pluriel(etatBord.filter((l) => l.present === false).length, "manquant") : undefined,
     },
     {
       cle: "entretien",
@@ -642,7 +643,7 @@ export function FicheEnginPage() {
       description: "Échéancier d'entretien et interventions effectuées.",
       icone: Wrench,
       teinte: "alerte",
-      resume: echeances ? (nbEnRetard > 0 ? `${nbEnRetard} en retard` : nbBientot > 0 ? `${nbBientot} bientôt` : "À jour") : undefined,
+      resume: echeances ? (nbEnRetard > 0 ? `${nbEnRetard} en retard` : nbBientot > 0 ? `${nbBientot} à échéance proche` : "À jour") : undefined,
     },
     // Coûts fixes du véhicule (TCO, 2026-09-29) : visible des rôles de gestion seulement.
     ...(voitCouts
@@ -721,13 +722,13 @@ export function FicheEnginPage() {
           icone={Camera}
           teinte="succes"
           titre="Photos du véhicule"
-          description="Facultatif — la photo principale s'affiche en haut de la fiche ; envoi dès que le véhicule est créé."
+          description="Facultatif — la photo principale s'affiche en haut de la fiche ; elle sera envoyée dès la création du véhicule."
         >
           <SelectionPhotosInitiales selection={photosInitiales} />
         </Section>
       )}
 
-      <Section titre="Caractéristiques techniques" description="Facultatif — ce qui figure sur la carte grise ou la plaque constructeur.">
+      <Section titre="Caractéristiques techniques" description="Facultatif — informations figurant sur la carte grise ou la plaque constructeur.">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Champ id="energie" label="Énergie">
             <Controller
@@ -762,7 +763,7 @@ export function FicheEnginPage() {
               id="consommationReferenceL100km"
               inputMode="decimal"
               placeholder="ex. 9,5"
-              title="Chaque plein, appoint ou bidon est contrôlé par rapport à cette valeur. Vide = moyenne habituelle du véhicule."
+              title="Chaque plein, appoint ou bidon est contrôlé par rapport à cette valeur. Si le champ est vide, la moyenne habituelle du véhicule est retenue."
               {...register("consommationReferenceL100km")}
             />
           </Champ>

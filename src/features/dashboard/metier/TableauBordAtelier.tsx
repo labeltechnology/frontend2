@@ -15,6 +15,7 @@ import { useEngins } from "@/features/engins/api";
 import { useMaintenances, usePieces } from "@/features/maintenance/api";
 import { MaintenanceFormDialog } from "@/features/maintenance/MaintenanceFormDialog";
 import { libelleRole, peut } from "@/lib/droits";
+import { accord, pluriel } from "@/lib/pluriel";
 
 /**
  * Tableau de bord de l'atelier (pages par métier, 2026-09-30) — chef et
@@ -66,7 +67,7 @@ export function TableauBordAtelier() {
       <EnTeteTableauBord
         date={format(maintenant, "EEEE d MMMM yyyy", { locale: fr })}
         salutation={`Bonjour${session ? ` — ${libelleRole(session.role)}` : ""}`}
-        sousTitre={<p className="text-sm text-muted-foreground">L'atelier aujourd'hui : interventions, planning et stock.</p>}
+        sousTitre={<p className="text-sm text-muted-foreground">L'atelier aujourd'hui : interventions, planification et stock.</p>}
         actions={
           peut(session?.role, "GERER_MAINTENANCE") && (
             <Button size="sm" onClick={() => setNouvelleOuverte(true)}>
@@ -81,7 +82,7 @@ export function TableauBordAtelier() {
         <CarteIndicateur
           titre="En cours"
           valeur={indicateurs.enCours}
-          precision="intervention(s) à l'atelier"
+          precision={`${accord(indicateurs.enCours, "intervention")} à l'atelier`}
           icone={Wrench}
           ton="alerte"
           lien="/maintenance"
@@ -126,7 +127,7 @@ export function TableauBordAtelier() {
         <CarteIndicateur
           titre="Alertes de l'atelier"
           valeur={indicateurs.alertes}
-          precision={indicateurs.alertesCritiques > 0 ? `${indicateurs.alertesCritiques} critique(s)` : "aucune critique"}
+          precision={indicateurs.alertesCritiques > 0 ? pluriel(indicateurs.alertesCritiques, "critique") : "aucune alerte critique"}
           icone={TriangleAlert}
           ton={indicateurs.alertesCritiques > 0 ? "danger" : "neutre"}
           lien="/alertes"
@@ -141,7 +142,7 @@ export function TableauBordAtelier() {
           sourcesIndisponibles={sourcesIndisponibles}
         />
         <ListeLiens
-          titre="Planning de l'atelier"
+          titre="Planification de l'atelier"
           icone={CalendarDays}
           lien="/maintenance"
           lignes={planning}

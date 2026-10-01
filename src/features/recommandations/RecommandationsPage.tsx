@@ -117,7 +117,7 @@ export function RecommandationsPage() {
 
           {visibles.length === 0 ? (
             <p className="rounded-xl border bg-card px-4 py-6 text-center text-sm text-muted-foreground">
-              {d.recommandations.length === 0 ? "Aucune recommandation : les indicateurs sont dans les clous." : "Aucune recommandation ne correspond aux filtres."}
+              {d.recommandations.length === 0 ? "Aucune recommandation : tous les indicateurs sont dans les normes." : "Aucune recommandation ne correspond aux filtres."}
             </p>
           ) : (
             <ul className="space-y-2">

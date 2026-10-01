@@ -73,7 +73,7 @@ export function CarburantPage() {
     { key: "type", header: "Type", render: (c) => libelleApprovisionnement(c.typeApprovisionnement) },
     { key: "kilometrage", header: "Kilométrage", render: (c) => formatNombre(c.kilometrageAuPlein), sortValue: (c) => c.kilometrageAuPlein },
     { key: "litres", header: "Litres", render: (c) => formatNombre(c.quantiteLitres, 2), sortValue: (c) => c.quantiteLitres },
-    { key: "prixUnitaire", header: "Prix / L", render: (c) => formatMontant(c.prixUnitaire) },
+    { key: "prixUnitaire", header: "Prix/L", render: (c) => formatMontant(c.prixUnitaire) },
     { key: "montant", header: "Montant total", render: (c) => formatMontant(c.montantTotal), sortValue: (c) => c.montantTotal },
     { key: "station", header: "Station", render: (c) => c.station ?? "—" },
   ];

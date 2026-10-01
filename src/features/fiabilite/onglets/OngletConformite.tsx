@@ -5,6 +5,7 @@ import { useConformite } from "@/features/fiabilite/api";
 import { EtatChargement, Pastille } from "@/features/fiabilite/EtatChargement";
 import { ETATS_DOCUMENT, NATURES_DEPASSEMENT, classeTauxObjectif, textePourcent, texteMinutes } from "@/features/fiabilite/fiabilite";
 import { cn, formatDate, formatDateTime } from "@/lib/utils";
+import { pluriel } from "@/lib/pluriel";
 
 const OBJECTIF = 100;
 
@@ -47,7 +48,7 @@ export function OngletConformite({ actif, peutReglerFatigue }: { actif: boolean;
           classeValeur={d.depassementsFatigue.length > 0 ? "text-badge-warningFg" : undefined}
           precision="30 derniers jours"
         />
-        <CarteChiffre titre="Date" valeur={<span className="text-base">{formatDate(d.date)}</span>} precision="Photo d'aujourd'hui" />
+        <CarteChiffre titre="Date" valeur={<span className="text-base">{formatDate(d.date)}</span>} precision="Situation à ce jour" />
       </div>
 
       <p className="rounded-xl border bg-muted/30 px-4 py-3 text-sm text-muted-foreground">
@@ -62,7 +63,11 @@ export function OngletConformite({ actif, peutReglerFatigue }: { actif: boolean;
             Véhicules {tousVehicules ? "" : "non conformes ou à renouveler"}
           </h2>
           <button type="button" className="text-sm text-primary hover:underline" onClick={() => setTousVehicules((v) => !v)}>
-            {tousVehicules ? "Voir seulement les problèmes" : `Voir les ${d.vehicules.length} véhicules`}
+            {tousVehicules
+              ? "Afficher uniquement les anomalies"
+              : d.vehicules.length < 2
+                ? "Voir le véhicule"
+                : `Voir les ${pluriel(d.vehicules.length, "véhicule")}`}
           </button>
         </div>
         {vehicules.length === 0 ? (
@@ -110,7 +115,11 @@ export function OngletConformite({ actif, peutReglerFatigue }: { actif: boolean;
             Conducteurs {tousConducteurs ? "" : "non conformes ou à renouveler"}
           </h2>
           <button type="button" className="text-sm text-primary hover:underline" onClick={() => setTousConducteurs((v) => !v)}>
-            {tousConducteurs ? "Voir seulement les problèmes" : `Voir les ${d.conducteurs.length} conducteurs`}
+            {tousConducteurs
+              ? "Afficher uniquement les anomalies"
+              : d.conducteurs.length < 2
+                ? "Voir le conducteur"
+                : `Voir les ${pluriel(d.conducteurs.length, "conducteur")}`}
           </button>
         </div>
         {conducteurs.length === 0 ? (
@@ -155,7 +164,7 @@ export function OngletConformite({ actif, peutReglerFatigue }: { actif: boolean;
           )}
         </div>
         <p className="text-xs text-muted-foreground">
-          {s.actif ? "Surveillance active" : "Surveillance coupée"} : au plus {texteMinutes(s.conduiteContinueMaxMinutes)} de conduite sans pause
+          {s.actif ? "Surveillance active" : "Surveillance désactivée"} : au plus {texteMinutes(s.conduiteContinueMaxMinutes)} de conduite sans pause
           d'au moins {texteMinutes(s.pauseMinimaleMinutes)}, et {texteMinutes(s.conduiteJournaliereMaxMinutes)} par jour. Calcul sur les positions
           GPS en mouvement ; le conducteur est celui de la mission, sinon de l'affectation.
         </p>

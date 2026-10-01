@@ -55,7 +55,7 @@ export function envoisDe(envois: EnvoiRapport[], idUtilisateur: number | null): 
 
 /** « Semaine du 21/09 au 27/09/2026 », « Mois de août 2026 », « E-mail d'essai ». */
 export function textePeriodeEnvoi(e: Pick<EnvoiRapport, "frequence" | "periodeDebut" | "periodeFin">): string {
-  if (e.frequence === "TEST" || !e.periodeDebut || !e.periodeFin) return "E-mail d'essai";
+  if (e.frequence === "TEST" || !e.periodeDebut || !e.periodeFin) return "Courriel d'essai";
   const [ad, md, jd] = e.periodeDebut.split("-");
   const [af, mf, jf] = e.periodeFin.split("-");
   if (e.frequence === "MENSUELLE") {

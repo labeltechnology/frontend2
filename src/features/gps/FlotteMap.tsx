@@ -125,7 +125,7 @@ function PhotoPrincipalePopup({ idEngin }: { idEngin: number }) {
   return (
     <AuthenticatedImage
       url={principale.url}
-      alt={principale.nomFichierOriginal ?? "Photo de le véhicule"}
+      alt={principale.nomFichierOriginal ?? "Photo du véhicule"}
       className="mt-2 h-24 w-40 rounded"
     />
   );
@@ -236,15 +236,15 @@ export function FlotteMap() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="flex flex-wrap items-end gap-4">
           <div className="w-72 space-y-2">
-            <Label>Voir le trajet d'un véhicule (optionnel)</Label>
+            <Label>Voir le trajet d'un véhicule (facultatif)</Label>
             <Select value={idDispositifDetail} onValueChange={setIdDispositifDetail}>
               <SelectTrigger>
-                <SelectValue placeholder="Vue flotte (tous les véhicules)" />
+                <SelectValue placeholder="Vue d'ensemble de la flotte (tous les véhicules)" />
               </SelectTrigger>
               <SelectContent>
                 {dispositifs?.map((d) => (
                   <SelectItem key={d.idDispositifGps} value={String(d.idDispositifGps)}>
-                    {d.numeroSerie} — {d.libelleVehicule ?? "non posé"}
+                    {d.numeroSerie} — {d.libelleVehicule ?? "non installé"}
                   </SelectItem>
                 ))}
               </SelectContent>

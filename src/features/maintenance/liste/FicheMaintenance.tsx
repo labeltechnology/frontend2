@@ -209,13 +209,13 @@ export function FicheMaintenance({
                 />
                 {garage && (
                   <Ligne
-                    libelle="Proforma du garage"
+                    libelle="Facture pro forma du garage"
                     valeur={
                       proforma.isPending && !proforma.isError
                         ? "…"
                         : proforma.data
-                          ? (proforma.data.nomFichierOriginal ?? "Téléversé")
-                          : <span className="text-badge-warningFg">Manquant (exigé à la clôture)</span>
+                          ? (proforma.data.nomFichierOriginal ?? "Téléversée")
+                          : <span className="text-badge-warningFg">Manquante (exigée à la clôture)</span>
                     }
                   />
                 )}

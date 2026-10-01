@@ -26,7 +26,7 @@ export function AnalyseChantiersTab({ gestion }: { gestion: boolean }) {
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-base">Rendement par type de chantier</CardTitle>
-              <CardDescription>Chantiers en cours ou terminés, coûts réels à date, heures du journal.</CardDescription>
+              <CardDescription>Chantiers en cours ou terminés, coûts réels à ce jour, heures du journal.</CardDescription>
             </CardHeader>
             <CardContent className="overflow-x-auto">
               {data.parType.length === 0 ? (
@@ -188,7 +188,7 @@ function PrevisionCarte({ prevision }: { prevision: PrevisionMois[] }) {
               {t}
             </span>
           ))}
-          <span className="text-muted-foreground">Mois à venir en clair.</span>
+          <span className="text-muted-foreground">Les mois à venir sont affichés en couleur claire.</span>
         </div>
       </CardContent>
     </Card>

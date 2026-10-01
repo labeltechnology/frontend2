@@ -40,7 +40,7 @@ export function resumerNavigateur(ua: string | null | undefined): string {
   if (!ua) return "—";
   const s = ua.toLowerCase();
   if (s.includes("okhttp") || s.includes("dart") || s.includes("expo") || s.includes("reactnative")) {
-    return s.includes("iphone") || s.includes("ios") ? "Appli iOS" : "Appli Android";
+    return s.includes("iphone") || s.includes("ios") ? "Application iOS" : "Application Android";
   }
   const navigateur = s.includes("edg/")
     ? "Edge"

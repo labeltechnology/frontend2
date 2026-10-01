@@ -16,7 +16,7 @@ export function ResumeTrajet({ trajet }: { trajet: TrajetPeriode }) {
           {formatNombre(trajet.distanceKm, 1)} km
         </span>
         <span>
-          <span className="text-muted-foreground">Vitesse max : </span>
+          <span className="text-muted-foreground">Vitesse maximale : </span>
           {trajet.vitesseMaxKmh == null ? "—" : `${formatNombre(trajet.vitesseMaxKmh, 0)} km/h`}
         </span>
         <span>

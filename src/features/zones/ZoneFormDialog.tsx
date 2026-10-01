@@ -32,7 +32,7 @@ const schema = z
     polygoneGeoJson: z.string().optional(),
   })
   .refine((v) => v.modeDefinition !== "CERCLE" || (v.centreLatitude && v.centreLongitude && v.rayonMetres), {
-    message: "Latitude, longitude et rayon sont requis pour une zone en mode cercle",
+    message: "La latitude, la longitude et le rayon sont requis pour une zone circulaire",
     path: ["centreLatitude"],
   })
   .refine((v) => v.modeDefinition !== "POLYGONE" || !!v.polygoneGeoJson, {
@@ -96,7 +96,7 @@ export function ZoneFormDialog({ open, onOpenChange }: ZoneFormDialogProps) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Nouvelle zone géographique</DialogTitle>
-          <DialogDescription>Définit une zone autorisée ou interdite pour le suivi GPS.</DialogDescription>
+          <DialogDescription>Définissez une zone autorisée ou interdite pour le suivi GPS.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">

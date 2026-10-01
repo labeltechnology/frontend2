@@ -86,7 +86,7 @@ export function RapportFormDialog({ open, onOpenChange, onGenere }: RapportFormD
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{type ? "Paramètres du rapport" : "Quel rapport voulez-vous ?"}</DialogTitle>
+          <DialogTitle>{type ? "Paramètres du rapport" : "Quel rapport souhaitez-vous générer ?"}</DialogTitle>
           <DialogDescription>
             {type
               ? "Choisissez la période et, si besoin, le véhicule, le conducteur ou le chantier."

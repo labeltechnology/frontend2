@@ -147,9 +147,9 @@ export function EnginFormDialog({ engin, open, onOpenChange }: EnginFormDialogPr
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{enEdition ? "Modifier le véhicule" : "Nouvel véhicule"}</DialogTitle>
+          <DialogTitle>{enEdition ? "Modifier le véhicule" : "Nouveau véhicule"}</DialogTitle>
           <DialogDescription>
-            {enEdition ? "Corrige la fiche de ce véhicule." : "Ajoute un véhicule ou un engin de chantier au parc."}
+            {enEdition ? "Modifiez la fiche de ce véhicule." : "Ajoutez un véhicule ou un engin de chantier au parc."}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

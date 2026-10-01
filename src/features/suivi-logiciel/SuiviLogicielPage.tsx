@@ -23,7 +23,7 @@ export function SuiviLogicielPage() {
           <Activity className="h-6 w-6 text-primary" aria-hidden="true" />
           Suivi du logiciel
         </h1>
-        <p className="text-sm text-muted-foreground">Qui utilise l'application, ce qui manque dans les fiches, et qui s'est connecté.</p>
+        <p className="text-sm text-muted-foreground">Utilisateurs de l'application, données manquantes dans les fiches et historique des connexions.</p>
       </div>
       <Tabs value={onglet} onValueChange={(v) => setParams({ onglet: v }, { replace: true })}>
         <TabsList className="flex h-auto flex-wrap justify-start">

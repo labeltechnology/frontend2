@@ -7,7 +7,7 @@ import type { GroupeAide } from "@/types/aide";
  */
 export const groupeParc: GroupeAide = {
   id: "parc",
-  titre: "Parc & exploitation",
+  titre: "Parc et exploitation",
   icone: "Truck",
   articles: [
     {
@@ -21,20 +21,20 @@ export const groupeParc: GroupeAide = {
         "Mettre à jour le kilométrage",
         "Activer/désactiver l'équipement GPS",
         "Galerie de photos réelles : ajouter, définir la photo principale, supprimer",
-        "Zones d'opération autorisées : assigner une ou plusieurs zones dans lesquelles le véhicule est censé rester",
+        "Zones d'opération autorisées : affecter une ou plusieurs zones dans lesquelles le véhicule est censé rester",
         "Colonne « Location » : signale si le véhicule est loué à un client (Locations externes) ou loué chez un prestataire (Locations entrantes)",
       ],
       reglesCles: [
         "L'immatriculation (ou le numéro de série pour un engin de chantier) de chaque véhicule est unique dans tout le parc ; le code interne est attribué automatiquement et n'est pas affiché.",
         "Le kilométrage ne peut jamais diminuer — une saisie inférieure au kilométrage déjà enregistré est refusée.",
-        "La disponibilité de le véhicule découle directement de son statut (un véhicule « En mission » ou « En panne » n'est pas proposé comme disponible).",
-        "L'équipement GPS est optionnel : un véhicule peut très bien ne pas être suivi par GPS.",
-        "Seules les zones de type « Autorisée » peuvent être assignées comme zone d'opération (une zone « Interdite » n'a pas de sens ici, elle est déjà surveillée indépendamment).",
-        "Un véhicule sortant de toutes ses zones d'opération assignées à la fois déclenche une alerte — tant qu'il reste dans au moins une zone assignée, aucune alerte.",
+        "La disponibilité du véhicule découle directement de son statut (un véhicule « En mission » ou « En panne » n'est pas proposé comme disponible).",
+        "L'équipement GPS est facultatif : un véhicule peut très bien ne pas être suivi par GPS.",
+        "Seules les zones de type « Autorisée » peuvent être affectées comme zone d'opération (une zone « Interdite » n'a pas de sens ici, elle est déjà surveillée indépendamment).",
+        "Un véhicule sortant de toutes ses zones d'opération affectées à la fois déclenche une alerte — tant qu'il reste dans au moins une zone affectée, aucune alerte.",
       ],
       astuces: [
         "La suppression d'une photo est définitive (contrairement aux documents administratifs, qui sont versionnés — voir « Documents »).",
-        "Un véhicule sans zone d'opération assignée n'est simplement pas surveillé sur ce plan.",
+        "Un véhicule sans zone d'opération affectée n'est simplement pas surveillé sur ce plan.",
       ],
     },
     {
@@ -88,7 +88,7 @@ export const groupeParc: GroupeAide = {
         "Liste enrichie : chantiers en cours, à venir, non démarrés ou en retard, recherche, filtres, avancement et alertes",
         "Fiche chantier : position, identification, véhicules et conducteurs à glisser-déposer, chacun avec sa période",
         "Onglet « Journal » : météo, effectif, travaux, incidents, heures des véhicules et photos, jour par jour",
-        "Onglet « Coûts » : carburant, maintenance et coûts fixes par véhicule sur sa période, rentabilité, proforma, export Excel",
+        "Onglet « Coûts » : carburant, maintenance et coûts fixes par véhicule sur sa période, rentabilité, facture pro forma, export Excel",
         "Rubrique « Organisation » : type de chantier, priorité, chef de chantier, rayon de présence GPS, budget matériel, client",
         "Onglet « Terrain » : présence GPS par jour, km, disponibilité, utilisation réelle, sorties et retours avec photos",
         "Onglet « Incidents » : incidents et maintenances du chantier, causes, remplacement d'un véhicule en panne",
@@ -102,8 +102,8 @@ export const groupeParc: GroupeAide = {
         "Terminer ou annuler un chantier libère ses véhicules et ses conducteurs.",
         "Un conducteur ne peut pas être sur deux chantiers à la fois, sauf si les deux rattachements sont « multi-sites » ; une mission bloque toujours.",
         "Des alertes signalent un chantier non démarré, en retard, ou un véhicule prévu en panne ou en maintenance dans les 3 jours.",
-        "Le journal s'écrit pendant le chantier et jusqu'à 7 jours après sa fin ; les coûts sont réels à date, sans prévision.",
-        "Un véhicule est « sur le chantier » s'il est dans une zone tracée, ou à moins du rayon de présence (300 m par défaut) ; calcul chaque nuit.",
+        "Le journal s'écrit pendant le chantier et jusqu'à 7 jours après sa fin ; les coûts sont arrêtés à la date du jour, sans prévision.",
+        "Un véhicule est « sur le chantier » s'il est dans une zone tracée, ou à moins du rayon de présence (300 m par défaut) ; calculé chaque nuit.",
         "Un véhicule réservé aux chantiers critiques ne va que sur un chantier de priorité « Critique ».",
         "Un incident ou une maintenance est rattaché d'office au chantier où se trouvait le véhicule ce jour-là.",
         "Le chef de chantier demande du matériel et tient le journal de ses chantiers ; la gestion du parc répond aux demandes.",
