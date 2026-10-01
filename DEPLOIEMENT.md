@@ -167,6 +167,59 @@ Lecture des résultats :
 | `nginx` déjà actif | ne pas en installer un second : ajouter les blocs `location` de `nginx.conf` au fichier existant |
 | `443` écouté | HTTPS déjà en place : le relais en profite automatiquement, et le temps réel bascule en `wss` |
 
+## 127.0.0.1 et 0.0.0.0 sous Docker
+
+Constat rencontré en production : « avec 127.0.0.1 ça ne marche pas, avec
+0.0.0.0 ça marche ». L'explication tient en une phrase : **127.0.0.1 ne
+désigne pas la machine, mais « moi-même » — et dans un conteneur, « moi-même »
+est le conteneur, pas le VPS.** Chaque conteneur a sa propre pile réseau, donc
+son propre loopback.
+
+Deux réglages distincts portent ces adresses, et la bonne valeur n'est pas la
+même :
+
+**1. L'adresse d'écoute du backend, à l'intérieur du conteneur**
+
+Si Spring Boot écoute sur `127.0.0.1:8080`, il n'accepte que les connexions
+nées dans son propre conteneur : nginx, qui est ailleurs, est refusé. Il faut
+`0.0.0.0` (valeur par défaut de Spring Boot, souvent forcée par erreur via
+`SERVER_ADDRESS` ou `server.address`). **C'est correct et sans danger** : le
+réseau du conteneur est isolé.
+
+**2. La publication du port par Docker, vers l'hôte**
+
+```
+-p 8080:8080              # = 0.0.0.0 : exposé sur TOUTES les interfaces → Internet
+-p 127.0.0.1:8080:8080    # exposé au seul hôte, donc à nginx
+```
+
+Ici `0.0.0.0` rend le backend **joignable directement depuis Internet**, en
+contournant nginx : plus de HTTPS, plus de limite de taille d'envoi, plus de
+journalisation centralisée.
+
+### Vérifier si le backend est exposé
+
+Depuis une machine **autre que le VPS** :
+
+```bash
+curl -m 5 http://IP_DU_VPS:8080/actuator/health
+```
+
+Une réponse = le port est ouvert sur Internet. Deux façons de refermer :
+
+```bash
+# a) ne plus publier le port du tout (nginx dans le même réseau Docker)
+#    retirer la section ports: du service backend
+
+# b) le publier sur le seul loopback de l'hôte
+#    ports: ["127.0.0.1:8080:8080"]
+```
+
+Puis, en complément, un pare-feu : `sudo ufw deny 8080`.
+
+**Règle à retenir : `0.0.0.0` à l'intérieur du conteneur, `127.0.0.1` à la
+publication.**
+
 ## Limites connues
 
 - **Pas de HTTPS dans cette configuration.** Pour un test interne c'est
