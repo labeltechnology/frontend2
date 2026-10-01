@@ -1,118 +1,73 @@
-# Déploiement de test sur un VPS
+# Déploiement sur un VPS
 
-Marche à suivre pour mettre l'application en ligne sur un serveur de test.
-Concerne le frontend ; les points qui dépendent du backend sont signalés.
+Deux montages coexistent dans ce dépôt. **Le premier est celui en service**,
+le second est documenté comme alternative.
 
-## Principe retenu : une seule origine
+| | En service | Alternative |
+|---|---|---|
+| Sert les fichiers | `serve` dans un conteneur | nginx |
+| API appelée par le navigateur | directement, `http://IP:8080` | relayée, même origine |
+| CORS | **à configurer côté backend** | sans objet |
+| HTTPS | à ajouter devant | géré par nginx |
+| Fichiers | `Dockerfile`, `docker-compose.yml`, `.github/workflows/deploy.yml` | `nginx.conf` |
 
-nginx sert le frontend **et** relaie `/api` et `/ws` vers le backend. Tout passe
-par la même adresse, ce qui supprime d'un coup trois sources d'ennuis :
+## Montage en service — `serve` + appel direct du backend
 
-- aucun CORS à configurer ;
-- aucun blocage de contenu mixte (page en HTTPS appelant une API en HTTP) ;
-- le build ne dépend plus du domaine : la même image fonctionne sur
-  `http://203.0.113.10` comme sur `https://parcauto.exemple.mg`.
+Le conteneur ne sert que les fichiers statiques ; le navigateur appelle le
+backend à son adresse propre. `VITE_API_BASE_URL` doit donc porter l'URL
+publique du backend, et **le backend doit autoriser l'origine du frontend** :
 
-C'est pourquoi `VITE_API_BASE_URL` reste **vide**. Une valeur n'est nécessaire
-que si le backend vit sur un autre domaine — il faut alors HTTPS des deux côtés
-et déclarer l'origine du frontend dans `APP_CORS_ALLOWED_ORIGINS`.
-
-## Prérequis sur le VPS
-
-- Docker et Docker Compose, ou bien Node 22 + nginx si l'on compile à la main ;
-- 2 Go de RAM au minimum (le backend Java en consomme l'essentiel) ;
-- les ports 80 (et 443 si certificat) ouverts.
-
-## Le backend est déjà en place sur le VPS
-
-Dans ce cas, seul le frontend reste à installer : nginx sert les fichiers et
-relaie `/api` et `/ws` vers le backend local. Rien à modifier côté backend —
-en particulier `APP_CORS_ALLOWED_ORIGINS` devient sans objet, puisque le
-navigateur ne voit qu'une seule origine.
-
-Avant de configurer, identifier l'existant (voir « Reconnaître l'installation
-en place » plus bas) : le backend écoute-t-il sur 8080, tourne-t-il en
-conteneur, et un serveur web est-il déjà installé ? La réponse change
-seulement deux choses : l'adresse dans le bloc `upstream` de `nginx.conf`, et
-le fait d'ajouter un fichier de configuration plutôt que d'installer nginx.
-
-## Option A — Docker Compose (recommandée pour un test)
-
-Le `Dockerfile` du frontend est fourni. À la racine du projet, un
-`docker-compose.yml` assemble les trois services :
-
-```yaml
-services:
-  db:
-    image: postgis/postgis:16-3.4
-    environment:
-      POSTGRES_DB: parcauto
-      POSTGRES_USER: parcauto
-      POSTGRES_PASSWORD: ${DB_PASSWORD:?mot de passe requis}
-    volumes: [db-data:/var/lib/postgresql/data]
-
-  backend:
-    build: ./backend            # à confirmer avec le responsable du backend
-    environment:
-      SPRING_PROFILES_ACTIVE: prod
-      APP_DB_URL: jdbc:postgresql://db:5432/parcauto
-      APP_DB_USERNAME: parcauto
-      APP_DB_PASSWORD: ${DB_PASSWORD}
-      APP_JWT_SECRET: ${JWT_SECRET:?secret requis}
-      APP_STORAGE_UPLOAD_DIR: /data/uploads
-    volumes: [uploads:/data/uploads]
-    depends_on: [db]
-
-  frontend:
-    build:
-      context: ./frontend2
-      args:
-        VITE_API_BASE_URL: ""   # même origine, voir plus haut
-    ports: ["80:80"]
-    depends_on: [backend]
-
-volumes:
-  db-data:
-  uploads:
+```properties
+# côté backend, sinon le navigateur bloque tous les appels
+APP_CORS_ALLOWED_ORIGINS=http://IP_DU_VPS:8081
 ```
 
-Les deux volumes nommés sont essentiels : sans `db-data` la base repart de zéro
-à chaque redéploiement, sans `uploads` les photos de véhicules et les proformas
-disparaissent.
+### Déploiement manuel
 
 ```bash
-export DB_PASSWORD='…'   # à générer, pas celui de développement
-export JWT_SECRET="$(openssl rand -base64 48)"
+# sur le VPS, à côté de docker-compose.yml
+cat > .env <<'EOF'
+VITE_API_BASE_URL=http://IP_DU_VPS:8080
+FRONT_PORT=8081
+EOF
 docker compose up -d --build
 ```
 
-## Option B — Compilation manuelle (backend déjà en place)
+`--build` est indispensable après tout changement de `VITE_API_BASE_URL` :
+la valeur est **inscrite dans le bundle à la compilation**, la redéfinir dans
+l'environnement du conteneur n'a aucun effet.
 
-La compilation peut se faire sur le poste de développement puis être copiée :
-le VPS n'a alors besoin ni de Node ni des sources.
+### Déploiement automatique
 
-```bash
-# --- sur le poste de développement ---
-cd frontend2
-npm ci
-VITE_API_BASE_URL= npm run build     # variable vide = même origine
-tar czf parcauto-frontend.tgz -C dist .
-scp parcauto-frontend.tgz nginx.conf UTILISATEUR@VPS:/tmp/
+`.github/workflows/deploy.yml` construit l'image, la publie sur GitHub
+Container Registry et la déploie par SSH. Les variables à renseigner dans
+*Settings → Secrets and variables → Actions* sont listées en tête du fichier.
 
-# --- sur le VPS ---
-sudo mkdir -p /var/www/parcauto
-sudo tar xzf /tmp/parcauto-frontend.tgz -C /var/www/parcauto
-sudo cp /tmp/nginx.conf /etc/nginx/sites-available/parcauto
-# adapter deux lignes du fichier :
-#   root  → /var/www/parcauto   (au lieu de /usr/share/nginx/html, valeur Docker)
-#   upstream → l'adresse relevée à l'étape « Reconnaître l'installation »
-sudo ln -sf /etc/nginx/sites-available/parcauto /etc/nginx/sites-enabled/
-sudo nginx -t && sudo systemctl reload nginx
-```
+### Points de vigilance propres à ce montage
 
-`nginx -t` avant le rechargement n'est pas une précaution de style : une erreur
-de syntaxe non détectée laisse nginx sur son ancienne configuration sans
-prévenir, et l'on cherche ensuite pourquoi rien n'a changé.
+- **Le port 8080 du backend doit être joignable depuis le navigateur**, donc
+  ouvert sur Internet. Voir plus bas « 127.0.0.1 et 0.0.0.0 sous Docker » :
+  l'exposer directement contourne toute protection placée devant.
+- **Pas de HTTPS.** Dès que le site est en HTTPS, le navigateur bloquera les
+  appels vers une API en HTTP (contenu mixte) et le temps réel ne se
+  connectera plus. Les deux doivent passer en HTTPS ensemble.
+- **Deux origines** : toute nouvelle adresse du frontend doit être ajoutée à
+  `APP_CORS_ALLOWED_ORIGINS`, sinon l'application se charge mais reste vide.
+
+## Alternative — nginx, une seule origine
+
+`nginx.conf` (fourni, non utilisé actuellement) sert les fichiers **et** relaie
+`/api` et `/ws` vers le backend. Tout passe alors par une seule adresse :
+
+- aucun CORS à configurer ;
+- le port 8080 n'a plus besoin d'être public ;
+- HTTPS se gère en un seul point ;
+- `VITE_API_BASE_URL` reste **vide** et le même build fonctionne sur
+  n'importe quel domaine.
+
+En contrepartie : un composant de plus à installer et à maintenir. Le passage
+de l'un à l'autre ne demande qu'un rebuild avec la variable vide et la mise en
+place du fichier `nginx.conf`.
 
 ## À faire côté backend
 
@@ -130,15 +85,22 @@ installation. À vérifier néanmoins avec la personne qui en a la charge :
 ## Vérifier que tout fonctionne
 
 ```bash
-curl -I  http://VOTRE_VPS/                    # 200, type text/html
-curl -s  http://VOTRE_VPS/actuator/health     # {"status":"UP"}
-curl -I  http://VOTRE_VPS/engins              # 200 (et non 404 : repli SPA)
-curl -sI http://VOTRE_VPS/api/engins | head -1  # 401 ou 403 = le relais marche
+# Le frontend répond
+curl -I http://IP_DU_VPS:8081/                 # 200, text/html
+curl -I http://IP_DU_VPS:8081/engins           # 200 et non 404 (repli SPA)
+
+# Le backend est joignable DEPUIS LE NAVIGATEUR, donc depuis l'extérieur
+curl -s http://IP_DU_VPS:8080/actuator/health  # {"status":"UP"}
+
+# Le CORS autorise bien l'origine du frontend : la réponse doit porter
+# access-control-allow-origin, sinon l'application restera vide
+curl -sI -X OPTIONS http://IP_DU_VPS:8080/api/engins   -H "Origin: http://IP_DU_VPS:8081"   -H "Access-Control-Request-Method: GET" | grep -i access-control
 ```
 
 Puis dans le navigateur : se connecter, ouvrir une carte (tuiles), et vérifier
-le témoin **« En direct »** de la barre de navigation — s'il reste gris, le
-relais WebSocket (`location /ws/`) ne fonctionne pas.
+le témoin **« En direct »** de la barre de navigation. S'il reste gris, le
+WebSocket ne passe pas — vérifier que le port du backend est joignable et que
+l'origine est autorisée.
 
 ## Reconnaître l'installation en place
 
@@ -193,19 +155,27 @@ réseau du conteneur est isolé.
 -p 127.0.0.1:8080:8080    # exposé au seul hôte, donc à nginx
 ```
 
-Ici `0.0.0.0` rend le backend **joignable directement depuis Internet**, en
-contournant nginx : plus de HTTPS, plus de limite de taille d'envoi, plus de
-journalisation centralisée.
+Ici `0.0.0.0` rend le backend **joignable depuis Internet**. Et c'est là que
+le montage choisi change tout :
 
-### Vérifier si le backend est exposé
+| Montage | Port 8080 du backend |
+|---|---|
+| **En service** (`serve` + appel direct) | **doit rester ouvert** — c'est le navigateur de chaque utilisateur qui appelle le backend |
+| Alternative nginx (même origine) | à refermer — seul nginx, sur la machine, a besoin de l'atteindre |
 
-Depuis une machine **autre que le VPS** :
+Autrement dit, dans le montage actuel l'ouverture du port n'est pas une erreur
+mais une nécessité. Ce qu'il faut en revanche, puisque le backend est exposé :
+HTTPS, et une surveillance des accès.
+
+### Refermer le port — seulement si l'on passe à nginx
+
+Vérifier d'abord l'état, depuis une machine **autre que le VPS** :
 
 ```bash
 curl -m 5 http://IP_DU_VPS:8080/actuator/health
 ```
 
-Une réponse = le port est ouvert sur Internet. Deux façons de refermer :
+Une réponse = le port est ouvert sur Internet. Deux façons de le refermer :
 
 ```bash
 # a) ne plus publier le port du tout (nginx dans le même réseau Docker)
@@ -215,20 +185,20 @@ Une réponse = le port est ouvert sur Internet. Deux façons de refermer :
 #    ports: ["127.0.0.1:8080:8080"]
 ```
 
-Puis, en complément, un pare-feu : `sudo ufw deny 8080`.
+Un `sudo ufw deny 8080` complète la mesure. **À ne pas appliquer tant que le
+montage actuel est en place : l'application deviendrait inutilisable.**
 
-**Règle à retenir : `0.0.0.0` à l'intérieur du conteneur, `127.0.0.1` à la
-publication.**
+**Règle à retenir : `0.0.0.0` à l'intérieur du conteneur. À la publication,
+cela dépend du montage — ouvert avec `serve`, loopback avec nginx.**
 
 ## Limites connues
 
-- **Pas de HTTPS dans cette configuration.** Pour un test interne c'est
-  acceptable, mais les jetons de session circulent en clair. Sur une adresse
-  publique, ajouter un certificat (Certbot) avant toute donnée réelle.
-- **Bundle de 2,4 Mo** (674 Ko compressés), en un seul fichier. La compression
-  gzip est active dans `nginx.conf` ; un découpage par route reste à faire si le
-  premier chargement est jugé trop lent.
-- **La police Google Sans est chargée depuis Google Fonts.** Sur un serveur sans
-  accès sortant, ou derrière un filtrage, l'interface bascule sur une police
-  système. L'auto-hébergement est possible (le thème « nuit » le fait déjà pour
-  Source Sans 3).
+- **Pas de HTTPS.** Pour un test interne c'est acceptable, mais les jetons de
+  session circulent en clair. Attention au passage : le frontend et le backend
+  doivent basculer **ensemble**, sinon le navigateur bloque les appels d'une
+  page HTTPS vers une API HTTP.
+- **Pas de compression HTTP** avec `serve` : les 1 070 Ko du premier chargement
+  partent tels quels, là où gzip les ramènerait à 321 Ko. C'est le gain le plus
+  simple à obtenir — un proxy devant le conteneur (nginx, Caddy, Traefik) suffit.
+- **Le port du backend doit rester ouvert** tant que le navigateur l'appelle
+  directement. Le montage nginx le referme.
